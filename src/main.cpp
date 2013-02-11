@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QUrl>
+#include <QDir>
 
 
 int main(int argc, char *argv[])
@@ -50,6 +51,8 @@ int main(int argc, char *argv[])
 
     QFile loadinghtml("gui/splash.html");
     loadinghtml.open(QIODevice::ReadOnly);
+    QString splashFile = QString::fromUtf8(loadinghtml.readAll().constData());
+    QUrl baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
 
     splashwin.setWindowFlags(Qt::FramelessWindowHint);
     QPalette palette = splashwin.palette();
@@ -59,7 +62,7 @@ int main(int argc, char *argv[])
     splashwin.setAttribute(Qt::WA_OpaquePaintEvent, false);
     //splashwin.setGeometry(0, 0, QApplication::desktop()->size().width(), QApplication::desktop()->size().height());
 
-    splashwin.setHtml(QString::fromUtf8(loadinghtml.readAll().constData()), QUrl());
+    splashwin.setHtml(splashFile, baseUrl);
     splashwin.resize(300,200);
     splashwin.show();
 
