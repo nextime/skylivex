@@ -32,3 +32,23 @@
  * Purpose:
  *
  */
+#ifndef SKYLIVEX_H
+#define SKYLIVEX_H
+
+#include <QWebView>
+#include <QUrl>
+#include <QFile>
+#include <QString>
+
+class SplashPage : public QWebView
+{
+      QUrl baseurl;
+      QFile splash_html;
+      QString splashFile;
+
+   public:
+      SplashPage(QFile &splash_html);
+      ~SplashPage();
+};
+
+#endif
