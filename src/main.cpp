@@ -94,13 +94,13 @@ int main(int argc, char *argv[])
    splashwin.show();
    
    // Instance of the core ITC/IPC messasing
-   //SkyliveX *skx = new SkyliveX(&skylivex);
+   SkyliveX *skx = new SkyliveX(&skylivex);
 
    // connect the "finished" signal coming from the ITC/IPC to the qui call
-   //QObject::connect(skx, SIGNAL(finished()), &skx, SLOT(quit()));
+   QObject::connect(skx, SIGNAL(finished()), &skx, SLOT(quit()));
 
    // and give a slot to the ITC/IPC in the main loop
-   //QTimer::signalShot(0, skx, SLOT(run()));
+   QTimer::signalShot(0, skx, SLOT(run()));
 
    // and then.. go!
    return skylivex.exec();
