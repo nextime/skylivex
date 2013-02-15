@@ -27,8 +27,32 @@
  *
  ********************************************************************
  *
- * File: 
+ * File: splashpage.cpp 
  * 
  * Purpose:
  *
  */
+#include "mainwin.h"
+#include <QFile>
+#include <QDir>
+
+MainWin::MainWin(QFile &htmlfile)
+      : QWebView(0)
+{
+   htmlfile.open(QIODevice::ReadOnly);
+   htmlFileName = QString::fromUtf8(htmlfile.readAll().constData());
+   QUrl baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
+
+   setWindowFlags(Qt::FramelessWindowHint);
+   page()->setPalette(palette());
+   setAttribute(Qt::WA_TranslucentBackground, true);
+   setAttribute(Qt::WA_OpaquePaintEvent, false);
+
+   setHtml(htmlFileName, baseUrl);
+   resize(250,200);
+}
+
+MainWin::~MainWin()
+{
+
+}

@@ -35,20 +35,29 @@
 #ifndef SKYLIVEX_H
 #define SKYLIVEX_H
 
-#include <QWebView>
-#include <QUrl>
-#include <QFile>
-#include <QString>
+#include <QObject>
 
-class SplashPage : public QWebView
+
+/*
+ * class SkyliveX
+ * This is the core of the SkyliveX client.
+ * Here the inter-thread and inter-process communication
+ * with plugins is done, so, the magic happen here
+ */
+class SkyliveX : public QObject
 {
-      QUrl baseurl;
-      QFile splash_html;
-      QString splashFile;
+   Q_OBJECT
 
    public:
-      SplashPage(QFile &splash_html);
-      ~SplashPage();
+     SkyliveX(QObject *parent=0) : QObject(parent) {}
+     ~SkyliveX() {}
+
+   public slots:
+     void initialize();
+     void process();
+
+   signals:
+      void finished();
 };
 
 #endif

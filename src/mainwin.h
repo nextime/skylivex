@@ -27,8 +27,34 @@
  *
  ********************************************************************
  *
- * File: 
+ * File: skylivex.h
  * 
  * Purpose:
  *
  */
+#ifndef MAINWIN_H
+#define MAINWIN_H
+
+#include <QWebView>
+#include <QUrl>
+#include <QFile>
+#include <QString>
+
+/*
+ * class MainWin
+ * This is just a little webkit transparent window 
+ * to show the splash screen
+ */
+class MainWin : public QWebView
+{
+      QUrl baseurl;
+      QFile htmlfile;
+      QString htmlFileName;
+
+   public:
+      MainWin(QFile &htmlfile);
+      ~MainWin();
+};
+
+
+#endif

@@ -35,4 +35,4 @@
 #include <QPluginLoader>
 #include "pluginsinterfaces.h"
 
-
+#define sarca

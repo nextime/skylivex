@@ -36,40 +36,9 @@
  */
 #include <QApplication>
 #include <QFile>
-#include <QObject>
-
+#include <QTimer>
+#include "mainwin.h"
 #include "skylivex.h"
-
-/*
- * class SkyliveX
- * This is the core of the SkyliveX client.
- * Here the inter-thread and inter-process communication
- * with plugins is done, so, the magic happen here
- */
-class SkyliveX : public QObject
-{
-   Q_OBJECT
-
-   public:
-     SkyliveX(QObject *parent=0) : QObject(parent) {}
-     ~SkyliveX() {}
-
-   public slots:
-     void run()
-     {
-         emit finished();
-     }
-
-   signals:
-      void finished();
-};
-
-/*
- * Not less important than the core is the main window.
- * It is a Wekbit object that load our HTML/js gui
- * for the main window!
- */
-//class MainWindow
 
 
 /*
@@ -85,25 +54,30 @@ int main(int argc, char *argv[])
 {
 
    // Start our application object
-   QApplication skylivex(argc, argv);
+   QApplication skylivexapp(argc, argv);
 
    // Start the splash screen. also
    // the splash screen is a (transparent) webkit object
    QFile splashfile("gui/splash.html");
-   SplashPage splashwin(splashfile);
-   splashwin.show();
+   MainWin mainw(splashfile);
+   mainw.show();
    
    // Instance of the core ITC/IPC messasing
-   SkyliveX *skx = new SkyliveX(&skylivex);
+   SkyliveX *skx = new SkyliveX(&skylivexapp);
 
    // connect the "finished" signal coming from the ITC/IPC to the qui call
-   QObject::connect(skx, SIGNAL(finished()), &skx, SLOT(quit()));
+   QObject::connect(skx, SIGNAL(finished()), &skylivexapp, SLOT(quit()), Qt::QueuedConnection);
 
    // and give a slot to the ITC/IPC in the main loop
-   QTimer::signalShot(0, skx, SLOT(run()));
+   QTimer::singleShot(0, skx, SLOT(initialize()));
+
+   // process IPC events when we are in idle from the main window
+   QTimer *skxprocess = new QTimer(skx);
+   QObject::connect(skxprocess, SIGNAL(timeout()), skx, SLOT(process()));
+   skxprocess->start();
 
    // and then.. go!
-   return skylivex.exec();
+   return skylivexapp.exec();
 
 }
 

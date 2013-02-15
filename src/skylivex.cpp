@@ -27,32 +27,22 @@
  *
  ********************************************************************
  *
- * File: splashpage.cpp 
+ * File: 
  * 
  * Purpose:
  *
  */
+
+
 #include "skylivex.h"
-#include <QFile>
-#include <QDir>
+#include <iostream>
 
-SplashPage::SplashPage(QFile &splash_html)
-      : QWebView(0)
+void SkyliveX::initialize()
 {
-   splash_html.open(QIODevice::ReadOnly);
-   splashFile = QString::fromUtf8(splash_html.readAll().constData());
-   QUrl baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
-
-   setWindowFlags(Qt::FramelessWindowHint);
-   page()->setPalette(palette());
-   setAttribute(Qt::WA_TranslucentBackground, true);
-   setAttribute(Qt::WA_OpaquePaintEvent, false);
-
-   setHtml(splashFile, baseUrl);
-   resize(250,200);
+   std::cout << "antani" << std::endl;
 }
 
-SplashPage::~SplashPage()
+void SkyliveX::process()
 {
-
+   std::cout << "process" << std::endl;
 }
