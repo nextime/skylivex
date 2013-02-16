@@ -45,7 +45,6 @@ class SkylivexPluginInterface
 {
    public: 
       virtual ~SkylivexPluginInterface() {}
-      virtual QStringList importer() const = 0;
       virtual void startPlugin() = 0;
 };
 

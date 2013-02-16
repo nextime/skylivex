@@ -1,4 +1,9 @@
 TEMPLATE = subdirs
 SUBDIRS = src/skylivex.pro \
           plugins/skproto.pro
-DESTDIR = release
+
+DATAFILES.path = build
+DATAFILES.files = doc gui LICENSE.txt COPYING
+
+INSTALLS += DATAFILES
+

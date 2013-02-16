@@ -4,4 +4,4 @@ CONFIG += plugin
 HEADERS = skproto.h
 INCLUDEPATH = ../src
 QT += core network widgets
-DESTDIR = ../plugins
+DESTDIR = ../build/plugins

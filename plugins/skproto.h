@@ -39,7 +39,7 @@
 class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
    Q_OBJECT
-   Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0")
+   Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE "skproto.json")
    Q_INTERFACES(SkylivexPluginInterface)
 
 public:
