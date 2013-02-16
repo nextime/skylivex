@@ -35,6 +35,7 @@
 #include "mainwin.h"
 #include <QFile>
 #include <QDir>
+#include <QPalette>
 
 MainWin::MainWin(QFile &htmlfile)
       : QWebView(0)
@@ -43,8 +44,11 @@ MainWin::MainWin(QFile &htmlfile)
    htmlFileName = QString::fromUtf8(htmlfile.readAll().constData());
    QUrl baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
 
+   QPalette pal = palette();
+   pal.setBrush(QPalette::Base, Qt::transparent);
+
    setWindowFlags(Qt::FramelessWindowHint);
-   page()->setPalette(palette());
+   page()->setPalette(pal);
    setAttribute(Qt::WA_TranslucentBackground, true);
    setAttribute(Qt::WA_OpaquePaintEvent, false);
 
