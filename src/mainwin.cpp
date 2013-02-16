@@ -33,9 +33,11 @@
  *
  */
 #include "mainwin.h"
+#include <QWebView>
 #include <QFile>
 #include <QDir>
 #include <QPalette>
+#include <iostream>
 
 MainWin::MainWin(QFile &htmlfile)
       : QWebView(0)
@@ -54,9 +56,16 @@ MainWin::MainWin(QFile &htmlfile)
 
    setHtml(htmlFileName, baseUrl);
    resize(250,200);
+
+
 }
 
 MainWin::~MainWin()
 {
 
+}
+
+void MainWin::msgFromCore(std::string &msg)
+{
+   std::cout << "Message from core: " << msg << std::endl;  
 }

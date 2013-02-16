@@ -38,6 +38,8 @@
 #include <QObject>
 #include <QString>
 #include "pluginsinterfaces.h"
+#include <iostream>
+#include <string>
 
 /*
  * class SkyliveX
@@ -61,10 +63,11 @@ class SkyliveX : public QObject
    public slots:
      void initialize();
      void process();
-
+     void sendMsgToMainWin(std::string &msg);
 
    signals:
       void finished();
+      void msgForMainWin(std::string &msg);
 };
 
 #endif

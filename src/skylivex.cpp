@@ -43,6 +43,7 @@
 #include <iostream>
 
 
+
 // Load and initialize plugins and shared memory communication
 void SkyliveX::initialize()
 {
@@ -55,6 +56,8 @@ void SkyliveX::initialize()
 void SkyliveX::process()
 {
    //std::cout << "process" << std::endl;
+   std::string sarca("ANTANI!");
+   sendMsgToMainWin(sarca);
 }
 
 
@@ -92,4 +95,10 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
       std::cout << "Plugin file " << filename.toStdString() << " is valid." << std::endl;
       // now the plugin can be initialized and used
    }
+}
+
+void SkyliveX::sendMsgToMainWin(std::string &msg)
+{
+   //std::cout <<  "Send To MainWin: " << msg << std::endl;
+   emit msgForMainWin(msg);
 }

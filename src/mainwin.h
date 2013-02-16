@@ -39,6 +39,7 @@
 #include <QUrl>
 #include <QFile>
 #include <QString>
+#include <QObject>
 
 /*
  * class MainWin
@@ -47,13 +48,20 @@
  */
 class MainWin : public QWebView
 {
-      QUrl baseurl;
-      QFile htmlfile;
-      QString htmlFileName;
+
+   Q_OBJECT
+
+   QUrl baseurl;
+   QFile htmlfile;
+   QString htmlFileName;
 
    public:
       MainWin(QFile &htmlfile);
       ~MainWin();
+
+   public slots:
+     void msgFromCore(std::string &msg);
+
 };
 
 

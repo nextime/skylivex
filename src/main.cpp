@@ -76,6 +76,9 @@ int main(int argc, char *argv[])
    QObject::connect(skxprocess, SIGNAL(timeout()), skx, SLOT(process()));
    skxprocess->start();
 
+   // connect core with the mainwin
+   QObject::connect(skx, SIGNAL(msgForMainWin(std::string&)), &mainw, SLOT(msgFromCore(std::string&)));
+
    // and then.. go!
    return skylivexapp.exec();
 

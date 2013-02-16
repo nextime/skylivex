@@ -6,7 +6,7 @@ HEADERS = src/skylivex.h \
           src/mainwin.h \ 
           src/pluginsinterfaces.h
 
-QT += network webkitwidgets widgets
+QT += core network webkitwidgets widgets
 
 OTHER_FILES += \
     gui/splash.html \
