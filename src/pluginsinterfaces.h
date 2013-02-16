@@ -32,6 +32,8 @@
  * Purpose:
  *
  */
+#ifndef PLUGINSINTERFACES_H
+#define PLUGINSINTERFACES_H
 #include <QtPlugin>
 
 QT_BEGIN_NAMESPACE
@@ -51,3 +53,4 @@ QT_BEGIN_NAMESPACE
 Q_DECLARE_INTERFACE(SkylivexPluginInterface,
                     "com.skylivex.SkylivexPlugin/1.0")
 QT_END_NAMESPACE
+#endif

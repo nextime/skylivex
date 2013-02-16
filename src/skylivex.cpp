@@ -33,16 +33,63 @@
  *
  */
 
-
+#include <QPluginLoader>
+#include <QApplication>
+#include <QDir>
+#include <QObject>
+#include <QString>
 #include "skylivex.h"
+#include "pluginsinterfaces.h"
 #include <iostream>
 
+
+// Load and initialize plugins and shared memory communication
 void SkyliveX::initialize()
 {
    std::cout << "antani" << std::endl;
+   loadPlugins();
 }
 
+
+// read messages from plugins and dispatch to others
 void SkyliveX::process()
 {
-   std::cout << "process" << std::endl;
+   //std::cout << "process" << std::endl;
+}
+
+
+void SkyliveX::loadPlugins() 
+{
+   QDir pluginsDir = QDir(qApp->applicationDirPath());
+   pluginsDir.cd("plugins");
+
+   std::cout << "Try to load plugins in folder " << pluginsDir.path().toStdString() << std::endl;
+
+   foreach(QString fileName, pluginsDir.entryList(QDir::Files)) 
+   {
+      std::cout << "Testing " << pluginsDir.absoluteFilePath(fileName).toStdString() << std::endl;
+      QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+      QObject *plugin = loader.instance();
+      if (plugin) 
+      {
+         std::cout << "Loading " << fileName.toStdString() << std::endl;
+         initializePlugin(plugin, fileName);
+         //pluginFileNames += fileName;SkylivexPluginInterface
+      }
+      else 
+      {
+         std::cout << loader.errorString().toStdString() << std::endl;
+         std::cout << plugin << std::endl;
+      }
+  }
+}
+
+void SkyliveX::initializePlugin(QObject *plugin, QString filename) 
+{
+   skylivexPluginInterface = qobject_cast<SkylivexPluginInterface *>(plugin);
+   if (skylivexPluginInterface)
+   {
+      std::cout << "Plugin file " << filename.toStdString() << " is valid." << std::endl;
+      // now the plugin can be initialized and used
+   }
 }

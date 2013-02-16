@@ -3,7 +3,8 @@ SOURCES = src/main.cpp \
           src/skylivex.cpp #  src/plugins.cpp
 
 HEADERS = src/skylivex.h\
-          src/mainwin.h # src/plugins.h src/pluginsinterfaces.h
+          src/mainwin.h \ # src/plugins.h src/pluginsinterfaces.h
+          src/pluginsinterfaces.h
 
 QT += network webkitwidgets widgets
 

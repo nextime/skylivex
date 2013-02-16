@@ -36,7 +36,8 @@
 #define SKYLIVEX_H
 
 #include <QObject>
-
+#include <QString>
+#include "pluginsinterfaces.h"
 
 /*
  * class SkyliveX
@@ -48,13 +49,19 @@ class SkyliveX : public QObject
 {
    Q_OBJECT
 
+   private:
+    SkylivexPluginInterface *skylivexPluginInterface;
+
    public:
      SkyliveX(QObject *parent=0) : QObject(parent) {}
      ~SkyliveX() {}
+     void loadPlugins();
+     void initializePlugin(QObject*, QString);
 
    public slots:
      void initialize();
      void process();
+
 
    signals:
       void finished();
