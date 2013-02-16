@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
    skxprocess->start();
 
    // connect core with the mainwin
+   //QObject::connect(skx, SIGNAL(msgForMainWin(std::string&)), &mainw, SLOT(msgFromCore(std::string&)), Qt::QueuedConnection);
    QObject::connect(skx, SIGNAL(msgForMainWin(std::string&)), &mainw, SLOT(msgFromCore(std::string&)));
 
    // and then.. go!
