@@ -1,7 +1,7 @@
 TEMPLATE = lib
 SOURCES = skproto.cpp
-
-HEADERS = ../src/pluginsinterfaces.h
-
+CONFIG += plugin
+HEADERS = skproto.h
+INCLUDEPATH = ../src
 QT += core network widgets
-
+DESTDIR = ../plugins

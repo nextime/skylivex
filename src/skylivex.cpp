@@ -71,8 +71,8 @@ void SkyliveX::loadPlugins()
    foreach(QString fileName, pluginsDir.entryList(QDir::Files)) 
    {
       std::cout << "Testing " << pluginsDir.absoluteFilePath(fileName).toStdString() << std::endl;
-      QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-      QObject *plugin = loader.instance();
+      QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
+      QObject *plugin = pluginLoader.instance();
       if (plugin) 
       {
          std::cout << "Loading " << fileName.toStdString() << std::endl;
@@ -81,7 +81,7 @@ void SkyliveX::loadPlugins()
       }
       else 
       {
-         std::cout << loader.errorString().toStdString() << std::endl;
+         std::cout << pluginLoader.errorString().toStdString() << std::endl;
          std::cout << plugin << std::endl;
       }
   }

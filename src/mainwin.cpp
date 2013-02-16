@@ -67,5 +67,5 @@ MainWin::~MainWin()
 
 void MainWin::msgFromCore(std::string &msg)
 {
-   std::cout << "Message from core: " << msg << std::endl;  
+   //std::cout << "Message from core: " << msg << std::endl;
 }

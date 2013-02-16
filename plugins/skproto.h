@@ -32,25 +32,17 @@
  * Purpose:
  *
  */
-#ifndef PLUGINSINTERFACES_H
-#define PLUGINSINTERFACES_H
+#include <QObject>
 #include <QtPlugin>
+#include "pluginsinterfaces.h"
 
-QT_BEGIN_NAMESPACE
-class QStringList;
-class QObject;
-QT_END_NAMESPACE
-
-class SkylivexPluginInterface
+class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
-   public: 
-      virtual ~SkylivexPluginInterface() {}
-      virtual QStringList importer() const = 0;
-      virtual void startPlugin() = 0;
+   Q_OBJECT
+   Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0")
+   Q_INTERFACES(SkylivexPluginInterface)
+
+public:
+   void startPlugin();
 };
 
-QT_BEGIN_NAMESPACE
-#define skylivexplugin_iid "com.skylivex.SkylivexPlugin/1.0"
-Q_DECLARE_INTERFACE(SkylivexPluginInterface, skylivexplugin_iid)
-QT_END_NAMESPACE
-#endif

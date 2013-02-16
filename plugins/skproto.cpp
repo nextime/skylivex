@@ -32,25 +32,12 @@
  * Purpose:
  *
  */
-#include <QObject>
-#include <QtPlugin>
-#include "../src/pluginsinterfaces.h"
+#include "pluginsinterfaces.h"
 #include <iostream>
-
-class SkyliveProtocol : public QObject, SkylivexPluginInterface
-{
-   Q_OBJECT
-   Q_INTERFACES(SkylivexPluginInterface)
-   //Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE skproto.json)
-
-public:
-   void startPlugin();
-};
+#include "skproto.h"
 
 void SkyliveProtocol::startPlugin()
 {
    std::cout << "SkyliveProtocol initialized" << std::endl;
 }
 
-// Qt 5.0 broke compatibility with old metadata macro
-//Q_EXPORT_PLUGIN2(skproto, SkyliveProtocol)
