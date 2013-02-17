@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QObject>
 #include <QString>
+#include <QThread>
 #include "skylivex.h"
 #include "pluginsinterfaces.h"
 #include <iostream>
@@ -77,7 +78,6 @@ void SkyliveX::loadPlugins()
       {
          std::cout << "Loading " << fileName.toStdString() << std::endl;
          initializePlugin(plugin, fileName);
-         //pluginFileNames += fileName;SkylivexPluginInterface
       }
       else 
       {
@@ -93,7 +93,15 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
    if (skylivexPluginInterface)
    {
       std::cout << "Plugin file " << filename.toStdString() << " is valid." << std::endl;
+      // Create a new thread for the plugin
+      QThread* consumer = new QThread();
+      plugin->moveToThread(consumer);
+      consumer->start();
+
+      // Save plugin in the plugin list hash
+      skylivexPluginList.insert(filename, plugin);
       // now the plugin can be initialized and used
+      skylivexPluginInterface->startPlugin();
    }
 }
 

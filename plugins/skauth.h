@@ -27,49 +27,22 @@
  *
  ********************************************************************
  *
- * File: skylivex.h
+ * File: 
  * 
  * Purpose:
  *
  */
-#ifndef SKYLIVEX_H
-#define SKYLIVEX_H
-
 #include <QObject>
-#include <QString>
-#include <QHash>
+#include <QtPlugin>
 #include "pluginsinterfaces.h"
-#include <iostream>
-#include <string>
 
-/*
- * class SkyliveX
- * This is the core of the SkyliveX client.
- * Here the inter-thread and inter-process communication
- * with plugins is done, so, the magic happen here
- */
-class SkyliveX : public QObject
+class SkyliveAuth : public QObject, SkylivexPluginInterface
 {
    Q_OBJECT
+   Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE "skauth.json")
+   Q_INTERFACES(SkylivexPluginInterface)
 
-   private:
-    SkylivexPluginInterface *skylivexPluginInterface;
-    QHash<QString, QObject*> skylivexPluginList;
-
-   public:
-     SkyliveX(QObject *parent=0) : QObject(parent) {}
-     ~SkyliveX() {}
-     void loadPlugins();
-     void initializePlugin(QObject*, QString);
-
-   public slots:
-     void initialize();
-     void process();
-     void sendMsgToMainWin(std::string &msg);
-
-   signals:
-      void finished();
-      void msgForMainWin(std::string &msg);
+public:
+   void startPlugin();
 };
 
-#endif
