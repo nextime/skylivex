@@ -43,12 +43,14 @@
 #include "pluginsinterfaces.h"
 #include <iostream>
 
+Q_DECLARE_METATYPE(std::string)
 
 
 // Load and initialize plugins and shared memory communication
 void SkyliveX::initialize()
 {
    std::cout << "antani" << std::endl;
+   qRegisterMetaType<std::string>("std::string");
    loadPlugins();
 }
 
@@ -125,7 +127,7 @@ void SkyliveX::receiveFromMainWin(std::string &msg)
    emit msgForPlugins(msg);
 }
 
-void SkyliveX::receiveFromPlugins(std::string &msg)
+void SkyliveX::receiveFromPlugins(std::string msg)
 {
    sendMessage(msg);
 }

@@ -43,12 +43,12 @@ void SkyliveProtocol::startPlugin()
    sendMessage(prova);
 }
 
-void SkyliveProtocol::receiveMessage(std::string &msg)
+void SkyliveProtocol::receiveMessage(std::string msg)
 {
    std::cout << "SkyliveProtocol receive" << msg << std::endl;
 }
 
-void SkyliveProtocol::sendMessage(std::string &msg)
+void SkyliveProtocol::sendMessage(std::string msg)
 {
    emit putMessage(msg);
 }

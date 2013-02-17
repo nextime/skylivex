@@ -44,10 +44,10 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
 
    public:
       void startPlugin();
-      void sendMessage(std::string &msg);
+      void sendMessage(std::string msg);
    public slots:
-      void receiveMessage(std::string &msg);
+      void receiveMessage(std::string msg);
    signals:
-      void putMessage(std::string &msg);
+      void putMessage(std::string msg);
 };
 

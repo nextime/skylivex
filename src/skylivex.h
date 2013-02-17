@@ -67,12 +67,12 @@ class SkyliveX : public QObject
      void initialize();
      void process();
      void receiveFromMainWin(std::string &msg);
-     void receiveFromPlugins(std::string &msg);
+     void receiveFromPlugins(std::string msg);
 
    signals:
       void finished();
       void msgForMainWin(std::string &msg);
-      void msgForPlugins(std::string &msg);
+      void msgForPlugins(std::string msg);
 };
 
 #endif

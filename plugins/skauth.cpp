@@ -42,12 +42,12 @@ void SkyliveAuth::startPlugin()
 }
 
 
-void SkyliveAuth::receiveMessage(std::string &msg)
+void SkyliveAuth::receiveMessage(std::string msg)
 {
    std::cout << "SkyliveAuth receive" << msg << std::endl;
 }
 
-void SkyliveAuth::sendMessage(std::string &msg)
+void SkyliveAuth::sendMessage(std::string msg)
 {
    emit putMessage(msg);
 }
