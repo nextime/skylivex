@@ -42,7 +42,13 @@ class SkyliveAuth : public QObject, SkylivexPluginInterface
    Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE "skauth.json")
    Q_INTERFACES(SkylivexPluginInterface)
 
-public:
-   void startPlugin();
+   public:
+      void startPlugin();
+      void sendMessage(std::string &msg);
+   public slots:
+      void receiveMessage(std::string &msg);
+   signals:
+      void putMessage(std::string  &msg);
+
 };
 

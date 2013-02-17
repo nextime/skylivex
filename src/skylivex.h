@@ -61,15 +61,18 @@ class SkyliveX : public QObject
      ~SkyliveX() {}
      void loadPlugins();
      void initializePlugin(QObject*, QString);
+     void sendMessage(std::string &msg);
 
    public slots:
      void initialize();
      void process();
-     void sendMsgToMainWin(std::string &msg);
+     void receiveFromMainWin(std::string &msg);
+     void receiveFromPlugins(std::string &msg);
 
    signals:
       void finished();
       void msgForMainWin(std::string &msg);
+      void msgForPlugins(std::string &msg);
 };
 
 #endif

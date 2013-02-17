@@ -58,7 +58,7 @@ void SkyliveX::process()
 {
    //std::cout << "process" << std::endl;
    std::string sarca("ANTANI!");
-   sendMsgToMainWin(sarca);
+   sendMessage(sarca);
 }
 
 
@@ -89,24 +89,43 @@ void SkyliveX::loadPlugins()
 
 void SkyliveX::initializePlugin(QObject *plugin, QString filename) 
 {
+
+   // connect signals/slots
+   connect(plugin, SIGNAL(putMessage(std::string)), this, SLOT(receiveFromPlugins(std::string)));
+   connect(this, SIGNAL(msgForPlugins(std::string)), plugin, SLOT(receiveMessage(std::string)));
+
+   // Move the plugin in it's own thread
+   QThread* consumer = new QThread();
+   plugin->moveToThread(consumer);
+   consumer->start();
+
+   // Save plugin in the plugin list hash
+   skylivexPluginList.insert(filename, plugin);
+
+   // Cast the plugin skylivex interface
    skylivexPluginInterface = qobject_cast<SkylivexPluginInterface *>(plugin);
    if (skylivexPluginInterface)
    {
       std::cout << "Plugin file " << filename.toStdString() << " is valid." << std::endl;
-      // Create a new thread for the plugin
-      QThread* consumer = new QThread();
-      plugin->moveToThread(consumer);
-      consumer->start();
-
-      // Save plugin in the plugin list hash
-      skylivexPluginList.insert(filename, plugin);
-      // now the plugin can be initialized and used
+      // now the plugin can be initialized 
       skylivexPluginInterface->startPlugin();
    }
 }
 
-void SkyliveX::sendMsgToMainWin(std::string &msg)
+void SkyliveX::sendMessage(std::string &msg)
 {
    //std::cout <<  "Send To MainWin: " << msg << std::endl;
    emit msgForMainWin(msg);
+   emit msgForPlugins(msg);
+}
+
+
+void SkyliveX::receiveFromMainWin(std::string &msg)
+{
+   emit msgForPlugins(msg);
+}
+
+void SkyliveX::receiveFromPlugins(std::string &msg)
+{
+   sendMessage(msg);
 }

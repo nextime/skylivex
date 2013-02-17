@@ -35,6 +35,7 @@
 #ifndef PLUGINSINTERFACES_H
 #define PLUGINSINTERFACES_H
 #include <QtPlugin>
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 class QStringList;
@@ -46,6 +47,13 @@ class SkylivexPluginInterface
    public: 
       virtual ~SkylivexPluginInterface() {}
       virtual void startPlugin() = 0;
+      virtual void sendMessage(std::string) {}
+
+   public slots:
+     virtual void receiveMessage(std::string) {}
+
+   signals:
+      virtual void putMessage(std::string) {}
 };
 
 QT_BEGIN_NAMESPACE

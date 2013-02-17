@@ -39,5 +39,17 @@
 void SkyliveProtocol::startPlugin()
 {
    std::cout << "SkyliveProtocol initialized" << std::endl;
+   std::string prova("ANTANI STA PROVA!!");
+   sendMessage(prova);
+}
+
+void SkyliveProtocol::receiveMessage(std::string &msg)
+{
+   std::cout << "SkyliveProtocol receive" << msg << std::endl;
+}
+
+void SkyliveProtocol::sendMessage(std::string &msg)
+{
+   emit putMessage(msg);
 }
 
