@@ -40,13 +40,13 @@
 void SkyliveProtocol::startPlugin()
 {
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
-   std::string prova("ANTANI STA PROVA!!");
+   SKMessage::SKMessage prova("ANTANI STA PROVA!!");
    sendMessage(prova);
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 {
-   std::cout << "SkyliveProtocol receive" << msg.handle << std::endl;
+   std::cout << "SkyliveProtocol msg received: " << msg.handle.toStdString() << std::endl;
 }
 
 void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)

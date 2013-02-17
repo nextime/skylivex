@@ -45,7 +45,7 @@ void SkyliveAuth::startPlugin()
 
 void SkyliveAuth::receiveMessage(SKMessage::SKMessage msg)
 {
-   std::cout << "SkyliveAuth receive" << msg.handle << std::endl;
+   std::cout << "SkyliveAuth msg received: " << msg.handle.toStdString() << std::endl;
 }
 
 void SkyliveAuth::sendMessage(SKMessage::SKMessage msg)

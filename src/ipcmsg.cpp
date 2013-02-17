@@ -35,38 +35,39 @@
 
 #include <QTime>
 #include <QHash>
+#include <QString>
 #include <iostream>
 #include "ipcmsg.h"
 
 
-SKMessage::SKMessage(std::string s, std::string h, QHash<std::string, std::string > p)
+SKMessage::SKMessage(QString s, QString h, QHash<QString, QString > p)
 {
    handle=h;
    sender=s;
    parameters=p;
    time = QTime::currentTime();  
-   std::cout << "SKMessage initialized "  << handle << std::endl;
+   std::cout << "SKMessage initialized "  << handle.toStdString() << std::endl;
 }
 
-SKMessage::SKMessage(std::string h, QHash<std::string, std::string > p)
+SKMessage::SKMessage(QString h, QHash<QString, QString > p)
 {
-   sender= std::string("unknown");
+   sender= QString("unknown");
    time = QTime::currentTime();
    parameters = p;
    handle = h;
 }
 
-SKMessage::SKMessage(std::string h) 
+SKMessage::SKMessage(QString h) 
 {
-   sender= std::string("unknown");
+   sender= QString("unknown");
    handle = h;
    time = QTime::currentTime();
 }
 
 SKMessage::SKMessage()
 {
-   sender= std::string("unknown");
-   handle = std::string("none");
+   sender= QString("unknown");
+   handle = QString("none");
    time = QTime::currentTime();
 
 }

@@ -68,5 +68,5 @@ MainWin::~MainWin()
 
 void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 {
-   std::cout << "Message from core: " << msg.handle << std::endl;
+   std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
 }

@@ -55,11 +55,10 @@ void SkyliveX::initialize()
 }
 
 
-// read messages from plugins and dispatch to others
 void SkyliveX::process()
 {
-   SKMessage::SKMessage sarca("ANTANI!");
-   sendMessage(sarca);
+   //SKMessage::SKMessage sarca("ANTANI!");
+   //sendMessage(sarca);
 }
 
 

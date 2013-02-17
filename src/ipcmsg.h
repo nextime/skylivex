@@ -38,7 +38,7 @@
 
 #include <QTime>
 #include <QHash>
-#include <iostream>
+#include <QString>
 
 /*
  * SKMessage
@@ -54,13 +54,13 @@ class SKMessage
       ~SKMessage();
 
       QTime time;
-      std::string sender;
-      std::string handle;
-      QHash<std::string, std::string > parameters;
+      QString sender;
+      QString handle;
+      QHash<QString, QString > parameters;
 
-      SKMessage(std::string s, std::string h, QHash<std::string, std::string > p);
-      SKMessage(std::string h, QHash<std::string, std::string > p);
-      SKMessage(std::string h);
+      SKMessage(QString s, QString h, QHash<QString, QString > p);
+      SKMessage(QString h, QHash<QString, QString > p);
+      SKMessage(QString h);
 };
 
 
