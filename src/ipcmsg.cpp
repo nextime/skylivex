@@ -38,7 +38,7 @@
 #include <QString>
 #include <iostream>
 #include "ipcmsg.h"
-
+#include "pluginsinterfaces.h"
 
 SKMessage::SKMessage(QString s, QString h, QHash<QString, QString > p)
 {
@@ -74,7 +74,6 @@ SKMessage::SKMessage()
 
 SKMessage::~SKMessage()
 {
-
 }
 
 SKMessage::SKMessage(const SKMessage &other)
@@ -83,4 +82,25 @@ SKMessage::SKMessage(const SKMessage &other)
    sender=other.sender;
    parameters=other.parameters;
    time=other.time;
+}
+
+SKHandlers::SKHandlers()
+{
+}
+
+void SKHandlers::execute(SKMessage::SKMessage &msg)
+{
+  //if(_handlers.contains(msg.handle))
+  //   _handlers[msg.handle](msg);
+
+}
+
+void SKHandlers::registerHandler(QString type, SKHandlerFunction handler)
+{
+  _handlers[type] = handler;
+
+}
+
+SKHandlers::~SKHandlers()
+{
 }

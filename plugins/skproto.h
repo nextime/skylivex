@@ -37,15 +37,19 @@
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
 
+
 class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
    Q_OBJECT
    Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE "skproto.json")
    Q_INTERFACES(SkylivexPluginInterface)
 
+   private:
+      SKHandlers::SKHandlers handlers;
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
+      void handle_connect(SKMessage::SKMessage msg);
    public slots:
       void receiveMessage(SKMessage::SKMessage msg);
    signals:

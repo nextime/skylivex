@@ -64,4 +64,20 @@ class SKMessage
 };
 
 
+
+typedef void (*SKHandlerFunction)(SKMessage::SKMessage);
+
+class SKHandlers
+{
+
+   public:
+      SKHandlers();
+      ~SKHandlers();
+      void registerHandler(QString type, SKHandlerFunction handler);
+      void execute(SKMessage::SKMessage &msg);
+
+   private:
+      QHash<QString, SKHandlerFunction> _handlers;
+
+};
 #endif

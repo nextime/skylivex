@@ -37,11 +37,19 @@
 #include <iostream>
 #include "skproto.h"
 
+
 void SkyliveProtocol::startPlugin()
 {
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    SKMessage::SKMessage prova("ANTANI STA PROVA!!");
    sendMessage(prova);
+   handlers.registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
+}
+
+
+void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
+{
+   std::cout << "SkyliveProtocol connect : " << msg.handle.toStdString() << std::endl;
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
