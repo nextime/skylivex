@@ -41,6 +41,7 @@
 #include "pluginsinterfaces.h"
 #include <iostream>
 #include <string>
+#include "ipcmsg.h"
 
 /*
  * class SkyliveX
@@ -61,18 +62,18 @@ class SkyliveX : public QObject
      ~SkyliveX() {}
      void loadPlugins();
      void initializePlugin(QObject*, QString);
-     void sendMessage(std::string &msg);
+     void sendMessage(SKMessage::SKMessage &msg);
 
    public slots:
      void initialize();
      void process();
-     void receiveFromMainWin(std::string &msg);
-     void receiveFromPlugins(std::string msg);
+     void receiveFromMainWin(SKMessage::SKMessage &msg);
+     void receiveFromPlugins(SKMessage::SKMessage msg);
 
    signals:
       void finished();
-      void msgForMainWin(std::string &msg);
-      void msgForPlugins(std::string msg);
+      void msgForMainWin(SKMessage::SKMessage &msg);
+      void msgForPlugins(SKMessage::SKMessage msg);
 };
 
 #endif

@@ -32,33 +32,54 @@
  * Purpose:
  *
  */
-#ifndef PLUGINSINTERFACES_H
-#define PLUGINSINTERFACES_H
-#include <QtPlugin>
+
+#include <QTime>
+#include <QHash>
 #include <iostream>
 #include "ipcmsg.h"
 
-QT_BEGIN_NAMESPACE
-class QStringList;
-class QObject;
-QT_END_NAMESPACE
 
-class SkylivexPluginInterface
+SKMessage::SKMessage(std::string s, std::string h, QHash<std::string, std::string > p)
 {
-   public: 
-      virtual ~SkylivexPluginInterface() {}
-      virtual void startPlugin() = 0;
-      virtual void sendMessage(SKMessage) {}
+   handle=h;
+   sender=s;
+   parameters=p;
+   time = QTime::currentTime();  
+   std::cout << "SKMessage initialized "  << handle << std::endl;
+}
 
-   public slots:
-     virtual void receiveMessage(SKMessage) {}
+SKMessage::SKMessage(std::string h, QHash<std::string, std::string > p)
+{
+   sender= std::string("unknown");
+   time = QTime::currentTime();
+   parameters = p;
+   handle = h;
+}
 
-   signals:
-      virtual void putMessage(SKMessage) {}
-};
+SKMessage::SKMessage(std::string h) 
+{
+   sender= std::string("unknown");
+   handle = h;
+   time = QTime::currentTime();
+}
 
-QT_BEGIN_NAMESPACE
-#define skylivexplugin_iid "com.skylivex.SkylivexPlugin/1.0"
-Q_DECLARE_INTERFACE(SkylivexPluginInterface, skylivexplugin_iid)
-QT_END_NAMESPACE
-#endif
+SKMessage::SKMessage()
+{
+   sender= std::string("unknown");
+   handle = std::string("none");
+   time = QTime::currentTime();
+
+}
+
+SKMessage::~SKMessage()
+{
+
+}
+
+SKMessage::SKMessage(const SKMessage &other)
+{
+   handle=other.handle;
+   sender=other.sender;
+   parameters=other.parameters;
+   time=other.time;
+}

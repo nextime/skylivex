@@ -39,6 +39,7 @@
 #include <QTimer>
 #include "mainwin.h"
 #include "skylivex.h"
+#include "ipcmsg.h"
 
 
 /*
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
 
    // connect core with the mainwin
    //QObject::connect(skx, SIGNAL(msgForMainWin(std::string&)), &mainw, SLOT(msgFromCore(std::string&)), Qt::QueuedConnection);
-   QObject::connect(skx, SIGNAL(msgForMainWin(std::string&)), &mainw, SLOT(msgFromCore(std::string&)));
+   QObject::connect(skx, SIGNAL(msgForMainWin(SKMessage::SKMessage&)), &mainw, SLOT(msgFromCore(SKMessage::SKMessage&)));
 
    // and then.. go!
    return skylivexapp.exec();

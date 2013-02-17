@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QPalette>
 #include <iostream>
+#include "ipcmsg.h"
 
 MainWin::MainWin(QFile &htmlfile)
       : QWebView(0)
@@ -65,7 +66,7 @@ MainWin::~MainWin()
 
 }
 
-void MainWin::msgFromCore(std::string &msg)
+void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 {
-   std::cout << "Message from core: " << msg << std::endl;
+   std::cout << "Message from core: " << msg.handle << std::endl;
 }

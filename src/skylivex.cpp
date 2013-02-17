@@ -42,15 +42,15 @@
 #include "skylivex.h"
 #include "pluginsinterfaces.h"
 #include <iostream>
+#include "ipcmsg.h"
 
-Q_DECLARE_METATYPE(std::string)
+Q_DECLARE_METATYPE(SKMessage::SKMessage)
 
 
 // Load and initialize plugins and shared memory communication
 void SkyliveX::initialize()
 {
-   std::cout << "antani" << std::endl;
-   qRegisterMetaType<std::string>("std::string");
+   qRegisterMetaType<SKMessage::SKMessage>("SKMessage::SKMessage");
    loadPlugins();
 }
 
@@ -58,8 +58,7 @@ void SkyliveX::initialize()
 // read messages from plugins and dispatch to others
 void SkyliveX::process()
 {
-   //std::cout << "process" << std::endl;
-   std::string sarca("ANTANI!");
+   SKMessage::SKMessage sarca("ANTANI!");
    sendMessage(sarca);
 }
 
@@ -93,8 +92,8 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
 {
 
    // connect signals/slots
-   connect(plugin, SIGNAL(putMessage(std::string)), this, SLOT(receiveFromPlugins(std::string)));
-   connect(this, SIGNAL(msgForPlugins(std::string)), plugin, SLOT(receiveMessage(std::string)));
+   connect(plugin, SIGNAL(putMessage(SKMessage::SKMessage)), this, SLOT(receiveFromPlugins(SKMessage::SKMessage)));
+   connect(this, SIGNAL(msgForPlugins(SKMessage::SKMessage)), plugin, SLOT(receiveMessage(SKMessage::SKMessage)));
 
    // Move the plugin in it's own thread
    QThread* consumer = new QThread();
@@ -114,7 +113,7 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
    }
 }
 
-void SkyliveX::sendMessage(std::string &msg)
+void SkyliveX::sendMessage(SKMessage::SKMessage &msg)
 {
    //std::cout <<  "Send To MainWin: " << msg << std::endl;
    emit msgForMainWin(msg);
@@ -122,12 +121,12 @@ void SkyliveX::sendMessage(std::string &msg)
 }
 
 
-void SkyliveX::receiveFromMainWin(std::string &msg)
+void SkyliveX::receiveFromMainWin(SKMessage::SKMessage &msg)
 {
    emit msgForPlugins(msg);
 }
 
-void SkyliveX::receiveFromPlugins(std::string msg)
+void SkyliveX::receiveFromPlugins(SKMessage::SKMessage msg)
 {
    sendMessage(msg);
 }

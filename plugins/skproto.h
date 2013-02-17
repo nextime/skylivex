@@ -35,6 +35,7 @@
 #include <QObject>
 #include <QtPlugin>
 #include "pluginsinterfaces.h"
+#include "ipcmsg.h"
 
 class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
@@ -44,10 +45,10 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
 
    public:
       void startPlugin();
-      void sendMessage(std::string msg);
+      void sendMessage(SKMessage::SKMessage msg);
    public slots:
-      void receiveMessage(std::string msg);
+      void receiveMessage(SKMessage::SKMessage msg);
    signals:
-      void putMessage(std::string msg);
+      void putMessage(SKMessage::SKMessage msg);
 };
 

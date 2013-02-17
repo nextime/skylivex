@@ -33,22 +33,23 @@
  *
  */
 #include "pluginsinterfaces.h"
+#include "ipcmsg.h"
 #include <iostream>
 #include "skproto.h"
 
 void SkyliveProtocol::startPlugin()
 {
-   std::cout << "SkyliveProtocol initialized" << std::endl;
+   std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    std::string prova("ANTANI STA PROVA!!");
    sendMessage(prova);
 }
 
-void SkyliveProtocol::receiveMessage(std::string msg)
+void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 {
-   std::cout << "SkyliveProtocol receive" << msg << std::endl;
+   std::cout << "SkyliveProtocol receive" << msg.handle << std::endl;
 }
 
-void SkyliveProtocol::sendMessage(std::string msg)
+void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)
 {
    emit putMessage(msg);
 }

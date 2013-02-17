@@ -40,6 +40,7 @@
 #include <QFile>
 #include <QString>
 #include <QObject>
+#include <ipcmsg.h>
 
 /*
  * class MainWin
@@ -60,7 +61,7 @@ class MainWin : public QWebView
       ~MainWin();
 
    public slots:
-     void msgFromCore(std::string &msg);
+     void msgFromCore(SKMessage::SKMessage &msg);
 
 };
 

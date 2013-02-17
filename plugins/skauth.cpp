@@ -33,21 +33,22 @@
  *
  */
 #include "pluginsinterfaces.h"
+#include "ipcmsg.h"
 #include <iostream>
 #include "skauth.h"
 
 void SkyliveAuth::startPlugin()
 {
-   std::cout << "SkyliveAuth initialized" << std::endl;
+   std::cout << "SkyliveAuth initialized in thread " << thread() << std::endl;
 }
 
 
-void SkyliveAuth::receiveMessage(std::string msg)
+void SkyliveAuth::receiveMessage(SKMessage::SKMessage msg)
 {
-   std::cout << "SkyliveAuth receive" << msg << std::endl;
+   std::cout << "SkyliveAuth receive" << msg.handle << std::endl;
 }
 
-void SkyliveAuth::sendMessage(std::string msg)
+void SkyliveAuth::sendMessage(SKMessage::SKMessage msg)
 {
    emit putMessage(msg);
 }

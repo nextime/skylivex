@@ -32,33 +32,36 @@
  * Purpose:
  *
  */
-#ifndef PLUGINSINTERFACES_H
-#define PLUGINSINTERFACES_H
-#include <QtPlugin>
+
+#ifndef IPCMSG_H
+#define IPCMSG_H
+
+#include <QTime>
+#include <QHash>
 #include <iostream>
-#include "ipcmsg.h"
 
-QT_BEGIN_NAMESPACE
-class QStringList;
-class QObject;
-QT_END_NAMESPACE
-
-class SkylivexPluginInterface
+/*
+ * SKMessage
+ * An object representing an IPC message
+ * between threads
+ */
+class SKMessage
 {
-   public: 
-      virtual ~SkylivexPluginInterface() {}
-      virtual void startPlugin() = 0;
-      virtual void sendMessage(SKMessage) {}
 
-   public slots:
-     virtual void receiveMessage(SKMessage) {}
+   public:
+      SKMessage();
+      SKMessage(const SKMessage &other);
+      ~SKMessage();
 
-   signals:
-      virtual void putMessage(SKMessage) {}
+      QTime time;
+      std::string sender;
+      std::string handle;
+      QHash<std::string, std::string > parameters;
+
+      SKMessage(std::string s, std::string h, QHash<std::string, std::string > p);
+      SKMessage(std::string h, QHash<std::string, std::string > p);
+      SKMessage(std::string h);
 };
 
-QT_BEGIN_NAMESPACE
-#define skylivexplugin_iid "com.skylivex.SkylivexPlugin/1.0"
-Q_DECLARE_INTERFACE(SkylivexPluginInterface, skylivexplugin_iid)
-QT_END_NAMESPACE
+
 #endif

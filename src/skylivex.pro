@@ -1,10 +1,12 @@
 SOURCES = main.cpp \
           mainwin.cpp  \
-          skylivex.cpp 
+          skylivex.cpp \
+          ipcmsg.cpp
 
 HEADERS = skylivex.h \
           mainwin.h \ 
-          pluginsinterfaces.h
+          pluginsinterfaces.h \
+          ipcmsg.h
 
 QT += core network webkitwidgets widgets
 
