@@ -36,7 +36,8 @@
 #include "ipcmsg.h"
 #include <iostream>
 #include "skproto.h"
-
+#include <QTcpSocket>
+#include <QtNetwork>
 
 
 void SkyliveProtocol::startPlugin()
@@ -46,14 +47,44 @@ void SkyliveProtocol::startPlugin()
 }
 
 
+void SkyliveProtocol::readFromNetwork()
+{
+   std::cout << "Received From Skylive Serve";
+   QDataStream in(tcpSocket);
+   in.setVersion(QDataStream::Qt_4_0);
+   if(blockSize == 0)
+   {
+      if(tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+         return;
+      in >> blockSize;
+   }
+   if(tcpSocket->bytesAvailable() < blockSize)
+      return;
+   QString receivedTCP;
+   in >> receivedTCP;
+   std::cout << "Received From Skylive Server" << receivedTCP.toStdString() << std::endl;
+}
+
 void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
 {
    std::cout << "SkyliveProtocol connect : " << msg.handle.toStdString() << std::endl;
+   tcpSocket = new QTcpSocket(this);
+   connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readFromNetwork()));
+   connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(displayError(QAbstractSocket::SocketError)));
+   blockSize=0;
+   tcpSocket->abort();
+   tcpSocket->connectToHost("localhost", 8081);
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 {
    std::cout << "SkyliveProtocol msg received: " << msg.handle.toStdString() << std::endl;
+   if(_handlers.contains(msg.handle))
+   {
+     SKHandlerFunction mf =_handlers[msg.handle];
+     (this->*mf)(msg);
+   }
+
 }
 
 void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)
@@ -62,18 +93,25 @@ void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)
 }
 
 
-void SkyliveProtocol::execute(SKMessage::SKMessage &msg)
-{ 
-  if(_handlers.contains(msg.handle))
-  {
-    SKHandlerFunction mf =_handlers[msg.handle];
-    (this->*mf)(msg);
-  }
-}
-
 void SkyliveProtocol::registerHandler(QString type, SKHandlerFunction handler)
 {
   _handlers[type] = handler;
   
 }
 
+void SkyliveProtocol::displayError(QAbstractSocket::SocketError socketError)
+{
+    switch (socketError) {
+    case QAbstractSocket::RemoteHostClosedError:
+        break;
+    case QAbstractSocket::HostNotFoundError:
+        std::cout << "Host not found"  << std::endl;
+        break;
+    case QAbstractSocket::ConnectionRefusedError:
+        std::cout << "connection refused"  << std::endl;
+        break;
+    default:
+        std::cout << "networ error: " << std::endl;
+    }
+
+}

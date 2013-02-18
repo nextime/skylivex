@@ -76,7 +76,7 @@ class MainWin : public QWebView
      void msgFromCore(SKMessage::SKMessage &msg);
 
    signals:
-     void putMessage(SKMessage::SKMessage msg);
+     void putMessage(SKMessage::SKMessage &msg);
 
 };
 

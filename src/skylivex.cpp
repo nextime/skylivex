@@ -122,10 +122,12 @@ void SkyliveX::sendMessage(SKMessage::SKMessage &msg)
 
 void SkyliveX::receiveFromMainWin(SKMessage::SKMessage &msg)
 {
-   emit msgForPlugins(msg);
+    std::cout << "received from MainWin " << msg.handle.toStdString() << std::endl;
+   //emit msgForPlugins(msg);
 }
 
 void SkyliveX::receiveFromPlugins(SKMessage::SKMessage msg)
 {
+   std::cout << "received from plugins " << msg.handle.toStdString() << std::endl;
    sendMessage(msg);
 }

@@ -35,8 +35,11 @@
 #include <QObject>
 #include <QtPlugin>
 #include <QHash>
+#include <QTcpSocket>
+#include <QNetworkSession>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
+
 
 class SkyliveProtocol;
 typedef void (SkyliveProtocol::*SKHandlerFunction)(SKMessage::SKMessage);
@@ -49,13 +52,19 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
 
    private:
       QHash<QString, SKHandlerFunction> _handlers;
+      QTcpSocket *tcpSocket;
+      QNetworkSession *networkSession;
+      quint16 blockSize;
 
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
       void registerHandler(QString type, SKHandlerFunction handler);
-      void execute(SKMessage::SKMessage &msg);
       void handle_connect(SKMessage::SKMessage msg);
+   private slots:
+      void sessionOpened();
+      void readFromNetwork();
+      void displayError(QAbstractSocket::SocketError);
 
    public slots:
       void receiveMessage(SKMessage::SKMessage msg);
