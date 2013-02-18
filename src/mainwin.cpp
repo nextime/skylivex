@@ -36,6 +36,7 @@
 #include <QWebView>
 #include <QFile>
 #include <QDir>
+#include <QString>
 #include <QPalette>
 #include <iostream>
 #include "ipcmsg.h"
@@ -58,7 +59,7 @@ MainWin::MainWin(QFile &htmlfile)
    setHtml(htmlFileName, baseUrl);
    resize(250,200);
 
-
+   registerHandler((QString)"coreStarted", &MainWin::handle_corestarted);
 }
 
 MainWin::~MainWin()
@@ -69,4 +70,29 @@ MainWin::~MainWin()
 void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 {
    std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
+   if(_handlers.contains(msg.handle))
+   {
+      SKHandlerFunction mf =_handlers[msg.handle];
+      (this->*mf)(msg);
+   }
+
+}
+
+
+void MainWin::sendMessage(SKMessage::SKMessage &msg)
+{
+   emit putMessage(msg);
+}
+
+void MainWin::registerHandler(QString type, SKHandlerFunction handler)
+{
+  _handlers[type] = handler;
+
+}
+
+
+void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
+{
+   msg.handle = "connectTelescopes";
+   sendMessage(msg);
 }

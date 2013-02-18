@@ -38,9 +38,15 @@
 #include <QWebView>
 #include <QUrl>
 #include <QFile>
+#include <QHash>
 #include <QString>
 #include <QObject>
 #include <ipcmsg.h>
+
+
+class MainWin; // forward declaration for typedef
+// This is for member pointers to map messages
+typedef void (MainWin::*SKHandlerFunction)(SKMessage::SKMessage&);
 
 /*
  * class MainWin
@@ -56,12 +62,21 @@ class MainWin : public QWebView
    QFile htmlfile;
    QString htmlFileName;
 
+   private:
+      QHash<QString, SKHandlerFunction> _handlers;
+
    public:
       MainWin(QFile &htmlfile);
       ~MainWin();
+      void sendMessage(SKMessage::SKMessage &msg);
+      void registerHandler(QString type, SKHandlerFunction handler);
+      void handle_corestarted(SKMessage::SKMessage &msg);
 
    public slots:
      void msgFromCore(SKMessage::SKMessage &msg);
+
+   signals:
+     void putMessage(SKMessage::SKMessage msg);
 
 };
 

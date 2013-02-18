@@ -42,8 +42,6 @@
 void SkyliveProtocol::startPlugin()
 {
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
-   SKMessage::SKMessage prova("ANTANI STA PROVA!!");
-   sendMessage(prova);
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
 }
 

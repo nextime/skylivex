@@ -57,8 +57,6 @@ void SkyliveX::initialize()
 
 void SkyliveX::process()
 {
-   //SKMessage::SKMessage sarca("ANTANI!");
-   //sendMessage(sarca);
 }
 
 
@@ -85,6 +83,8 @@ void SkyliveX::loadPlugins()
          std::cout << plugin << std::endl;
       }
   }
+  SKMessage::SKMessage msg("coreStarted");
+  sendMessage(msg);
 }
 
 void SkyliveX::initializePlugin(QObject *plugin, QString filename) 
