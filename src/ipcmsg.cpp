@@ -84,23 +84,3 @@ SKMessage::SKMessage(const SKMessage &other)
    time=other.time;
 }
 
-SKHandlers::SKHandlers()
-{
-}
-
-void SKHandlers::execute(SKMessage::SKMessage &msg)
-{
-  //if(_handlers.contains(msg.handle))
-  //   _handlers[msg.handle](msg);
-
-}
-
-void SKHandlers::registerHandler(QString type, SKHandlerFunction handler)
-{
-  _handlers[type] = handler;
-
-}
-
-SKHandlers::~SKHandlers()
-{
-}

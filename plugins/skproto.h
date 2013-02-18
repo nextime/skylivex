@@ -34,9 +34,12 @@
  */
 #include <QObject>
 #include <QtPlugin>
+#include <QHash>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
 
+class SkyliveProtocol;
+typedef void (SkyliveProtocol::*SKHandlerFunction)(SKMessage::SKMessage);
 
 class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
@@ -45,13 +48,18 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
    Q_INTERFACES(SkylivexPluginInterface)
 
    private:
-      SKHandlers::SKHandlers handlers;
+      QHash<QString, SKHandlerFunction> _handlers;
+
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
+      void registerHandler(QString type, SKHandlerFunction handler);
+      void execute(SKMessage::SKMessage &msg);
       void handle_connect(SKMessage::SKMessage msg);
+
    public slots:
       void receiveMessage(SKMessage::SKMessage msg);
+
    signals:
       void putMessage(SKMessage::SKMessage msg);
 };
