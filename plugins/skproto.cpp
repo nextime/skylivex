@@ -49,20 +49,12 @@ void SkyliveProtocol::startPlugin()
 
 void SkyliveProtocol::readFromNetwork()
 {
-   std::cout << "Received From Skylive Serve";
-   QDataStream in(tcpSocket);
-   in.setVersion(QDataStream::Qt_4_0);
-   if(blockSize == 0)
+   char buffer[50];
+   while(tcpSocket->bytesAvailable())
    {
-      if(tcpSocket->bytesAvailable() < (int)sizeof(quint16))
-         return;
-      in >> blockSize;
+      tcpSocket->read(buffer, 50);
+      std::cout << "Received From Skylive Server" << buffer << std::endl;
    }
-   if(tcpSocket->bytesAvailable() < blockSize)
-      return;
-   QString receivedTCP;
-   in >> receivedTCP;
-   std::cout << "Received From Skylive Server" << receivedTCP.toStdString() << std::endl;
 }
 
 void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
@@ -71,9 +63,8 @@ void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
    tcpSocket = new QTcpSocket(this);
    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readFromNetwork()));
    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(displayError(QAbstractSocket::SocketError)));
-   blockSize=0;
    tcpSocket->abort();
-   tcpSocket->connectToHost("localhost", 8081);
+   tcpSocket->connectToHost("www.skylive.name", 8080);
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)

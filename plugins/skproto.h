@@ -54,7 +54,7 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       QHash<QString, SKHandlerFunction> _handlers;
       QTcpSocket *tcpSocket;
       QNetworkSession *networkSession;
-      quint16 blockSize;
+
 
    public:
       void startPlugin();
