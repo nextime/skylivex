@@ -34,6 +34,7 @@
  */
 #include "mainwin.h"
 #include <QWebView>
+#include <QWebFrame>
 #include <QFile>
 #include <QDir>
 #include <QString>
@@ -58,6 +59,8 @@ MainWin::MainWin(QFile &htmlfile)
 
    setHtml(htmlFileName, baseUrl);
    resize(250,200);
+
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
 
    registerHandler((QString)"coreStarted", &MainWin::handle_corestarted);
 }
@@ -95,4 +98,11 @@ void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
 {
    msg.handle = "connectTelescopes";
    sendMessage(msg);
+   jsbridge.changePageContent("loadstring", "Connecting...");
+
+}
+
+void JSBridge::changePageContent(QString elementid, QString content)
+{
+   emit changeContent(elementid, content);
 }

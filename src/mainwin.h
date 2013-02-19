@@ -48,6 +48,25 @@ class MainWin; // forward declaration for typedef
 // This is for member pointers to map messages
 typedef void (MainWin::*SKHandlerFunction)(SKMessage::SKMessage&);
 
+
+/*
+ * class JSBridge
+ * This class connect the javascript object SkyliveX
+ * to c++
+ */
+class JSBridge : public QObject
+{
+   Q_OBJECT
+
+   public:
+      void changePageContent(QString elementid, QString content);
+
+   signals:
+      void changeContent(QString elementid, QString content);
+
+};
+
+
 /*
  * class MainWin
  * This is just a little webkit transparent window 
@@ -61,6 +80,7 @@ class MainWin : public QWebView
    QUrl baseurl;
    QFile htmlfile;
    QString htmlFileName;
+   JSBridge jsbridge;
 
    private:
       QHash<QString, SKHandlerFunction> _handlers;

@@ -10,7 +10,8 @@ HEADERS = skylivex.h \
 
 QT += core network webkitwidgets widgets
 
-OTHER_FILES += \
-    ../gui/splash.html \
-    ../gui/img/logo.png
+OTHER_FILES += ../gui/ \
+    ../gui/*.js \
+    ../gui/*.html \
+    ../gui/img/*
 DESTDIR = ../build/

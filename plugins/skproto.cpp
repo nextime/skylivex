@@ -53,7 +53,7 @@ void SkyliveProtocol::readFromNetwork()
    while(tcpSocket->bytesAvailable())
    {
       tcpSocket->read(buffer, 50);
-      std::cout << "Received From Skylive Server" << buffer << std::endl;
+      std::cout << "Received From Skylive Server: " << buffer << std::endl;
    }
 }
 
