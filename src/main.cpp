@@ -72,11 +72,6 @@ int main(int argc, char *argv[])
    // and give a slot to the ITC/IPC in the main loop
    QTimer::singleShot(0, skx, SLOT(initialize()));
 
-   // process IPC events when we are in idle from the main window
-   QTimer *skxprocess = new QTimer(skx);
-   QObject::connect(skxprocess, SIGNAL(timeout()), skx, SLOT(process()));
-   skxprocess->start();
-
    // connect core with the mainwin
    QObject::connect(skx, SIGNAL(msgForMainWin(SKMessage::SKMessage&)), &mainw, SLOT(msgFromCore(SKMessage::SKMessage&)));
    QObject::connect(&mainw, SIGNAL(putMessage(SKMessage::SKMessage&)), skx, SLOT(receiveFromMainWin(SKMessage::SKMessage&)));

@@ -46,10 +46,9 @@ void SkyliveProtocol::startPlugin()
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
 
-   QTimer *parsetimer = new QTimer();
-   QObject::connect(parsetimer, SIGNAL(timeout()), this, SLOT(processPackets()));
-   parsetimer->start();
-
+   pktTimer = new QTimer();
+   QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
+   pktTimer->start();
 
 }
 
@@ -63,6 +62,9 @@ void SkyliveProtocol::processPackets()
       QString cmd(pkt.cmd);
       std::cout << "Packages in Queue: " << cmd.toStdString() <<std::endl;
 
+   } else {
+      if(pktTimer->isActive())
+         pktTimer->stop();
    }
 }
 
@@ -144,6 +146,9 @@ void SkyliveProtocol::readFromNetwork()
                }
                case PROTO_END:
                   protoQueue.enqueue(protoMsg);
+                  //processPackets();
+                  if(!pktTimer->isActive())
+                     pktTimer->start();
                case CMD_END:
                case PARAM_END:
                   SM_TCPCLIENT=CONNECTED;

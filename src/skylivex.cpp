@@ -55,10 +55,6 @@ void SkyliveX::initialize()
 }
 
 
-void SkyliveX::process()
-{
-}
-
 
 void SkyliveX::loadPlugins() 
 {

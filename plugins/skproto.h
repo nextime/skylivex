@@ -43,6 +43,7 @@
 //#include <QNetworkSession>
 #include <QByteArray>
 #include <QQueue>
+#include <QTimer>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
 
@@ -93,6 +94,7 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       _SM_TCPCLIENT SM_TCPCLIENT;
       SKProtoMsg protoMsg;
       QQueue<SKProtoMsg> protoQueue;
+      QTimer* pktTimer;
 
 
    public:

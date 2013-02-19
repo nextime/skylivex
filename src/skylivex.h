@@ -66,7 +66,6 @@ class SkyliveX : public QObject
 
    public slots:
      void initialize();
-     void process();
      void receiveFromMainWin(SKMessage::SKMessage &msg);
      void receiveFromPlugins(SKMessage::SKMessage msg);
 
