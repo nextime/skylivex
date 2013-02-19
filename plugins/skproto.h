@@ -42,18 +42,21 @@
 #include <QTcpSocket>
 //#include <QNetworkSession>
 #include <QByteArray>
+#include <QQueue>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
 
 #define SERVERHOST "www.skylive.name"
 #define SERVERPORT 8080
 
+#define MAX_PACKETREAD 2048
 
 struct SKProtoMsg
 {
   QByteArray cmd;
   QByteArray params;
   QByteArray crc;
+  int computed_crc;
 };
 
 enum _SM_TCPCLIENT
@@ -66,11 +69,11 @@ enum _SM_TCPCLIENT
 
 }; //SM_TCPCLIENT = HOME;
 
-#define PROTO_START     "["
-#define PROTO_END       "]"
-#define CMD_END         ">"
-#define PARAM_SEPARATOR "|"
-#define PARAM_END       ":"
+#define PROTO_START     0x5b // [
+#define PROTO_END       0x5d // ]
+#define CMD_END         0x3e // >
+#define PARAM_SEPARATOR 0x7c // |
+#define PARAM_END       0x3a // :
 
 
 class SkyliveProtocol;
@@ -88,6 +91,8 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       //QNetworkSession *networkSession;
       bool authenticated;
       _SM_TCPCLIENT SM_TCPCLIENT;
+      SKProtoMsg protoMsg;
+      QQueue<SKProtoMsg> protoQueue;
 
 
    public:
@@ -98,10 +103,14 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
    private slots:
       void sessionOpened();
       void readFromNetwork();
+      void clientConnected();
       void displayError(QAbstractSocket::SocketError);
 
    public slots:
       void receiveMessage(SKMessage::SKMessage msg);
+   
+   private slots:
+     void processPackets();
 
    signals:
       void putMessage(SKMessage::SKMessage msg);

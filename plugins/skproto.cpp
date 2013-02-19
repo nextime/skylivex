@@ -45,18 +45,115 @@ void SkyliveProtocol::startPlugin()
    SM_TCPCLIENT = HOME;
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
+
+   QTimer *parsetimer = new QTimer();
+   QObject::connect(parsetimer, SIGNAL(timeout()), this, SLOT(processPackets()));
+   parsetimer->start();
+
+
 }
 
 
+void SkyliveProtocol::processPackets()
+{
+   if(!protoQueue.isEmpty())
+   {
+      SKProtoMsg pkt;
+      pkt = protoQueue.dequeue();
+      QString cmd(pkt.cmd);
+      std::cout << "Packages in Queue: " << cmd.toStdString() <<std::endl;
+
+   }
+}
+
 void SkyliveProtocol::readFromNetwork()
 {
-   char buffer[1024];
-   int ba = tcpSocket->bytesAvailable();
-   std::cout << "Bytes: " << ba << std::endl;
+   char c;
+   int readidx=0;
    while(tcpSocket->bytesAvailable())
    {
-      tcpSocket->read(buffer, 1024);
-      std::cout << "Received From Skylive Server: " << buffer << std::endl;
+      if(readidx > MAX_PACKETREAD)
+         return;
+      tcpSocket->read(&c, 1);
+      switch(SM_TCPCLIENT)
+      {
+         case HOME:
+            break;
+         case CONNECTED:
+            switch(c)
+            {
+               case PROTO_START:
+               {
+                 SKProtoMsg protoMsg;
+                 SM_TCPCLIENT=COMMAND;
+                 break;
+               }
+               default:
+                 break;
+            }
+            break;
+         case COMMAND:
+            protoMsg.computed_crc+=c;
+            switch(c)
+            {
+               case CMD_END:
+                  SM_TCPCLIENT=PARAMS;
+                  break;
+               case PROTO_START:
+               {
+                  SKProtoMsg protoMsg;
+                  break;
+               }
+               case PARAM_END:
+               case PROTO_END:
+                  SM_TCPCLIENT=CONNECTED;
+                  break;
+               default:
+                  protoMsg.cmd.append(c);
+            }
+            break;
+         case PARAMS:
+            protoMsg.computed_crc+=c;
+            switch(c)
+            {
+               case PARAM_END:
+                  SM_TCPCLIENT=CRC;
+                  break;
+               case PROTO_START:
+               {
+                  SKProtoMsg protoMsg;
+                  SM_TCPCLIENT=COMMAND;
+                  break;
+               }
+               case CMD_END:
+               case PROTO_END:
+                  SM_TCPCLIENT=CONNECTED;
+                  break;
+               default:
+                  protoMsg.params.append(c);
+            }
+            break;
+         case CRC:
+            switch(c)
+            {
+               case PROTO_START:
+               {
+                  SKProtoMsg protoMsg;
+                  SM_TCPCLIENT=COMMAND;
+                  break;
+               }
+               case PROTO_END:
+                  protoQueue.enqueue(protoMsg);
+               case CMD_END:
+               case PARAM_END:
+                  SM_TCPCLIENT=CONNECTED;
+                  break;
+               default:
+                  protoMsg.crc.append(c);
+            }
+            break;
+      }
+      readidx++;
    }
 }
 
@@ -65,10 +162,16 @@ void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
    authenticated=false;
    std::cout << "SkyliveProtocol connect: " << msg.handle.toStdString() << std::endl;
    tcpSocket = new QTcpSocket(this);
+   connect(tcpSocket, SIGNAL(connected()), this, SLOT(clientConnected()));
    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readFromNetwork()));
    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(displayError(QAbstractSocket::SocketError)));
    tcpSocket->abort();
    tcpSocket->connectToHost(SERVERHOST, SERVERPORT);
+}
+
+void SkyliveProtocol::clientConnected()
+{
+   SM_TCPCLIENT = CONNECTED;
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
@@ -108,5 +211,6 @@ void SkyliveProtocol::displayError(QAbstractSocket::SocketError socketError)
     default:
         std::cout << "networ error: " << std::endl;
     }
+    SM_TCPCLIENT = HOME;
 
 }
