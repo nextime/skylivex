@@ -41,7 +41,7 @@
 #include <QHash>
 #include <QTcpSocket>
 //#include <QNetworkSession>
-#include <QByteArray>
+//#include <QByteArray>
 #include <QQueue>
 #include <QTimer>
 #include "pluginsinterfaces.h"
@@ -54,9 +54,9 @@
 
 struct SKProtoMsg
 {
-  QByteArray cmd;
-  QByteArray params;
-  QByteArray crc;
+  QString cmd;
+  QString params;
+  QString crc;
   int computed_crc;
 };
 
@@ -95,13 +95,18 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       SKProtoMsg protoMsg;
       QQueue<SKProtoMsg> protoQueue;
       QTimer* pktTimer;
-
+      void clearPkt();
 
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
       void registerHandler(QString type, SKHandlerFunction handler);
       void handle_connect(SKMessage::SKMessage msg);
+      void sendPacket(const char* cmd, const char* params);
+      void sendPacket(QString &cmd, QString &params);
+      void sendPacket(SKProtoMsg &pkt);
+      void sendPacket(QString &cmd, QList<QString> &paramlist);
+
    private slots:
       void sessionOpened();
       void readFromNetwork();

@@ -37,6 +37,7 @@
 #include <iostream>
 #include "skproto.h"
 #include <QTcpSocket>
+#include <QByteArray>
 #include <QtNetwork>
 
 
@@ -53,19 +54,111 @@ void SkyliveProtocol::startPlugin()
 }
 
 
+void SkyliveProtocol::sendPacket(QString &cmd, QList<QString> &paramlist)
+{
+ 
+   QString params;
+   for(int i=0;i<paramlist.size();i++)
+   {
+      if(i>0)
+         params.append(PARAM_SEPARATOR);
+      params.append(paramlist[i]);
+   }
+   sendPacket(cmd, params);
+
+}
+
+void SkyliveProtocol::sendPacket(const char* cmd, const char* params)
+{
+   QString pcmd(cmd);
+   QString pparams(params);
+   sendPacket(pcmd, pparams);
+}
+
+void SkyliveProtocol::sendPacket(QString &cmd, QString &params)
+{
+   SKProtoMsg pkt;
+   pkt.cmd=cmd;
+   pkt.params=params;
+   sendPacket(pkt);
+}
+
+void SkyliveProtocol::sendPacket(SKProtoMsg &pkt)
+{
+
+   QByteArray skpkt;
+   if(tcpSocket->isValid())
+   {
+      skpkt.append(PROTO_START);
+      skpkt.append(pkt.cmd);
+      skpkt.append(CMD_END);
+      skpkt.append(pkt.params);
+      pkt.computed_crc=0;
+      for(int i=1;i<skpkt.size();i++)
+      {
+         pkt.computed_crc+=static_cast<int>(skpkt[i]);
+      }
+      skpkt.append(PARAM_END);
+      skpkt.append(QString::number(pkt.computed_crc));
+      skpkt.append(PROTO_END);
+      tcpSocket->write(skpkt);
+      std::cout << "Packet sent: " << pkt.cmd.toStdString() <<std::endl;
+   } else {
+      std::cout << "Cannote send packet: " << pkt.cmd.toStdString() <<std::endl;
+   }
+}
+
+
 void SkyliveProtocol::processPackets()
 {
    if(!protoQueue.isEmpty())
    {
       SKProtoMsg pkt;
       pkt = protoQueue.dequeue();
-      QString cmd(pkt.cmd);
-      std::cout << "Packages in Queue: " << cmd.toStdString() <<std::endl;
+      std::cout << "Packet in Queue CRC " << pkt.crc.toInt() << " computed CRC " << pkt.computed_crc << std::endl;
+      if(pkt.crc.toInt()==pkt.computed_crc)
+      {
+         std::cout << "Packet CRC OK command: " << pkt.cmd.toStdString() <<std::endl;
+         if(pkt.cmd=="LOGIN")
+         {
 
+         } 
+         else if(pkt.cmd=="PING")
+         {
+            sendPacket("PONG", "NIL");
+         }
+         if(pkt.cmd=="CPUBLIC")
+         {
+
+         }
+         else if(pkt.cmd=="CPRIVAT")
+         {
+
+         } 
+         else if(pkt.cmd=="STATUS")
+         {
+               
+         }
+         else 
+         {
+            std::cout << "Unknown command from server" <<std::endl;
+         }
+         
+      } else {
+         std::cout << "Packet in Queue has invalid CRC. Discard it" <<std::endl;
+      }
    } else {
       if(pktTimer->isActive())
          pktTimer->stop();
    }
+}
+
+void SkyliveProtocol::clearPkt()
+{
+   protoMsg.computed_crc=0;
+   protoMsg.cmd.clear();
+   protoMsg.params.clear();
+   protoMsg.crc.clear();
 }
 
 void SkyliveProtocol::readFromNetwork()
@@ -85,27 +178,23 @@ void SkyliveProtocol::readFromNetwork()
             switch(c)
             {
                case PROTO_START:
-               {
-                 SKProtoMsg protoMsg;
+                 clearPkt();
                  SM_TCPCLIENT=COMMAND;
                  break;
-               }
                default:
                  break;
             }
             break;
          case COMMAND:
-            protoMsg.computed_crc+=c;
+            protoMsg.computed_crc+=static_cast<int>(c);
             switch(c)
             {
                case CMD_END:
                   SM_TCPCLIENT=PARAMS;
                   break;
                case PROTO_START:
-               {
-                  SKProtoMsg protoMsg;
+                  clearPkt();
                   break;
-               }
                case PARAM_END:
                case PROTO_END:
                   SM_TCPCLIENT=CONNECTED;
@@ -115,18 +204,17 @@ void SkyliveProtocol::readFromNetwork()
             }
             break;
          case PARAMS:
-            protoMsg.computed_crc+=c;
+            protoMsg.computed_crc+=static_cast<int>(c);
             switch(c)
             {
                case PARAM_END:
                   SM_TCPCLIENT=CRC;
+                  protoMsg.computed_crc-=static_cast<int>(c);
                   break;
                case PROTO_START:
-               {
-                  SKProtoMsg protoMsg;
+                  clearPkt();
                   SM_TCPCLIENT=COMMAND;
                   break;
-               }
                case CMD_END:
                case PROTO_END:
                   SM_TCPCLIENT=CONNECTED;
@@ -139,11 +227,9 @@ void SkyliveProtocol::readFromNetwork()
             switch(c)
             {
                case PROTO_START:
-               {
-                  SKProtoMsg protoMsg;
+                 clearPkt();
                   SM_TCPCLIENT=COMMAND;
                   break;
-               }
                case PROTO_END:
                   protoQueue.enqueue(protoMsg);
                   //processPackets();
@@ -177,6 +263,7 @@ void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
 void SkyliveProtocol::clientConnected()
 {
    SM_TCPCLIENT = CONNECTED;
+
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
