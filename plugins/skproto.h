@@ -32,13 +32,45 @@
  * Purpose:
  *
  */
+
+#ifndef SKPROTO_H
+#define SKPROTO_H
+
 #include <QObject>
 #include <QtPlugin>
 #include <QHash>
 #include <QTcpSocket>
-#include <QNetworkSession>
+//#include <QNetworkSession>
+#include <QByteArray>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
+
+#define SERVERHOST "www.skylive.name"
+#define SERVERPORT 8080
+
+
+struct SKProtoMsg
+{
+  QByteArray cmd;
+  QByteArray params;
+  QByteArray crc;
+};
+
+enum _SM_TCPCLIENT
+{
+   HOME = 0,
+   CONNECTED,
+   COMMAND,
+   PARAMS,
+   CRC
+
+}; //SM_TCPCLIENT = HOME;
+
+#define PROTO_START     "["
+#define PROTO_END       "]"
+#define CMD_END         ">"
+#define PARAM_SEPARATOR "|"
+#define PARAM_END       ":"
 
 
 class SkyliveProtocol;
@@ -53,7 +85,9 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
    private:
       QHash<QString, SKHandlerFunction> _handlers;
       QTcpSocket *tcpSocket;
-      QNetworkSession *networkSession;
+      //QNetworkSession *networkSession;
+      bool authenticated;
+      _SM_TCPCLIENT SM_TCPCLIENT;
 
 
    public:
@@ -72,4 +106,4 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
    signals:
       void putMessage(SKMessage::SKMessage msg);
 };
-
+#endif

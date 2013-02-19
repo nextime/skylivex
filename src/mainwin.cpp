@@ -98,7 +98,7 @@ void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
 {
    msg.handle = "connectTelescopes";
    sendMessage(msg);
-   jsbridge.changePageContent("loadstring", "Connecting...");
+   jsbridge.notify("Connecting...");
 
 }
 
@@ -106,3 +106,4 @@ void JSBridge::changePageContent(QString elementid, QString content)
 {
    emit changeContent(elementid, content);
 }
+

@@ -42,6 +42,7 @@
 
 void SkyliveProtocol::startPlugin()
 {
+   SM_TCPCLIENT = HOME;
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
 }
@@ -49,22 +50,25 @@ void SkyliveProtocol::startPlugin()
 
 void SkyliveProtocol::readFromNetwork()
 {
-   char buffer[50];
+   char buffer[1024];
+   int ba = tcpSocket->bytesAvailable();
+   std::cout << "Bytes: " << ba << std::endl;
    while(tcpSocket->bytesAvailable())
    {
-      tcpSocket->read(buffer, 50);
+      tcpSocket->read(buffer, 1024);
       std::cout << "Received From Skylive Server: " << buffer << std::endl;
    }
 }
 
 void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
 {
-   std::cout << "SkyliveProtocol connect : " << msg.handle.toStdString() << std::endl;
+   authenticated=false;
+   std::cout << "SkyliveProtocol connect: " << msg.handle.toStdString() << std::endl;
    tcpSocket = new QTcpSocket(this);
    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readFromNetwork()));
    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(displayError(QAbstractSocket::SocketError)));
    tcpSocket->abort();
-   tcpSocket->connectToHost("www.skylive.name", 8080);
+   tcpSocket->connectToHost(SERVERHOST, SERVERPORT);
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)

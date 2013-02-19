@@ -1,6 +1,15 @@
 function changeContent(id, content)
 {
-   document.getElementById(id).innerHTML=content;
+   var n=document.getElementById(id);
+   if(typeof(n)!="undefined")
+     n.innerHTML=content;
+}
+
+function notify(content)
+{
+   if(typeof(notifycb)=="function")
+      notifycb(content);
 }
 
 SkyliveX.changeContent.connect(changeContent);
+SkyliveX.notify.connect(notify);

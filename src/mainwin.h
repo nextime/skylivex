@@ -63,6 +63,7 @@ class JSBridge : public QObject
 
    signals:
       void changeContent(QString elementid, QString content);
+      void notify(QString content);
 
 };
 
