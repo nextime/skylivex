@@ -67,6 +67,9 @@ class JSBridge : public QObject
       void notify(QString content);
    public slots:
       void pushLogin(QString username, QString password);
+      void resizeWin(int width, int height);
+      void toggleBorders(bool borders);
+      void toggleTransparentBackground(bool transparentbg);
 
 };
 
@@ -89,6 +92,8 @@ class MainWin : public QWebView
    private:
       QHash<QString, SKHandlerFunction> _handlers;
       void setHtmlFile(QString &fname);
+      void setHtmlFile(QString &fname, bool borders, bool transparentbg);
+      void setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transparentbg);
 
    public:
       MainWin(QString &htmlfile);
@@ -98,6 +103,8 @@ class MainWin : public QWebView
       void handle_corestarted(SKMessage::SKMessage &msg);
       void handle_connected(SKMessage::SKMessage &msg);
       void handle_asklogin(SKMessage::SKMessage &msg);
+      void toggleBorders(bool borders);
+      void toggleTransparentBackground(bool transparentbg);
 
    public slots:
      void msgFromCore(SKMessage::SKMessage &msg);

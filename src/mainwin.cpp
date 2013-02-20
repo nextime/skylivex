@@ -50,7 +50,6 @@ MainWin::MainWin(QString &htmlfile)
 {
    baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
    
-
    QPalette pal = palette();
    pal.setBrush(QPalette::Base, Qt::transparent);
 
@@ -58,7 +57,6 @@ MainWin::MainWin(QString &htmlfile)
    page()->setPalette(pal);
    setAttribute(Qt::WA_TranslucentBackground, true);
    setAttribute(Qt::WA_OpaquePaintEvent, false);
-
    setHtmlFile(htmlfile);
    resize(250,200);
 
@@ -85,6 +83,22 @@ void MainWin::setHtmlFile(QString &fname)
 
 }
 
+void MainWin::setHtmlFile(QString &fname, bool borders, bool transparentbg)
+{
+   toggleBorders(borders);
+   toggleTransparentBackground(transparentbg);
+   setHtmlFile(fname);
+
+}
+
+void MainWin::setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transparentbg)
+{
+   toggleBorders(borders);
+   toggleTransparentBackground(transparentbg);
+   setHtml(cont, baseUrl);
+}
+
+
 void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 {
    std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
@@ -96,6 +110,48 @@ void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 
 }
 
+void MainWin::toggleBorders(bool borders)
+{
+
+   Qt::WindowFlags flags = windowFlags();
+   if(borders)
+   {
+     if(flags & Qt::FramelessWindowHint)
+     {
+        flags &= ~Qt::FramelessWindowHint;
+        setWindowFlags(flags);
+        show();
+     }
+   }
+   else
+   {
+     if(!(flags & Qt::FramelessWindowHint))
+     {
+        flags &= Qt::FramelessWindowHint;
+        setWindowFlags(flags);
+        show();
+     }
+   }
+}
+
+void MainWin::toggleTransparentBackground(bool transparentbg)
+{
+   QPalette pal = palette();
+   if(transparentbg)
+   {
+      pal.setBrush(QPalette::Base, Qt::transparent);
+      setAttribute(Qt::WA_TranslucentBackground, true);
+      setAttribute(Qt::WA_OpaquePaintEvent, false);
+   }
+   else
+   {
+      pal.setBrush(QPalette::Base, Qt::white);
+      setAttribute(Qt::WA_TranslucentBackground, false);
+      setAttribute(Qt::WA_OpaquePaintEvent, true);
+   }
+   page()->setPalette(pal);
+
+}
 
 void MainWin::sendMessage(SKMessage::SKMessage &msg)
 {
@@ -147,3 +203,19 @@ void JSBridge::pushLogin(QString username, QString password)
    loginmsg.parameters.insert("password", password);
    mwin->sendMessage(loginmsg);
 }
+
+void JSBridge::resizeWin(int width, int height)
+{
+   mwin->resize(width, height);
+}
+
+void JSBridge::toggleBorders(bool borders)
+{
+   mwin->toggleBorders(borders);
+}
+
+void JSBridge::toggleTransparentBackground(bool transparentbg)
+{
+   mwin->toggleTransparentBackground(transparentbg);
+}
+
