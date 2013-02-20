@@ -65,6 +65,8 @@ class JSBridge : public QObject
    signals:
       void changeContent(QString elementid, QString content);
       void notify(QString content);
+      void alert(QString content);
+
    public slots:
       void pushLogin(QString username, QString password);
       void resizeWin(int width, int height);
@@ -103,6 +105,9 @@ class MainWin : public QWebView
       void handle_corestarted(SKMessage::SKMessage &msg);
       void handle_connected(SKMessage::SKMessage &msg);
       void handle_asklogin(SKMessage::SKMessage &msg);
+      void handle_alert(SKMessage::SKMessage &msg);
+      void handle_notify(SKMessage::SKMessage &msg);
+      void handle_loginres(SKMessage::SKMessage &msg);
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
 

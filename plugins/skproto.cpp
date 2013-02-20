@@ -121,7 +121,7 @@ void SkyliveProtocol::processPackets()
       std::cout << "Packet in Queue CRC " << pkt.crc.toInt() << " computed CRC " << pkt.computed_crc << std::endl;
       if(pkt.crc.toInt()==pkt.computed_crc)
       {
-         std::cout << "Packet CRC OK command: " << pkt.cmd.toStdString() <<std::endl;
+         std::cout << "Packet CRC OK command: " << pkt.cmd.toStdString() << " Params: " << pkt.params.toStdString()  <<std::endl;
          if(pkt.cmd=="LOGIN")
          {
             SKMessage::SKMessage msg("getlogin");
@@ -143,6 +143,49 @@ void SkyliveProtocol::processPackets()
          else if(pkt.cmd=="STATUS")
          {
                
+         }
+         else if(pkt.cmd=="ENABLE")
+         {
+            SKMessage::SKMessage loginmsg("loginfailed");
+            if(pkt.params=="USERERRATO")
+            {
+               loginmsg.parameters.insert("why", "wronguser");  
+            }
+            else if(pkt.params=="ADMIN")
+            {
+               loginmsg.handle="loginok";
+               loginmsg.parameters.insert("level", "admin");
+
+            }
+            else if(pkt.params=="ENABLED")
+            {
+               loginmsg.handle="loginok";
+               loginmsg.parameters.insert("level", "enabled");
+            }
+            else if(pkt.params=="GUEST")
+            {
+               loginmsg.handle="loginok";
+               loginmsg.parameters.insert("level", "guest");
+            }
+            else
+            {
+               loginmsg.parameters.insert("why", "unknown");
+            }
+            loginmsg.parameters.insert("response", pkt.params);
+            sendMessage(loginmsg);
+         }
+         else if(pkt.cmd=="SERMES")
+         {
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            if(paramlist[0]=="ALERT")
+            {
+               if(paramlist.size() > 1) // For safety
+               {
+                  SKMessage::SKMessage alertmsg("alert");
+                  alertmsg.parameters.insert("msg", QByteArray::fromPercentEncoding(paramlist[1].toLocal8Bit()));
+                  sendMessage(alertmsg);
+               }
+            }
          }
          else 
          {

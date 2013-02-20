@@ -66,6 +66,10 @@ MainWin::MainWin(QString &htmlfile)
    registerHandler((QString)"coreStarted", &MainWin::handle_corestarted);
    registerHandler((QString)"telescopeConnected", &MainWin::handle_connected);
    registerHandler((QString)"asklogin", &MainWin::handle_asklogin);
+   registerHandler((QString)"alert", &MainWin::handle_alert);
+   registerHandler((QString)"notify", &MainWin::handle_notify);
+   registerHandler((QString)"loginok", &MainWin::handle_loginres);
+   registerHandler((QString)"loginfailed", &MainWin::handle_loginres);
 }
 
 MainWin::~MainWin()
@@ -198,6 +202,31 @@ void MainWin::handle_asklogin(SKMessage::SKMessage &msg)
    setHtmlFile(html, true, false);
    resize(250, 200);
 }  
+
+
+void MainWin::handle_alert(SKMessage::SKMessage &msg)
+{
+   if(msg.parameters.contains("msg"))
+      jsbridge.alert(msg.parameters["msg"]);
+}
+
+void MainWin::handle_notify(SKMessage::SKMessage &msg)
+{
+   if(msg.parameters.contains("msg"))
+      jsbridge.notify(msg.parameters["msg"]);
+}
+
+void MainWin::handle_loginres(SKMessage::SKMessage &msg)
+{
+   if(msg.handle=="loginok") 
+   {
+      std::cout << "LOGIN OK" << std::endl;
+   } 
+   else 
+   {
+      std::cout << "LOGIN FAILED" << std::endl;
+   }
+}
 
 
 void JSBridge::changePageContent(QString elementid, QString content)
