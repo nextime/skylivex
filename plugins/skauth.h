@@ -32,10 +32,20 @@
  * Purpose:
  *
  */
+#ifndef SKAUTH_H
+#define SKAUTH_H
+
+#define SENDER "skauth"
+
 #include <QObject>
+#include <QHash>
+#include <QString>
 #include <QtPlugin>
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
+
+class SkyliveAuth;
+typedef void (SkyliveAuth::*SKHandlerFunction)(SKMessage::SKMessage);
 
 class SkyliveAuth : public QObject, SkylivexPluginInterface
 {
@@ -43,9 +53,17 @@ class SkyliveAuth : public QObject, SkylivexPluginInterface
    Q_PLUGIN_METADATA(IID "com.skylivex.SkylivexPlugin/1.0" FILE "skauth.json")
    Q_INTERFACES(SkylivexPluginInterface)
 
+   private:
+      QHash<QString, SKHandlerFunction> _handlers;
+
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
+      void registerHandler(QString type, SKHandlerFunction handler);
+      void handle_getlogin(SKMessage::SKMessage msg);
+
+
+
    public slots:
       void receiveMessage(SKMessage::SKMessage msg);
    signals:
@@ -53,3 +71,4 @@ class SkyliveAuth : public QObject, SkylivexPluginInterface
 
 };
 
+#endif

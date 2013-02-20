@@ -2,15 +2,24 @@
    <head>
       <title>SkyliveX</title>
       <script type="text/javascript">
-         function notifycb(content)
+         function notifycb(c)
          {
-            document.getElementById("loadstring").innerHTML=content;
+            document.getElementById("loadstring").innerHTML=c;
          }
       </script>
       <script type="text/javascript" src="SkyliveX.js"></script>
       <style>
          #loading {
-            color: #ff0000;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 0 auto;
+         }
+         #loading h3 {
+            background-color: #0000ff;
+            width:100%;
+            text-align: center;
+            padding-bottom:5px;
+            padding-top: 3px;
          }
       </style>
    </head>

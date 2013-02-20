@@ -40,16 +40,47 @@
 void SkyliveAuth::startPlugin()
 {
    std::cout << "SkyliveAuth initialized in thread " << thread() << std::endl;
+
+   registerHandler((QString)"getlogin", &SkyliveAuth::handle_getlogin);
 }
 
 
 void SkyliveAuth::receiveMessage(SKMessage::SKMessage msg)
 {
    std::cout << "SkyliveAuth msg received: " << msg.handle.toStdString() << std::endl;
+   if(_handlers.contains(msg.handle) && msg.sender != SENDER)
+   {
+     SKHandlerFunction mf =_handlers[msg.handle];
+     (this->*mf)(msg);
+   }    
+
 }
+
 
 void SkyliveAuth::sendMessage(SKMessage::SKMessage msg)
 {
+   msg.sender=SENDER;
    emit putMessage(msg);
+}
+
+void SkyliveAuth::registerHandler(QString type, SKHandlerFunction handler)
+{
+  _handlers[type] = handler;
+   
+}  
+
+void SkyliveAuth::handle_getlogin(SKMessage::SKMessage msg)
+{
+   std::cout << "Auth module handle Login by " << msg.sender.toStdString() << std::endl;
+   /*
+    * XXX: This is, for the moment, a dummy plugin.
+    * Here we should check if we have a saved user and pass,
+    * and ask the main process only if we donesn't yet have one
+    * or if the user has logged out.
+    */
+    SKMessage::SKMessage smsg("asklogin");
+    sendMessage(smsg);
+
+    
 }
 

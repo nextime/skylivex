@@ -36,18 +36,20 @@
 #include <QWebView>
 #include <QWebFrame>
 #include <QFile>
+#include <QUrl>
 #include <QDir>
 #include <QString>
 #include <QPalette>
 #include <iostream>
 #include "ipcmsg.h"
 
-MainWin::MainWin(QFile &htmlfile)
+#define SENDER "maingui"
+
+MainWin::MainWin(QString &htmlfile)
       : QWebView(0)
 {
-   htmlfile.open(QIODevice::ReadOnly);
-   htmlFileName = QString::fromUtf8(htmlfile.readAll().constData());
-   QUrl baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
+   baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
+   
 
    QPalette pal = palette();
    pal.setBrush(QPalette::Base, Qt::transparent);
@@ -57,12 +59,14 @@ MainWin::MainWin(QFile &htmlfile)
    setAttribute(Qt::WA_TranslucentBackground, true);
    setAttribute(Qt::WA_OpaquePaintEvent, false);
 
-   setHtml(htmlFileName, baseUrl);
+   setHtmlFile(htmlfile);
    resize(250,200);
 
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
+   jsbridge.mwin=qobject_cast<MainWin *>(this);
 
    registerHandler((QString)"coreStarted", &MainWin::handle_corestarted);
+   registerHandler((QString)"telescopeConnected", &MainWin::handle_connected);
+   registerHandler((QString)"asklogin", &MainWin::handle_asklogin);
 }
 
 MainWin::~MainWin()
@@ -70,10 +74,21 @@ MainWin::~MainWin()
 
 }
 
+void MainWin::setHtmlFile(QString &fname)
+{
+
+   QFile filename(fname);
+   filename.open(QIODevice::ReadOnly);
+   htmlFileCont = QString::fromUtf8(filename.readAll().constData());
+   setHtml(htmlFileCont, baseUrl);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
+
+}
+
 void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 {
    std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
-   if(_handlers.contains(msg.handle))
+   if(_handlers.contains(msg.handle) && msg.sender != SENDER)
    {
       SKHandlerFunction mf =_handlers[msg.handle];
       (this->*mf)(msg);
@@ -84,6 +99,7 @@ void MainWin::msgFromCore(SKMessage::SKMessage &msg)
 
 void MainWin::sendMessage(SKMessage::SKMessage &msg)
 {
+   msg.sender=SENDER;
    emit putMessage(msg);
 }
 
@@ -102,8 +118,32 @@ void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
 
 }
 
+void MainWin::handle_connected(SKMessage::SKMessage &msg)
+{
+   std::cout << "Connected by " << msg.sender.toStdString() << std::endl;
+   jsbridge.notify("Connected");
+}
+
+void MainWin::handle_asklogin(SKMessage::SKMessage &msg)
+{
+   std::cout << "asklogin by " << msg.sender.toStdString() << std::endl;
+   jsbridge.notify("Logging in");
+   QString html("gui/login.html");
+   setHtmlFile(html);
+   resize(250, 200);
+}  
+
+
 void JSBridge::changePageContent(QString elementid, QString content)
 {
    emit changeContent(elementid, content);
 }
 
+void JSBridge::pushLogin(QString username, QString password)
+{
+   std::cout << "pushLogin called from JS"  << std::endl;
+   SKMessage::SKMessage loginmsg("putlogin");
+   loginmsg.parameters.insert("username", username);
+   loginmsg.parameters.insert("password", password);
+   mwin->sendMessage(loginmsg);
+}

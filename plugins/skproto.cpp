@@ -44,12 +44,15 @@
 void SkyliveProtocol::startPlugin()
 {
    SM_TCPCLIENT = HOME;
+   cver=CLIENTVERSION;
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
+   registerHandler((QString)"putlogin", &SkyliveProtocol::handle_putlogin);
 
    pktTimer = new QTimer();
    QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
    pktTimer->start();
+
 
 }
 
@@ -121,6 +124,8 @@ void SkyliveProtocol::processPackets()
          std::cout << "Packet CRC OK command: " << pkt.cmd.toStdString() <<std::endl;
          if(pkt.cmd=="LOGIN")
          {
+            SKMessage::SKMessage msg("getlogin");
+            sendMessage(msg);
 
          } 
          else if(pkt.cmd=="PING")
@@ -260,16 +265,30 @@ void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
    tcpSocket->connectToHost(SERVERHOST, SERVERPORT);
 }
 
+void SkyliveProtocol::handle_putlogin(SKMessage::SKMessage msg)
+{
+   
+   QString cmd("LOGIN");
+   QList<QString> paramlist;
+   paramlist.append(msg.parameters["username"]);
+   paramlist.append(msg.parameters["password"]);
+   paramlist.append(cver);
+   sendPacket(cmd, paramlist);
+
+}
+
 void SkyliveProtocol::clientConnected()
 {
    SM_TCPCLIENT = CONNECTED;
+   SKMessage::SKMessage msg("telescopeConnected");
+   sendMessage(msg);
 
 }
 
 void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 {
    std::cout << "SkyliveProtocol msg received: " << msg.handle.toStdString() << std::endl;
-   if(_handlers.contains(msg.handle))
+   if(_handlers.contains(msg.handle) && msg.sender!=SENDER)
    {
      SKHandlerFunction mf =_handlers[msg.handle];
      (this->*mf)(msg);
@@ -279,6 +298,7 @@ void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 
 void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)
 {
+   msg.sender=SENDER;
    emit putMessage(msg);
 }
 

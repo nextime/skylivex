@@ -47,8 +47,12 @@
 #include "pluginsinterfaces.h"
 #include "ipcmsg.h"
 
+#define SENDER "skproto"
+
 #define SERVERHOST "www.skylive.name"
 #define SERVERPORT 8080
+
+#define CLIENTVERSION "X_0.1.0"
 
 #define MAX_PACKETREAD 2048
 
@@ -96,12 +100,14 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       QQueue<SKProtoMsg> protoQueue;
       QTimer* pktTimer;
       void clearPkt();
+      QString cver;
 
    public:
       void startPlugin();
       void sendMessage(SKMessage::SKMessage msg);
       void registerHandler(QString type, SKHandlerFunction handler);
       void handle_connect(SKMessage::SKMessage msg);
+      void handle_putlogin(SKMessage::SKMessage msg);
       void sendPacket(const char* cmd, const char* params);
       void sendPacket(QString &cmd, QString &params);
       void sendPacket(SKProtoMsg &pkt);

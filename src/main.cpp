@@ -35,7 +35,7 @@
  *
  */
 #include <QApplication>
-#include <QFile>
+#include <QString>
 #include <QTimer>
 #include "mainwin.h"
 #include "skylivex.h"
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
    // Start the splash screen. also
    // the splash screen is a (transparent) webkit object
-   QFile splashfile("gui/splash.html");
+   QString splashfile("gui/splash.html");
    MainWin mainw(splashfile);
    mainw.show();
    

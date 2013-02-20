@@ -60,6 +60,7 @@ class SKMessage
 
       SKMessage(QString s, QString h, QHash<QString, QString > p);
       SKMessage(QString h, QHash<QString, QString > p);
+      SKMessage(QString s, QString h);
       SKMessage(QString h);
 };
 

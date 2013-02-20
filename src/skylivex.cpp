@@ -119,7 +119,7 @@ void SkyliveX::sendMessage(SKMessage::SKMessage &msg)
 void SkyliveX::receiveFromMainWin(SKMessage::SKMessage &msg)
 {
     std::cout << "received from MainWin " << msg.handle.toStdString() << std::endl;
-   //emit msgForPlugins(msg);
+    emit msgForPlugins(msg);
 }
 
 void SkyliveX::receiveFromPlugins(SKMessage::SKMessage msg)

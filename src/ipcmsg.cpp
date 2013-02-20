@@ -57,6 +57,13 @@ SKMessage::SKMessage(QString h, QHash<QString, QString > p)
    handle = h;
 }
 
+SKMessage::SKMessage(QString s, QString h)
+{
+   sender = s;
+   handle = h;
+   time = QTime::currentTime();
+}
+
 SKMessage::SKMessage(QString h) 
 {
    sender= QString("unknown");

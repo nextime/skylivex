@@ -59,11 +59,14 @@ class JSBridge : public QObject
    Q_OBJECT
 
    public:
+      MainWin* mwin;
       void changePageContent(QString elementid, QString content);
 
    signals:
       void changeContent(QString elementid, QString content);
       void notify(QString content);
+   public slots:
+      void pushLogin(QString username, QString password);
 
 };
 
@@ -78,20 +81,23 @@ class MainWin : public QWebView
 
    Q_OBJECT
 
-   QUrl baseurl;
-   QFile htmlfile;
-   QString htmlFileName;
+   QUrl baseUrl;
+   QString htmlfile;
+   QString htmlFileCont;
    JSBridge jsbridge;
 
    private:
       QHash<QString, SKHandlerFunction> _handlers;
+      void setHtmlFile(QString &fname);
 
    public:
-      MainWin(QFile &htmlfile);
+      MainWin(QString &htmlfile);
       ~MainWin();
       void sendMessage(SKMessage::SKMessage &msg);
       void registerHandler(QString type, SKHandlerFunction handler);
       void handle_corestarted(SKMessage::SKMessage &msg);
+      void handle_connected(SKMessage::SKMessage &msg);
+      void handle_asklogin(SKMessage::SKMessage &msg);
 
    public slots:
      void msgFromCore(SKMessage::SKMessage &msg);

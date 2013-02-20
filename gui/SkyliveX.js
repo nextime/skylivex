@@ -2,7 +2,7 @@ function changeContent(id, content)
 {
    var n=document.getElementById(id);
    if(typeof(n)!="undefined")
-     n.innerHTML=content;
+     n.innerHTML="ESTICAZZI";
 }
 
 function notify(content)
