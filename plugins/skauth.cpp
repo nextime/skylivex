@@ -45,7 +45,7 @@ void SkyliveAuth::startPlugin()
 }
 
 
-void SkyliveAuth::receiveMessage(SKMessage::SKMessage msg)
+void SkyliveAuth::receiveMessage(SKMessage msg)
 {
    std::cout << "SkyliveAuth msg received: " << msg.handle.toStdString() << std::endl;
    if(_handlers.contains(msg.handle) && msg.sender != SENDER)
@@ -57,7 +57,7 @@ void SkyliveAuth::receiveMessage(SKMessage::SKMessage msg)
 }
 
 
-void SkyliveAuth::sendMessage(SKMessage::SKMessage msg)
+void SkyliveAuth::sendMessage(SKMessage msg)
 {
    msg.sender=SENDER;
    emit putMessage(msg);
@@ -69,7 +69,7 @@ void SkyliveAuth::registerHandler(QString type, SKHandlerFunction handler)
    
 }  
 
-void SkyliveAuth::handle_getlogin(SKMessage::SKMessage msg)
+void SkyliveAuth::handle_getlogin(SKMessage msg)
 {
    std::cout << "Auth module handle Login by " << msg.sender.toStdString() << std::endl;
    /*
@@ -78,7 +78,7 @@ void SkyliveAuth::handle_getlogin(SKMessage::SKMessage msg)
     * and ask the main process only if we donesn't yet have one
     * or if the user has logged out.
     */
-    SKMessage::SKMessage smsg("asklogin");
+    SKMessage smsg("asklogin");
     sendMessage(smsg);
 
     

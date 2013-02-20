@@ -62,17 +62,17 @@ class SkyliveX : public QObject
      ~SkyliveX() {}
      void loadPlugins();
      void initializePlugin(QObject*, QString);
-     void sendMessage(SKMessage::SKMessage &msg);
+     void sendMessage(SKMessage &msg);
 
    public slots:
      void initialize();
-     void receiveFromMainWin(SKMessage::SKMessage &msg);
-     void receiveFromPlugins(SKMessage::SKMessage msg);
+     void receiveFromMainWin(SKMessage &msg);
+     void receiveFromPlugins(SKMessage msg);
 
    signals:
       void finished();
-      void msgForMainWin(SKMessage::SKMessage &msg);
-      void msgForPlugins(SKMessage::SKMessage msg);
+      void msgForMainWin(SKMessage &msg);
+      void msgForPlugins(SKMessage msg);
 };
 
 #endif

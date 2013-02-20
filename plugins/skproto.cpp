@@ -124,7 +124,7 @@ void SkyliveProtocol::processPackets()
          std::cout << "Packet CRC OK command: " << pkt.cmd.toStdString() << " Params: " << pkt.params.toStdString()  <<std::endl;
          if(pkt.cmd=="LOGIN")
          {
-            SKMessage::SKMessage msg("getlogin");
+            SKMessage msg("getlogin");
             sendMessage(msg);
 
          } 
@@ -146,7 +146,7 @@ void SkyliveProtocol::processPackets()
          }
          else if(pkt.cmd=="ENABLE")
          {
-            SKMessage::SKMessage loginmsg("loginfailed");
+            SKMessage loginmsg("loginfailed");
             if(pkt.params=="USERERRATO")
             {
                loginmsg.parameters.insert("why", "wronguser");  
@@ -181,7 +181,7 @@ void SkyliveProtocol::processPackets()
             {
                if(paramlist.size() > 1) // For safety
                {
-                  SKMessage::SKMessage alertmsg("alert");
+                  SKMessage alertmsg("alert");
                   alertmsg.parameters.insert("msg", QByteArray::fromPercentEncoding(paramlist[1].toLocal8Bit()));
                   sendMessage(alertmsg);
                }
@@ -296,7 +296,7 @@ void SkyliveProtocol::readFromNetwork()
    }
 }
 
-void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
+void SkyliveProtocol::handle_connect(SKMessage msg)
 {
    authenticated=false;
    std::cout << "SkyliveProtocol connect: " << msg.handle.toStdString() << std::endl;
@@ -308,7 +308,7 @@ void SkyliveProtocol::handle_connect(SKMessage::SKMessage msg)
    tcpSocket->connectToHost(SERVERHOST, SERVERPORT);
 }
 
-void SkyliveProtocol::handle_putlogin(SKMessage::SKMessage msg)
+void SkyliveProtocol::handle_putlogin(SKMessage msg)
 {
    
    QString cmd("LOGIN");
@@ -323,12 +323,12 @@ void SkyliveProtocol::handle_putlogin(SKMessage::SKMessage msg)
 void SkyliveProtocol::clientConnected()
 {
    SM_TCPCLIENT = CONNECTED;
-   SKMessage::SKMessage msg("telescopeConnected");
+   SKMessage msg("telescopeConnected");
    sendMessage(msg);
 
 }
 
-void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
+void SkyliveProtocol::receiveMessage(SKMessage msg)
 {
    std::cout << "SkyliveProtocol msg received: " << msg.handle.toStdString() << std::endl;
    if(_handlers.contains(msg.handle) && msg.sender!=SENDER)
@@ -339,7 +339,7 @@ void SkyliveProtocol::receiveMessage(SKMessage::SKMessage msg)
 
 }
 
-void SkyliveProtocol::sendMessage(SKMessage::SKMessage msg)
+void SkyliveProtocol::sendMessage(SKMessage msg)
 {
    msg.sender=SENDER;
    emit putMessage(msg);

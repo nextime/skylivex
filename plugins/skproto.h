@@ -82,7 +82,7 @@ enum _SM_TCPCLIENT
 
 
 class SkyliveProtocol;
-typedef void (SkyliveProtocol::*SKHandlerFunction)(SKMessage::SKMessage);
+typedef void (SkyliveProtocol::*SKHandlerFunction)(SKMessage);
 
 class SkyliveProtocol : public QObject, SkylivexPluginInterface
 {
@@ -104,10 +104,10 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
 
    public:
       void startPlugin();
-      void sendMessage(SKMessage::SKMessage msg);
+      void sendMessage(SKMessage msg);
       void registerHandler(QString type, SKHandlerFunction handler);
-      void handle_connect(SKMessage::SKMessage msg);
-      void handle_putlogin(SKMessage::SKMessage msg);
+      void handle_connect(SKMessage msg);
+      void handle_putlogin(SKMessage msg);
       void sendPacket(const char* cmd, const char* params);
       void sendPacket(QString &cmd, QString &params);
       void sendPacket(SKProtoMsg &pkt);
@@ -120,12 +120,12 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       void displayError(QAbstractSocket::SocketError);
 
    public slots:
-      void receiveMessage(SKMessage::SKMessage msg);
+      void receiveMessage(SKMessage msg);
    
    private slots:
      void processPackets();
 
    signals:
-      void putMessage(SKMessage::SKMessage msg);
+      void putMessage(SKMessage msg);
 };
 #endif

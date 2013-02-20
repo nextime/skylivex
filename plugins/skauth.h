@@ -45,7 +45,7 @@
 #include "ipcmsg.h"
 
 class SkyliveAuth;
-typedef void (SkyliveAuth::*SKHandlerFunction)(SKMessage::SKMessage);
+typedef void (SkyliveAuth::*SKHandlerFunction)(SKMessage);
 
 class SkyliveAuth : public QObject, SkylivexPluginInterface
 {
@@ -58,16 +58,16 @@ class SkyliveAuth : public QObject, SkylivexPluginInterface
 
    public:
       void startPlugin();
-      void sendMessage(SKMessage::SKMessage msg);
+      void sendMessage(SKMessage msg);
       void registerHandler(QString type, SKHandlerFunction handler);
-      void handle_getlogin(SKMessage::SKMessage msg);
+      void handle_getlogin(SKMessage msg);
 
 
 
    public slots:
-      void receiveMessage(SKMessage::SKMessage msg);
+      void receiveMessage(SKMessage msg);
    signals:
-      void putMessage(SKMessage::SKMessage  msg);
+      void putMessage(SKMessage  msg);
 
 };
 

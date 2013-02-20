@@ -63,13 +63,13 @@ MainWin::MainWin(QString &htmlfile)
 
    jsbridge.mwin=qobject_cast<MainWin *>(this);
 
-   registerHandler((QString)"coreStarted", &MainWin::handle_corestarted);
-   registerHandler((QString)"telescopeConnected", &MainWin::handle_connected);
-   registerHandler((QString)"asklogin", &MainWin::handle_asklogin);
-   registerHandler((QString)"alert", &MainWin::handle_alert);
-   registerHandler((QString)"notify", &MainWin::handle_notify);
-   registerHandler((QString)"loginok", &MainWin::handle_loginres);
-   registerHandler((QString)"loginfailed", &MainWin::handle_loginres);
+   registerHandler((QString)"coreStarted", (SKHandlerFunction)&MainWin::handle_corestarted);
+   registerHandler((QString)"telescopeConnected", (SKHandlerFunction)&MainWin::handle_connected);
+   registerHandler((QString)"asklogin", (SKHandlerFunction)&MainWin::handle_asklogin);
+   registerHandler((QString)"alert", (SKHandlerFunction)&MainWin::handle_alert);
+   registerHandler((QString)"notify", (SKHandlerFunction)&MainWin::handle_notify);
+   registerHandler((QString)"loginok", (SKHandlerFunction)&MainWin::handle_loginres);
+   registerHandler((QString)"loginfailed", (SKHandlerFunction)&MainWin::handle_loginres);
 }
 
 MainWin::~MainWin()
@@ -113,7 +113,7 @@ void MainWin::setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transpa
 }
 
 
-void MainWin::msgFromCore(SKMessage::SKMessage &msg)
+void MainWin::msgFromCore(SKMessage &msg)
 {
    std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
    if(_handlers.contains(msg.handle) && msg.sender != SENDER)
@@ -167,7 +167,7 @@ void MainWin::toggleTransparentBackground(bool transparentbg)
 
 }
 
-void MainWin::sendMessage(SKMessage::SKMessage &msg)
+void MainWin::sendMessage(SKMessage &msg)
 {
    msg.sender=SENDER;
    emit putMessage(msg);
@@ -180,7 +180,7 @@ void MainWin::registerHandler(QString type, SKHandlerFunction handler)
 }
 
 
-void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
+void MainWin::handle_corestarted(SKMessage &msg)
 {
    msg.handle = "connectTelescopes";
    sendMessage(msg);
@@ -188,13 +188,13 @@ void MainWin::handle_corestarted(SKMessage::SKMessage &msg)
 
 }
 
-void MainWin::handle_connected(SKMessage::SKMessage &msg)
+void MainWin::handle_connected(SKMessage &msg)
 {
    std::cout << "Connected by " << msg.sender.toStdString() << std::endl;
    jsbridge.notify("Connected");
 }
 
-void MainWin::handle_asklogin(SKMessage::SKMessage &msg)
+void MainWin::handle_asklogin(SKMessage &msg)
 {
    std::cout << "asklogin by " << msg.sender.toStdString() << std::endl;
    jsbridge.notify("Logging in");
@@ -204,19 +204,19 @@ void MainWin::handle_asklogin(SKMessage::SKMessage &msg)
 }  
 
 
-void MainWin::handle_alert(SKMessage::SKMessage &msg)
+void MainWin::handle_alert(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
       jsbridge.alert(msg.parameters["msg"]);
 }
 
-void MainWin::handle_notify(SKMessage::SKMessage &msg)
+void MainWin::handle_notify(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
       jsbridge.notify(msg.parameters["msg"]);
 }
 
-void MainWin::handle_loginres(SKMessage::SKMessage &msg)
+void MainWin::handle_loginres(SKMessage &msg)
 {
    if(msg.handle=="loginok") 
    {
@@ -237,7 +237,7 @@ void JSBridge::changePageContent(QString elementid, QString content)
 void JSBridge::pushLogin(QString username, QString password)
 {
    std::cout << "pushLogin called from JS"  << std::endl;
-   SKMessage::SKMessage loginmsg("putlogin");
+   SKMessage loginmsg("putlogin");
    loginmsg.parameters.insert("username", username);
    loginmsg.parameters.insert("password", password);
    mwin->sendMessage(loginmsg);

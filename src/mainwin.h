@@ -43,11 +43,10 @@
 #include <QObject>
 #include <ipcmsg.h>
 
-
 class MainWin; // forward declaration for typedef
 // This is for member pointers to map messages
-typedef void (MainWin::*SKHandlerFunction)(SKMessage::SKMessage&);
-
+typedef void (MainWin::*SKHandlerFunction)(SKMessage&);
+//typedef int (MainWin::*SKHandlerFunction)(SKMessage&);
 
 /*
  * class JSBridge
@@ -100,22 +99,22 @@ class MainWin : public QWebView
    public:
       MainWin(QString &htmlfile);
       ~MainWin();
-      void sendMessage(SKMessage::SKMessage &msg);
+      void sendMessage(SKMessage &msg);
       void registerHandler(QString type, SKHandlerFunction handler);
-      void handle_corestarted(SKMessage::SKMessage &msg);
-      void handle_connected(SKMessage::SKMessage &msg);
-      void handle_asklogin(SKMessage::SKMessage &msg);
-      void handle_alert(SKMessage::SKMessage &msg);
-      void handle_notify(SKMessage::SKMessage &msg);
-      void handle_loginres(SKMessage::SKMessage &msg);
+      void handle_corestarted(SKMessage &msg);
+      void handle_connected(SKMessage &msg);
+      void handle_asklogin(SKMessage &msg);
+      void handle_alert(SKMessage &msg);
+      void handle_notify(SKMessage &msg);
+      void handle_loginres(SKMessage &msg);
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
 
    public slots:
-     void msgFromCore(SKMessage::SKMessage &msg);
+     void msgFromCore(SKMessage &msg);
 
    signals:
-     void putMessage(SKMessage::SKMessage &msg);
+     void putMessage(SKMessage &msg);
 
    // XXX Future usage
    /*
