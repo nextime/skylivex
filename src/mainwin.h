@@ -112,6 +112,11 @@ class MainWin : public QWebView
    signals:
      void putMessage(SKMessage::SKMessage &msg);
 
+   // XXX Future usage
+   /*
+   protected:
+     void dragMoveEvent(QDragMoveEvent *ev);
+   */
 };
 
 

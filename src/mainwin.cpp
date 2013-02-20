@@ -40,6 +40,7 @@
 #include <QDir>
 #include <QString>
 #include <QPalette>
+#include <QDragMoveEvent>
 #include <iostream>
 #include "ipcmsg.h"
 
@@ -71,6 +72,15 @@ MainWin::~MainWin()
 {
 
 }
+
+// XXX This can be used in future to permit
+//     to drag a window borderless on the desktop.
+/*
+void MainWin::dragMoveEvent(QDragMoveEvent *ev)
+{
+ std::cout << "Drag Move Event " << ev->pos().x() << std::endl;
+}
+*/
 
 void MainWin::setHtmlFile(QString &fname)
 {
