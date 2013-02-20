@@ -185,7 +185,7 @@ void MainWin::handle_asklogin(SKMessage::SKMessage &msg)
    std::cout << "asklogin by " << msg.sender.toStdString() << std::endl;
    jsbridge.notify("Logging in");
    QString html("gui/login.html");
-   setHtmlFile(html);
+   setHtmlFile(html, true, false);
    resize(250, 200);
 }  
 
