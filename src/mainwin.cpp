@@ -220,7 +220,10 @@ void MainWin::handle_loginres(SKMessage &msg)
 {
    if(msg.handle=="loginok") 
    {
-      std::cout << "LOGIN OK" << std::endl;
+      //std::cout << "LOGIN OK" << std::endl;
+      QString html("gui/maingui.html");
+      setHtmlFile(html, true, false);
+      resize(800, 600);
    } 
    else 
    {
