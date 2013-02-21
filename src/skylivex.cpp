@@ -59,6 +59,14 @@ void SkyliveX::initialize()
 void SkyliveX::loadPlugins() 
 {
    QDir pluginsDir = QDir(qApp->applicationDirPath());
+#if defined(Q_OS_MAC)
+   if(pluginsDir.dirname()=="MacOS")
+   {
+      pluginsDir.cdUp();
+      pluginsDir.cdUp();
+      pluginsDir.cdUp();
+   }
+#endif
    pluginsDir.cd("plugins");
 
    std::cout << "Try to load plugins in folder " << pluginsDir.path().toStdString() << std::endl;
