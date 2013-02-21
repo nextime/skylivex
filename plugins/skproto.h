@@ -114,7 +114,7 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       void sendPacket(QString &cmd, QList<QString> &paramlist);
 
    private slots:
-      void sessionOpened();
+      //void sessionOpened();
       void readFromNetwork();
       void clientConnected();
       void displayError(QAbstractSocket::SocketError);

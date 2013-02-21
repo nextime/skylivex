@@ -51,7 +51,7 @@ void SkyliveProtocol::startPlugin()
 
    pktTimer = new QTimer();
    QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
-   pktTimer->start();
+   //pktTimer->start();
 
 
 }
@@ -306,6 +306,8 @@ void SkyliveProtocol::handle_connect(SKMessage msg)
    connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(displayError(QAbstractSocket::SocketError)));
    tcpSocket->abort();
    tcpSocket->connectToHost(SERVERHOST, SERVERPORT);
+
+
 }
 
 void SkyliveProtocol::handle_putlogin(SKMessage msg)

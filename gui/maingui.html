@@ -11,7 +11,7 @@
             overflow:hidden;
          }
          #top {
-            height:50px;
+            height:40px;
             border: 1px solid #000000;
 				width:auto;
 				position: absolute;
@@ -23,7 +23,7 @@
          #left {
             width: 330px;
 				position: absolute;
-				top:58px;
+				top:48px;
 				left: 8px;
 				right: 8px;
 				bottom: 8px;
@@ -44,7 +44,7 @@
 		   }
          #right {
 			   position: absolute;
-				top: 58px;
+				top: 48px;
 				left: 338px;
 				right: 8px;
 				bottom: 8px;
@@ -56,8 +56,17 @@
 				position: absolute;
 				bottom: 70px;
 				top: 0px;
-				right: 0px;
+				right: 130px;
 				left: 0px;
+         }
+         #chatlist {
+            overflow-y: auto;
+            width: 130px;
+            position: absolute;
+            border: 1px solid #00FF00;
+            bottom: 70px;
+            top: 0px;
+            right: 0px;
          }
          #chatinput {
 				position: absolute;
@@ -83,36 +92,38 @@
 			   </div>
          </div>
          <div id="right">
-            <div id="chatwrapperarea">
-               <div id="chatarea">
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>CHAT</p>
-                  <p>PIPPO</p>
-               </div>
+            <div id="chatarea">
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>CHAT</p>
+               <p>PIPPO</p>
+            </div>
+            <div id="chatlist">
+               <p>user1</p>
+               <p>user2</p>
             </div>
             <div id="chatinput">
                <p>INPUT</p>
