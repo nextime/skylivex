@@ -79,6 +79,7 @@ void SkyliveX::loadPlugins()
          std::cout << plugin << std::endl;
       }
   }
+  emit kickPlugins();
   SKMessage msg("coreStarted");
   sendMessage(msg);
 }
@@ -89,6 +90,7 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
    // connect signals/slots
    connect(plugin, SIGNAL(putMessage(SKMessage)), this, SLOT(receiveFromPlugins(SKMessage)));
    connect(this, SIGNAL(msgForPlugins(SKMessage)), plugin, SLOT(receiveMessage(SKMessage)));
+   connect(this, SIGNAL(kickPlugins()), plugin, SLOT(pluginKicked()));
 
    // Move the plugin in it's own thread
    QThread* consumer = new QThread();

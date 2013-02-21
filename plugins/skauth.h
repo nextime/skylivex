@@ -66,6 +66,7 @@ class SkyliveAuth : public QObject, SkylivexPluginInterface
 
    public slots:
       void receiveMessage(SKMessage msg);
+      void pluginKicked();
    signals:
       void putMessage(SKMessage  msg);
 

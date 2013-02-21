@@ -71,6 +71,7 @@ class SkyliveX : public QObject
 
    signals:
       void finished();
+      void kickPlugins();
       void msgForMainWin(SKMessage &msg);
       void msgForPlugins(SKMessage msg);
 };

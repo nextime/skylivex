@@ -120,6 +120,7 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       void displayError(QAbstractSocket::SocketError);
 
    public slots:
+      void pluginKicked();
       void receiveMessage(SKMessage msg);
    
    private slots:

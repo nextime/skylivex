@@ -49,13 +49,19 @@ void SkyliveProtocol::startPlugin()
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
    registerHandler((QString)"putlogin", &SkyliveProtocol::handle_putlogin);
 
-   pktTimer = new QTimer();
-   QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
+   //pktTimer = new QTimer();
+   //QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
    //pktTimer->start();
 
 
 }
 
+void SkyliveProtocol::pluginKicked()
+{
+   pktTimer = new QTimer();
+   QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
+   pktTimer->start();
+}
 
 void SkyliveProtocol::sendPacket(QString &cmd, QList<QString> &paramlist)
 {
