@@ -60,7 +60,7 @@ void SkyliveX::loadPlugins()
 {
    QDir pluginsDir = QDir(qApp->applicationDirPath());
 #if defined(Q_OS_MAC)
-   if(pluginsDir.dirname()=="MacOS")
+   if(pluginsDir.dirName()=="MacOS")
    {
       pluginsDir.cdUp();
       pluginsDir.cdUp();
