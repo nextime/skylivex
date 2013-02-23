@@ -1,7 +1,8 @@
 <html>
    <head>
+   	  <link href='http://fonts.googleapis.com/css?family=Arial' rel='stylesheet' type='text/css'>
       <title>SkyliveX</title>
-      <script type="text/javascript" src="SkyliveX.js"></script>
+		<script type="text/javascript" src="SkyliveX.js"></script>
       <script type="text/javascript">
          function sendLogin()
          {
@@ -16,6 +17,7 @@
             document.getElementById("alert").innerHTML=msg;
          }
       </script>
+
       <style>
          #page {
             background-color: #0000FF;
@@ -24,17 +26,29 @@
             margin: 0 auto;
          }
       </style>
+      <style>
+	        body {
+	          font-family: 'Arial', serif;
+	          font-size: 30px;
+	        }
+      </style>
    </head>
    <body>
       <div id="page">
-         <b>SkyliveX 0.1.0 Login</b>
+         <b><font size="3">SkyliveX 0.1.0 Login</font></b>
          <div id="res"></div>
-         <div id="alert"></div>
+         <div id="alert" style="font-family: 'Arial', serif; font-size: 18px; color: #FF0000; background-color: #000000;">Enter your user and pass.</div>
+         <font size="2">
          <form id="login" name="loginform">
-            Username: <input type="text" value="" name="user" placeholder="username">
-            Password: <input type="password" value="" name="pass" placeholder="password">
+            <center>
+            <table>
+            	<tr><td><div style="font-family: 'Arial', serif; font-size: 14px; color: #FFFFFF;">Username:</div></td><td><input type="text" value="" name="user" placeholder="username" style="width: 150px; padding: 2px; border: 1px solid black"></td></tr>
+            	<tr><td><div style="font-family: 'Arial', serif; font-size: 14px; color: #FFFFFF;">Password:</div></td><td><input type="password" value="" name="pass" placeholder="password" style="width: 150px; padding: 2px; border: 1px solid black"></td></tr>
+            </table>
+            </center>
             <input type="submit" value="Login" onClick="sendLogin();">
          </form>
+         </font>
       </div>
    </body>
 </html>

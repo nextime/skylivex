@@ -248,7 +248,7 @@ void MainWin::handle_loginres(SKMessage &msg)
       //std::cout << "LOGIN OK" << std::endl;
       QString html("gui/maingui.html");
       setHtmlFile(html, true, false);
-      resize(800, 600);
+      resize(636, 733);
    } 
    else 
    {
