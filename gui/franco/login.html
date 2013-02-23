@@ -1,0 +1,41 @@
+<html>
+   <head>
+      <title>SkyliveX</title>
+      <script type="text/javascript" src="SkyliveX.js"></script>
+      <script type="text/javascript">
+         function sendLogin()
+         {
+            SkyliveX.pushLogin(document.forms.loginform.user.value, document.forms.loginform.pass.value);
+         }
+         function notifycb(msg)
+         {
+            document.getElementById("res").innerHTML=msg;
+         }
+         function alertcb(msg)
+         {
+            document.getElementById("alert").innerHTML=msg;
+         }
+      </script>
+      <style>
+         #page {
+            background-color: #0000FF;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 0 auto;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="page">
+         <b>SkyliveX 0.1.0 Login</b>
+         <div id="res"></div>
+         <div id="alert"></div>
+         <form id="login" name="loginform">
+            Username: <input type="text" value="" name="user" placeholder="username">
+            Password: <input type="password" value="" name="pass" placeholder="password">
+            <input type="submit" value="Login" onClick="sendLogin();">
+         </form>
+      </div>
+   </body>
+</html>
+

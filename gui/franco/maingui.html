@@ -1,0 +1,108 @@
+<html>
+   <head>
+      <title>SkyliveX 0.1.0</title>
+      <script type="text/javascript" src="SkyliveX.js"></script>
+      <style>
+         #page {
+            background-color: #FFFFFF;
+            color: #000000;
+            text-align: center;
+            margin: 0 auto;
+            overflow:hidden;
+         }
+         #top {
+            height:40px;
+            border: 1px solid #000000;
+				width:auto;
+				position: absolute;
+				top: 8px;
+				right: 8px;
+				left: 8px;
+         }  
+
+         #left {
+            width: 330px;
+				position: absolute;
+				top:48px;
+				left: 8px;
+				right: 8px;
+				bottom: 8px;
+				border: 1px solid #FF0000;
+         }
+         #livearea {
+            border: 1px solid #00FF00;           
+				position: relative;
+         }
+
+			#toolsarea {
+				 border: 1px solid #0000FF;
+				 position: absolute;
+				 bottom: 0px;
+				 right: 0px;
+				 left: 0px;
+				 top: 242px;
+		   }
+         #right {
+			   position: absolute;
+				top: 48px;
+				left: 338px;
+				right: 8px;
+				bottom: 8px;
+				border: 1px solid #FF0FF0;
+         }
+         #chatarea {
+            overflow-y: auto;
+				border: 1px solid #00FF00;
+				position: absolute;
+				bottom: 70px;
+				top: 0px;
+				right: 130px;
+				left: 0px;
+         }
+         #chatlist {
+            overflow-y: auto;
+            width: 130px;
+            position: absolute;
+            border: 1px solid #00FF00;
+            bottom: 70px;
+            top: 0px;
+            right: 0px;
+         }
+         #chatinput {
+				position: absolute;
+            height: 70px;
+				bottom: 0px;
+				right: 0px;
+				left: 0px;
+				border: 1px solid #0000FF;
+         }
+
+      </style>
+   </head>
+   <body>
+      <div id="page">
+         <div id="top">
+         </div>
+         <div id="left">
+            <div id="livearea">
+               <img src="http://live1.skylive.name/tele1/live640.jpg"></img>
+            </div>
+				<div id="toolsarea">
+					TOOL
+			   </div>
+         </div>
+         <div id="right">
+            <div id="chatarea">
+            </div>
+            <div id="chatlist">
+               <p>user1</p>
+               <p>user2</p>
+            </div>
+            <div id="chatinput">
+               <p>INPUT</p>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>
+

@@ -1,0 +1,32 @@
+<html>
+   <head>
+      <title>SkyliveX</title>
+      <script type="text/javascript">
+         function notifycb(c)
+         {
+            document.getElementById("loadstring").innerHTML=c;
+         }
+      </script>
+      <script type="text/javascript" src="SkyliveX.js"></script>
+      <style>
+         #loading {
+            color: #FFFFFF;
+            text-align: center;
+            margin: 0 auto;
+         }
+         #loading h3 {
+            background-color: #0000ff;
+            width:100%;
+            text-align: center;
+            padding-bottom:5px;
+            padding-top: 3px;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="loading">
+         <img src="img/logo.png"></img>
+         <h3 id="loadstring">Loading...</h3>
+      </div>
+   </body>
+</html>
