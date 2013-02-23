@@ -60,8 +60,15 @@ MainWin::MainWin(QString &htmlfile)
    setAttribute(Qt::WA_OpaquePaintEvent, false);
    setHtmlFile(htmlfile);
    resize(250,200);
+   //jsbridge.mwin=qobject_cast<MainWin *>(this);
+   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
 
-   jsbridge.mwin=qobject_cast<MainWin *>(this);
+   jsbridge = new JSBridge();
+   jsbridge->mwin = qobject_cast<MainWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+
+   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
 
    registerHandler((QString)"coreStarted", (SKHandlerFunction)&MainWin::handle_corestarted);
    registerHandler((QString)"telescopeConnected", (SKHandlerFunction)&MainWin::handle_connected);
@@ -70,6 +77,10 @@ MainWin::MainWin(QString &htmlfile)
    registerHandler((QString)"notify", (SKHandlerFunction)&MainWin::handle_notify);
    registerHandler((QString)"loginok", (SKHandlerFunction)&MainWin::handle_loginres);
    registerHandler((QString)"loginfailed", (SKHandlerFunction)&MainWin::handle_loginres);
+   registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&MainWin::handle_chatreceived);
+
+
+
 }
 
 MainWin::~MainWin()
@@ -86,6 +97,15 @@ void MainWin::dragMoveEvent(QDragMoveEvent *ev)
 }
 */
 
+void MainWin::refreshJsObject()
+{
+   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
+   jsbridge = new JSBridge();
+   jsbridge->mwin = qobject_cast<MainWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+}
+
 void MainWin::setHtmlFile(QString &fname)
 {
 
@@ -93,8 +113,8 @@ void MainWin::setHtmlFile(QString &fname)
    filename.open(QIODevice::ReadOnly);
    htmlFileCont = QString::fromUtf8(filename.readAll().constData());
    setHtml(htmlFileCont, baseUrl);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-
+   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
+   //jsbridge.mwin=qobject_cast<MainWin *>(this);
 }
 
 void MainWin::setHtmlFile(QString &fname, bool borders, bool transparentbg)
@@ -184,20 +204,23 @@ void MainWin::handle_corestarted(SKMessage &msg)
 {
    msg.handle = "connectTelescopes";
    sendMessage(msg);
-   jsbridge.notify("Connecting...");
+   //jsbridge.notify("Connecting...");
+   jsbridge->notify("Connecting...");
 
 }
 
 void MainWin::handle_connected(SKMessage &msg)
 {
    std::cout << "Connected by " << msg.sender.toStdString() << std::endl;
-   jsbridge.notify("Connected");
+   //jsbridge.notify("Connected");
+   jsbridge->notify("Connected");
 }
 
 void MainWin::handle_asklogin(SKMessage &msg)
 {
    std::cout << "asklogin by " << msg.sender.toStdString() << std::endl;
-   jsbridge.notify("Logging in");
+   //jsbridge.notify("Logging in");
+   jsbridge->notify("Logging in");
    QString html("gui/login.html");
    setHtmlFile(html, true, false);
    resize(250, 200);
@@ -207,13 +230,15 @@ void MainWin::handle_asklogin(SKMessage &msg)
 void MainWin::handle_alert(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
-      jsbridge.alert(msg.parameters["msg"]);
+      //jsbridge.alertmsg(msg.parameters["msg"]);
+      jsbridge->alertmsg(msg.parameters["msg"]);
 }
 
 void MainWin::handle_notify(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
-      jsbridge.notify(msg.parameters["msg"]);
+      //jsbridge.notify(msg.parameters["msg"]);
+      jsbridge->notify(msg.parameters["msg"]);
 }
 
 void MainWin::handle_loginres(SKMessage &msg)
@@ -228,6 +253,18 @@ void MainWin::handle_loginres(SKMessage &msg)
    else 
    {
       std::cout << "LOGIN FAILED" << std::endl;
+   }
+}
+
+void MainWin::handle_chatreceived(SKMessage &msg)
+{
+   if(msg.handle=="publicchatrcv")
+   {
+      if(msg.parameters.contains("msg") && msg.parameters.contains("username"))
+      {
+         //jsbridge.public_received(msg.parameters["username"], msg.parameters["msg"]);
+         jsbridge->public_received(msg.parameters["username"], msg.parameters["msg"]);
+      }
    }
 }
 

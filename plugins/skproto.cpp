@@ -48,6 +48,7 @@ void SkyliveProtocol::startPlugin()
    std::cout << "SkyliveProtocol initialized in thread " << thread() << std::endl;
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
    registerHandler((QString)"putlogin", &SkyliveProtocol::handle_putlogin);
+   registerHandler((QString)"publicChatSend", &SkyliveProtocol::handle_publicsend);
 
    //pktTimer = new QTimer();
    //QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
@@ -138,9 +139,16 @@ void SkyliveProtocol::processPackets()
          {
             sendPacket("PONG", "NIL");
          }
-         if(pkt.cmd=="CPUBLIC")
+         else if(pkt.cmd=="CPUBLIC")
          {
-
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            if(paramlist.size() > 1) // For safety
+            {
+               SKMessage pmsg("publicchatrcv");
+               pmsg.parameters.insert("username", QByteArray::fromPercentEncoding(paramlist[0].toLocal8Bit()));
+               pmsg.parameters.insert("msg", QByteArray::fromPercentEncoding(paramlist[1].toLocal8Bit()));
+               sendMessage(pmsg);
+            }
          }
          else if(pkt.cmd=="CPRIVAT")
          {
@@ -149,6 +157,10 @@ void SkyliveProtocol::processPackets()
          else if(pkt.cmd=="STATUS")
          {
                
+         }
+         else if(pkt.cmd=="ULIST")
+         {
+
          }
          else if(pkt.cmd=="ENABLE")
          {
@@ -326,6 +338,19 @@ void SkyliveProtocol::handle_putlogin(SKMessage msg)
    paramlist.append(cver);
    sendPacket(cmd, paramlist);
 
+}
+
+
+void SkyliveProtocol::handle_publicsend(SKMessage msg)
+{
+   if(msg.parameters.size() > 0)
+   {
+      QString cmd("CPUBLIC");
+      QList<QString> paramlist;
+      QByteArray message(msg.parameters[0].toLocal8Bit());
+      paramlist.append(message.toPercentEncoding());
+      sendPacket(cmd, paramlist);
+   }
 }
 
 void SkyliveProtocol::clientConnected()

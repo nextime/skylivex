@@ -108,6 +108,7 @@ class SkyliveProtocol : public QObject, SkylivexPluginInterface
       void registerHandler(QString type, SKHandlerFunction handler);
       void handle_connect(SKMessage msg);
       void handle_putlogin(SKMessage msg);
+      void handle_publicsend(SKMessage msg);
       void sendPacket(const char* cmd, const char* params);
       void sendPacket(QString &cmd, QString &params);
       void sendPacket(SKProtoMsg &pkt);

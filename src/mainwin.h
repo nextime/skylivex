@@ -64,7 +64,8 @@ class JSBridge : public QObject
    signals:
       void changeContent(QString elementid, QString content);
       void notify(QString content);
-      void alert(QString content);
+      void alertmsg(QString content);
+      void public_received(QString user, QString content);
 
    public slots:
       void pushLogin(QString username, QString password);
@@ -88,7 +89,8 @@ class MainWin : public QWebView
    QUrl baseUrl;
    QString htmlfile;
    QString htmlFileCont;
-   JSBridge jsbridge;
+   //JSBridge jsbridge;
+   JSBridge* jsbridge;
 
    private:
       QHash<QString, SKHandlerFunction> _handlers;
@@ -107,8 +109,12 @@ class MainWin : public QWebView
       void handle_alert(SKMessage &msg);
       void handle_notify(SKMessage &msg);
       void handle_loginres(SKMessage &msg);
+      void handle_chatreceived(SKMessage &msg);
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
+
+   private slots:
+     void refreshJsObject();
 
    public slots:
      void msgFromCore(SKMessage &msg);
