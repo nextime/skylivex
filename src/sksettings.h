@@ -45,6 +45,6 @@ class SkSettings : public QSettings
       SkSettings()
         : QSettings("Skylive", "SkyliveX") {};
 
-}
+};
 
 #endif

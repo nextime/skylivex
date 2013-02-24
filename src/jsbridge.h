@@ -36,7 +36,7 @@
 #define JSBRIDGE_H
 
 #include <QObject>
-#include <QStrings>
+#include <QString>
 
 class MainWin; // forward declaration for typedef
 
