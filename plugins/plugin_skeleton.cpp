@@ -36,6 +36,7 @@
 #include "ipcmsg.h"
 #include <iostream>
 #include "plugin_skeleton.h"
+//#include "sksettings.h" // XXX Only if we need to store configs
 
 void SkylivePluginSkeleton::startPlugin()
 {

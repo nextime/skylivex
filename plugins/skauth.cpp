@@ -36,6 +36,7 @@
 #include "ipcmsg.h"
 #include <iostream>
 #include "skauth.h"
+#include "sksettings.h"
 
 void SkyliveAuth::startPlugin()
 {
