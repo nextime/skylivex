@@ -37,8 +37,9 @@
 
 #include <QObject>
 #include <QString>
+#include "webwin.h"
 
-class MainWin; // forward declaration for typedef
+class WebWin; // forward declaration for typedef
 
 /*
  * class JSBridge
@@ -50,7 +51,7 @@ class JSBridge : public QObject
    Q_OBJECT
 
    public:
-      MainWin* mwin;
+      WebWin* wwin;
       void changePageContent(QString elementid, QString content);
 
    signals:

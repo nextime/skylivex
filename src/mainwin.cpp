@@ -33,7 +33,7 @@
  *
  */
 #include "mainwin.h"
-#include <QWebView>
+#include "webwin.h"
 #include <QWebFrame>
 #include <QFile>
 #include <QUrl>
@@ -48,28 +48,8 @@
 #define SENDER "maingui"
 
 MainWin::MainWin(QString &htmlfile)
-      : QWebView(0)
+      : WebWin(htmlfile)
 {
-   baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
-   
-   QPalette pal = palette();
-   pal.setBrush(QPalette::Base, Qt::transparent);
-
-   setWindowFlags(Qt::FramelessWindowHint);
-   page()->setPalette(pal);
-   setAttribute(Qt::WA_TranslucentBackground, true);
-   setAttribute(Qt::WA_OpaquePaintEvent, false);
-   setHtmlFile(htmlfile);
-   resize(250,200);
-   //jsbridge.mwin=qobject_cast<MainWin *>(this);
-   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-
-   jsbridge = new JSBridge();
-   jsbridge->mwin = qobject_cast<MainWin *>(this);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
-
-
-   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
 
    registerHandler((QString)"coreStarted", (SKHandlerFunction)&MainWin::handle_corestarted);
    registerHandler((QString)"telescopeConnected", (SKHandlerFunction)&MainWin::handle_connected);
@@ -89,123 +69,11 @@ MainWin::~MainWin()
 
 }
 
-// XXX This can be used in future to permit
-//     to drag a window borderless on the desktop.
-/*
-void MainWin::dragMoveEvent(QDragMoveEvent *ev)
-{
- std::cout << "Drag Move Event " << ev->pos().x() << std::endl;
-}
-*/
-
-void MainWin::refreshJsObject()
-{
-   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-   jsbridge = new JSBridge();
-   jsbridge->mwin = qobject_cast<MainWin *>(this);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
-
-}
-
-void MainWin::setHtmlFile(QString &fname)
-{
-
-   QFile filename(fname);
-   filename.open(QIODevice::ReadOnly);
-   htmlFileCont = QString::fromUtf8(filename.readAll().constData());
-   setHtml(htmlFileCont, baseUrl);
-   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-   //jsbridge.mwin=qobject_cast<MainWin *>(this);
-}
-
-void MainWin::setHtmlFile(QString &fname, bool borders, bool transparentbg)
-{
-   toggleBorders(borders);
-   toggleTransparentBackground(transparentbg);
-   setHtmlFile(fname);
-
-}
-
-void MainWin::setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transparentbg)
-{
-   toggleBorders(borders);
-   toggleTransparentBackground(transparentbg);
-   setHtml(cont, baseUrl);
-}
-
-
-void MainWin::msgFromCore(SKMessage &msg)
-{
-   std::cout << "MainWindow msg reveived: " << msg.handle.toStdString() << std::endl;
-   if(_handlers.contains(msg.handle) && msg.sender != SENDER)
-   {
-      SKHandlerFunction mf =_handlers[msg.handle];
-      (this->*mf)(msg);
-   }
-
-}
-
-void MainWin::toggleBorders(bool borders)
-{
-
-   Qt::WindowFlags flags = windowFlags();
-   if(borders)
-   {
-     if(flags & Qt::FramelessWindowHint)
-     {
-        flags &= ~Qt::FramelessWindowHint;
-        setWindowFlags(flags);
-        show();
-     }
-   }
-   else
-   {
-     if(!(flags & Qt::FramelessWindowHint))
-     {
-        flags &= Qt::FramelessWindowHint;
-        setWindowFlags(flags);
-        show();
-     }
-   }
-}
-
-void MainWin::toggleTransparentBackground(bool transparentbg)
-{
-   QPalette pal = palette();
-   if(transparentbg)
-   {
-      pal.setBrush(QPalette::Base, Qt::transparent);
-      setAttribute(Qt::WA_TranslucentBackground, true);
-      setAttribute(Qt::WA_OpaquePaintEvent, false);
-   }
-   else
-   {
-      pal.setBrush(QPalette::Base, Qt::white);
-      setAttribute(Qt::WA_TranslucentBackground, false);
-      setAttribute(Qt::WA_OpaquePaintEvent, true);
-   }
-   page()->setPalette(pal);
-
-}
-
-void MainWin::sendMessage(SKMessage &msg)
-{
-   msg.sender=SENDER;
-   emit putMessage(msg);
-}
-
-void MainWin::registerHandler(QString type, SKHandlerFunction handler)
-{
-  _handlers[type] = handler;
-
-}
-
 
 void MainWin::handle_corestarted(SKMessage &msg)
 {
    msg.handle = "connectTelescopes";
    sendMessage(msg);
-   //jsbridge.notify("Connecting...");
    jsbridge->notify("Connecting...");
 
 }
@@ -213,14 +81,12 @@ void MainWin::handle_corestarted(SKMessage &msg)
 void MainWin::handle_connected(SKMessage &msg)
 {
    std::cout << "Connected by " << msg.sender.toStdString() << std::endl;
-   //jsbridge.notify("Connected");
    jsbridge->notify("Connected");
 }
 
 void MainWin::handle_asklogin(SKMessage &msg)
 {
    std::cout << "asklogin by " << msg.sender.toStdString() << std::endl;
-   //jsbridge.notify("Logging in");
    jsbridge->notify("Logging in");
    QString html("gui/login.html");
    setHtmlFile(html, true, false);
@@ -231,14 +97,12 @@ void MainWin::handle_asklogin(SKMessage &msg)
 void MainWin::handle_alert(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
-      //jsbridge.alertmsg(msg.parameters["msg"]);
       jsbridge->alertmsg(msg.parameters["msg"]);
 }
 
 void MainWin::handle_notify(SKMessage &msg)
 {
    if(msg.parameters.contains("msg"))
-      //jsbridge.notify(msg.parameters["msg"]);
       jsbridge->notify(msg.parameters["msg"]);
 }
 
@@ -246,7 +110,6 @@ void MainWin::handle_loginres(SKMessage &msg)
 {
    if(msg.handle=="loginok") 
    {
-      //std::cout << "LOGIN OK" << std::endl;
       QString html("gui/maingui.html");
       setHtmlFile(html, true, false);
       resize(800, 600);
@@ -263,7 +126,6 @@ void MainWin::handle_chatreceived(SKMessage &msg)
    {
       if(msg.parameters.contains("msg") && msg.parameters.contains("username"))
       {
-         //jsbridge.public_received(msg.parameters["username"], msg.parameters["msg"]);
          jsbridge->public_received(msg.parameters["username"], msg.parameters["msg"]);
       }
    }

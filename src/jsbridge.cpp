@@ -49,21 +49,21 @@ void JSBridge::pushLogin(QString username, QString password)
    SKMessage loginmsg("putlogin");
    loginmsg.parameters.insert("username", username);
    loginmsg.parameters.insert("password", password);
-   mwin->sendMessage(loginmsg);
+   wwin->sendMessage(loginmsg);
 }
 
 void JSBridge::resizeWin(int width, int height)
 {
-   mwin->resize(width, height);
+   wwin->resize(width, height);
 }
 
 void JSBridge::toggleBorders(bool borders)
 {
-   mwin->toggleBorders(borders);
+   wwin->toggleBorders(borders);
 }
 
 void JSBridge::toggleTransparentBackground(bool transparentbg)
 {
-   mwin->toggleTransparentBackground(transparentbg);
+   wwin->toggleTransparentBackground(transparentbg);
 }
 

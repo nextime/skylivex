@@ -1,9 +1,12 @@
 SOURCES = main.cpp \
+          webwin.cpp \
           mainwin.cpp  \
           skylivex.cpp \
-          ipcmsg.cpp
+          ipcmsg.cpp \
+          jsbridge.cpp
 
 HEADERS = skylivex.h \
+          webwin.h \
           mainwin.h \ 
           pluginsinterfaces.h \
           ipcmsg.h \
