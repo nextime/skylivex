@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<title>SkyliveX 0.1.0</title>
+		<script type="text/javascript" src="SkyliveX.js"></script>
+		<style>
+			body {
+			background-color: #000000;
+			background-image:url('img/mainbg.jpg');
+			background-repeat:no-repeat;
+			color: #000000;
+			margin: 0 auto;
+			}
+
+			#datitele{
+			position: absolute;
+			top: 82px;
+			left: 438px;
+			height:100px;
+			width:50px;
+			color: #BBBBBB;
+			font-size:16px;
+			}
+
+			#status {
+			position: absolute;
+			top: 359px;
+			left: 38px;
+			height:35px;
+			width:350px;
+			color: #FFFF00;
+			text-align: left;
+			font-size:12px;
+			}
+
+			#livearea {
+			position: absolute;
+			top:73px;
+			left: 61px;
+			height:240x;
+			width:320px;
+			}
+
+			#telescope {
+			position: absolute;
+			top: 23px;
+			left: 312px;
+			width: auto;
+			color: #CCCCCC;
+			font-size:18px;
+			}
+
+			#numteleselect {
+			position: absolute;
+			top: 20px;
+			left: 407px;
+			}
+		</style>
+	</head>
+   	<body>
+		<div id="telescope">
+			Telescope
+		</div>
+
+		<div id="numteleselect">
+			<select name="numtele">
+				<option selected>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+			</select>
+		</div>
+
+        <div id="livearea">
+        	<img src="http://live1.skylive.name/tele1/live640.jpg"></img>
+        </div>
+
+        <div id="datitele">
+			RA<br>
+			DEC<br>
+			CCD Temp.<br>
+			FWHM<br>
+        </div>
+
+		<div id="status">
+			Telescopio chiuso per maltempo
+        </div>
+   </body>
+</html>
+
