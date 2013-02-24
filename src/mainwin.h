@@ -42,38 +42,12 @@
 #include <QString>
 #include <QObject>
 #include <ipcmsg.h>
+#include "jsbridge.h"
 
 class MainWin; // forward declaration for typedef
 // This is for member pointers to map messages
 typedef void (MainWin::*SKHandlerFunction)(SKMessage&);
 //typedef int (MainWin::*SKHandlerFunction)(SKMessage&);
-
-/*
- * class JSBridge
- * This class connect the javascript object SkyliveX
- * to c++
- */
-class JSBridge : public QObject
-{
-   Q_OBJECT
-
-   public:
-      MainWin* mwin;
-      void changePageContent(QString elementid, QString content);
-
-   signals:
-      void changeContent(QString elementid, QString content);
-      void notify(QString content);
-      void alertmsg(QString content);
-      void public_received(QString user, QString content);
-
-   public slots:
-      void pushLogin(QString username, QString password);
-      void resizeWin(int width, int height);
-      void toggleBorders(bool borders);
-      void toggleTransparentBackground(bool transparentbg);
-
-};
 
 
 /*

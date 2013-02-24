@@ -6,7 +6,9 @@ SOURCES = main.cpp \
 HEADERS = skylivex.h \
           mainwin.h \ 
           pluginsinterfaces.h \
-          ipcmsg.h
+          ipcmsg.h \
+          sksettings.h \
+          jsbridge.h 
 
 QT += core network webkitwidgets widgets
 
