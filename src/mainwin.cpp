@@ -43,6 +43,7 @@
 #include <QDragMoveEvent>
 #include <iostream>
 #include "ipcmsg.h"
+#include "jsbridge.h"
 
 #define SENDER "maingui"
 
@@ -266,35 +267,5 @@ void MainWin::handle_chatreceived(SKMessage &msg)
          jsbridge->public_received(msg.parameters["username"], msg.parameters["msg"]);
       }
    }
-}
-
-
-void JSBridge::changePageContent(QString elementid, QString content)
-{
-   emit changeContent(elementid, content);
-}
-
-void JSBridge::pushLogin(QString username, QString password)
-{
-   std::cout << "pushLogin called from JS"  << std::endl;
-   SKMessage loginmsg("putlogin");
-   loginmsg.parameters.insert("username", username);
-   loginmsg.parameters.insert("password", password);
-   mwin->sendMessage(loginmsg);
-}
-
-void JSBridge::resizeWin(int width, int height)
-{
-   mwin->resize(width, height);
-}
-
-void JSBridge::toggleBorders(bool borders)
-{
-   mwin->toggleBorders(borders);
-}
-
-void JSBridge::toggleTransparentBackground(bool transparentbg)
-{
-   mwin->toggleTransparentBackground(transparentbg);
 }
 
