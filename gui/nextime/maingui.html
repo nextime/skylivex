@@ -2,6 +2,23 @@
    <head>
       <title>SkyliveX 0.1.0</title>
       <script type="text/javascript" src="SkyliveX.js"></script>
+      <script type="text/javascript">
+         function sendMsg()
+         {
+           //publicReceived('me', document.forms.messagesend.msginput.value);
+           SkyliveX.chat_message_send(document.forms.messagesend.msginput.value);
+           document.forms.messagesend.msginput.value="";
+         }
+
+         function  msgInputKey(event)
+         {
+            if(event.keyCode==13)
+            {
+               sendMsg();
+            }
+         }
+
+      </script>
       <style>
          #page {
             background-color: #FFFFFF;
@@ -76,12 +93,32 @@
 				left: 0px;
 				border: 1px solid #0000FF;
          }
+         #msginput {
+            height: 100%;
+            left:0;
+            right:100;
+            position:absolute;
+         }
+         #msgsend {
+            position:absolute;
+            right:5;
+            height: 100%;
+            width: 90;
+            
+         }
 
       </style>
    </head>
    <body>
       <div id="page">
          <div id="top">
+         <select id="telescopes" onChange="SkyliveX.change_telescope(this.options[this.selectedIndex].value);">
+            <option value="1">telescope 1</option>
+            <option value="2">telescope 2</option>
+            <option value="3">telescope 3</option>
+            <option value="4">telescope 4</option>
+            <option value="5">telescope 5</option>
+         </select>
          </div>
          <div id="left">
             <div id="livearea">
@@ -99,7 +136,10 @@
                <p>user2</p>
             </div>
             <div id="chatinput">
-               <p>INPUT</p>
+               <form name="messagesend" >
+                  <textarea id="msginput" name="msginput" onKeyDown="msgInputKey(event);"></textarea>
+                  <input id="msgsend" type="submit" name="msgsend" value="Invia" onClick="sendMsg();" />
+               </form>
             </div>
          </div>
       </div>

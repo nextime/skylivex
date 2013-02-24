@@ -69,6 +69,8 @@ WebWin::WebWin(QString &htmlfile)
 
    connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
 
+   msgsender = SENDER;
+
 
 }
 
@@ -125,7 +127,7 @@ void WebWin::setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transpar
 void WebWin::msgFromCore(SKMessage &msg)
 {
    std::cout << "WebWindow msg reveived: " << msg.handle.toStdString() << std::endl;
-   if(_handlers.contains(msg.handle) && msg.sender != SENDER)
+   if(_handlers.contains(msg.handle) && msg.sender != msgsender)
    {
       SKHandlerFunction mf =_handlers[msg.handle];
       (this->*mf)(msg);
@@ -178,7 +180,8 @@ void WebWin::toggleTransparentBackground(bool transparentbg)
 
 void WebWin::sendMessage(SKMessage &msg)
 {
-   msg.sender=SENDER;
+   //msg.sender=SENDER;
+   msg.sender = msgsender;
    emit putMessage(msg);
 }
 

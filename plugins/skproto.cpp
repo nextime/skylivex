@@ -49,6 +49,7 @@ void SkyliveProtocol::startPlugin()
    registerHandler((QString)"connectTelescopes", &SkyliveProtocol::handle_connect);
    registerHandler((QString)"putlogin", &SkyliveProtocol::handle_putlogin);
    registerHandler((QString)"publicChatSend", &SkyliveProtocol::handle_publicsend);
+   registerHandler((QString)"changeTelescope", &SkyliveProtocol::handle_changetelescope);
 
    //pktTimer = new QTimer();
    //QObject::connect(pktTimer, SIGNAL(timeout()), this, SLOT(processPackets()));
@@ -347,11 +348,23 @@ void SkyliveProtocol::handle_publicsend(SKMessage msg)
    {
       QString cmd("CPUBLIC");
       QList<QString> paramlist;
-      QByteArray message(msg.parameters[0].toLocal8Bit());
+      QByteArray message(msg.parameters["msg"].toLocal8Bit());
       paramlist.append(message.toPercentEncoding());
       sendPacket(cmd, paramlist);
    }
 }
+
+void SkyliveProtocol::handle_changetelescope(SKMessage msg)
+{
+   if(msg.parameters.size() > 0)
+   {
+      QString cmd("CHTELE");
+      QList<QString> paramlist;
+      paramlist.append(msg.parameters["telescope"]);
+      sendPacket(cmd, paramlist);
+   }
+}
+
 
 void SkyliveProtocol::clientConnected()
 {
@@ -402,3 +415,4 @@ void SkyliveProtocol::displayError(QAbstractSocket::SocketError socketError)
     SM_TCPCLIENT = HOME;
 
 }
+

@@ -65,7 +65,9 @@ class JSBridge : public QObject
       void resizeWin(int width, int height);
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
-
+      void chat_message_send(QString dest, QString message);
+      void chat_message_send(QString message);
+      void change_telescope(QString tele);
 };
 
 

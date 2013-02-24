@@ -67,3 +67,26 @@ void JSBridge::toggleTransparentBackground(bool transparentbg)
    wwin->toggleTransparentBackground(transparentbg);
 }
 
+/* a private message */
+void JSBridge::chat_message_send(QString dest, QString message)
+{
+
+}
+
+/* a public message */
+void JSBridge::chat_message_send(QString message)
+{
+   std::cout << "public message send called from JS"  << std::endl;
+   SKMessage chatmsg("publicChatSend");
+   chatmsg.parameters.insert("msg", message);
+   wwin->sendMessage(chatmsg);
+}
+
+void JSBridge::change_telescope(QString tele)
+{
+   std::cout << "Telescope change requested from JS" << std::endl;
+   SKMessage msg("changeTelescope");
+   msg.parameters.insert("telescope", tele);
+   wwin->sendMessage(msg);
+
+}

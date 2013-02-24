@@ -61,6 +61,7 @@ MainWin::MainWin(QString &htmlfile)
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&MainWin::handle_chatreceived);
 
 
+   msgsender = SENDER;
 
 }
 

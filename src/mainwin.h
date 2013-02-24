@@ -57,6 +57,7 @@ class MainWin : public WebWin
    public:
       MainWin(QString &htmlfile);
       ~MainWin();
+      QString msgsender;
       void handle_corestarted(SKMessage &msg);
       void handle_connected(SKMessage &msg);
       void handle_asklogin(SKMessage &msg);

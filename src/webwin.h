@@ -79,6 +79,7 @@ class WebWin : public QWebView
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
       JSBridge* jsbridge;
+      QString msgsender;
 
    private slots:
      void refreshJsObject();
