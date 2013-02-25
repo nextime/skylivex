@@ -1,24 +1,20 @@
 function skyliveClass () {}
-skyliveClass.prototype.method = function(name, func){
-   this.prototype[name] = func;
-   return this;
-}
-skyliveClass.method('changeContent', function(id, content){
+skyliveClass.prototype.changeContent = function(id, content){
    var n=document.getElementById(id);
    if(typeof(n)!="undefined")
      n.innerHTML=content;
-});
-skyliveClass.method('notify', function(content){
+};
+skyliveClass.prototype.notify = function(content){
    if(typeof(notifycb)=="function")
       notifycb(content);
-});
-skyliveClass.method('msgalert', function(content){
+};
+skyliveClass.prototype.msgalert = function(content){
    if(typeof(alertcb)=="function")
       alertcb(content);
    //else
    //   alert(content);
-});     
-skyliveClass.method('publicReceived', function(user, msg){
+};     
+skyliveClass.prototype.publicReceived = function(user, msg){
    if(typeof(public_received)=="function")
    {
       public_received(user, msg);
@@ -32,9 +28,10 @@ skyliveClass.method('publicReceived', function(user, msg){
          n.scollTop = n.scrollHeight;
       }  
    }  
-});  
-SkyliveX.page = new SkyliveClass();
-SkyliveX.changeContent.connect(SkyliveX.page.changeContent);
-SkyliveX.notify.connect(SkyliveX.page.notify);
-SkyliveX.alertmsg.connect(SkyliveX.page.msgalert);
-SkyliveX.public_received.connect(SkyliveX.page.publicReceived);
+}; 
+
+SkyliveXPage = new skyliveClass();
+SkyliveX.changeContent.connect(SkyliveXPage.changeContent);
+SkyliveX.notify.connect(SkyliveXPage.notify);
+SkyliveX.alertmsg.connect(SkyliveXPage.msgalert);
+SkyliveX.public_received.connect(SkyliveXPage.publicReceived);

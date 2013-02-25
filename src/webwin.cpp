@@ -34,6 +34,7 @@
  */
 #include "webwin.h"
 #include <QWebView>
+#include <QWebPage>
 #include <QWebFrame>
 #include <QFile>
 #include <QUrl>
@@ -44,6 +45,7 @@
 #include <iostream>
 #include "ipcmsg.h"
 #include "jsbridge.h"
+#include "QWebSettings"
 
 #define SENDER "webwin"
 
@@ -52,6 +54,10 @@ WebWin::WebWin(QString &htmlfile)
 {
    baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
    
+   settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+   settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
+   //settings->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
+
    QPalette pal = palette();
    pal.setBrush(QPalette::Base, Qt::transparent);
 
@@ -74,10 +80,42 @@ WebWin::WebWin(QString &htmlfile)
 
 }
 
+WebWin::WebWin()
+      : QWebView()
+{
+   baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
+   settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+   settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
+   jsbridge = new JSBridge();
+   jsbridge->wwin = qobject_cast<WebWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
+   msgsender = SENDER;
+}
+
 WebWin::~WebWin()
 {
 
 }
+
+QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
+{
+   WebWin *wv = new WebWin;
+   QWebPage *newWeb = new QWebPage(wv);
+   wv->jsbridge = new JSBridge();
+   newWeb->mainFrame()->addToJavaScriptWindowObject("SkyliveX", wv->jsbridge);
+
+   connect(newWeb->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), wv, SLOT(refreshJsObject()));
+
+   wv->setPage(newWeb);
+   wv->setAttribute(Qt::WA_DeleteOnClose, true);
+   if (type == QWebPage::WebModalDialog)
+      wv->setWindowModality(Qt::ApplicationModal);
+   wv->show();
+   return wv;
+}
+
 
 // XXX This can be used in future to permit
 //     to drag a window borderless on the desktop.

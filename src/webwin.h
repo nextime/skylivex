@@ -36,6 +36,7 @@
 #define WEBWIN_H
 
 #include <QWebView>
+#include <QWebPage>
 #include <QUrl>
 #include <QFile>
 #include <QHash>
@@ -69,6 +70,7 @@ class WebWin : public QWebView
       QHash<QString, SKHandlerFunction> _handlers;
 
    public:
+      WebWin();
       WebWin(QString &htmlfile);
       ~WebWin();
       void setHtmlFile(QString &fname);
@@ -78,6 +80,7 @@ class WebWin : public QWebView
       void registerHandler(QString type, SKHandlerFunction handler);
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
+      QWebView* createWindow(QWebPage::WebWindowType type);
       JSBridge* jsbridge;
       QString msgsender;
 
