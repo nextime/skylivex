@@ -1,23 +1,24 @@
-function changeContent(id, content)
-{
+function skyliveClass () {}
+skyliveClass.prototype.method = function(name, func){
+   this.prototype[name] = func;
+   return this;
+}
+skyliveClass.method('changeContent', function(id, content){
    var n=document.getElementById(id);
    if(typeof(n)!="undefined")
      n.innerHTML=content;
-}
-function notify(content)
-{
+});
+skyliveClass.method('notify', function(content){
    if(typeof(notifycb)=="function")
       notifycb(content);
-}
-function msgalert(content)
-{
+});
+skyliveClass.method('msgalert', function(content){
    if(typeof(alertcb)=="function")
       alertcb(content);
-   else
-      alert(content);
-}
-function publicReceived(user, msg)
-{
+   //else
+   //   alert(content);
+});     
+skyliveClass.method('publicReceived', function(user, msg){
    if(typeof(public_received)=="function")
    {
       public_received(user, msg);
@@ -29,11 +30,11 @@ function publicReceived(user, msg)
          newel.innerHTML="&lt;"+user+"&gt; "+msg;
          n.appendChild(newel);
          n.scollTop = n.scrollHeight;
-      }
-   }
-}
-
-SkyliveX.changeContent.connect(changeContent);
-SkyliveX.notify.connect(notify);
-SkyliveX.alertmsg.connect(msgalert);
-SkyliveX.public_received.connect(publicReceived);
+      }  
+   }  
+});  
+SkyliveX.page = new SkyliveClass();
+SkyliveX.changeContent.connect(SkyliveX.page.changeContent);
+SkyliveX.notify.connect(SkyliveX.page.notify);
+SkyliveX.alertmsg.connect(SkyliveX.page.msgalert);
+SkyliveX.public_received.connect(SkyliveX.page.publicReceived);
