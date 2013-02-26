@@ -39,7 +39,7 @@
 #include <QString>
 #include "webwin.h"
 
-class WebWin; // forward declaration for typedef
+class SkylivexWin; // forward declaration for typedef
 
 /*
  * class JSBridge
@@ -51,7 +51,7 @@ class JSBridge : public QObject
    Q_OBJECT
 
    public:
-      WebWin* wwin;
+      SkylivexWin* wwin;
       void changePageContent(QString elementid, QString content);
 
    signals:
@@ -68,6 +68,7 @@ class JSBridge : public QObject
       void chat_message_send(QString dest, QString message);
       void chat_message_send(QString message);
       void change_telescope(QString tele);
+      SkylivexWin* open_window(QString url, bool Modal);
 };
 
 

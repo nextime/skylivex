@@ -49,7 +49,7 @@
  * This is just a little webkit transparent window 
  * to show the splash screen
  */
-class MainWin : public WebWin
+class MainWin : public SkylivexWin
 {
 
    Q_OBJECT
@@ -61,10 +61,7 @@ class MainWin : public WebWin
       void handle_corestarted(SKMessage &msg);
       void handle_connected(SKMessage &msg);
       void handle_asklogin(SKMessage &msg);
-      void handle_alert(SKMessage &msg);
-      void handle_notify(SKMessage &msg);
       void handle_loginres(SKMessage &msg);
-      void handle_chatreceived(SKMessage &msg);
 
 };
 

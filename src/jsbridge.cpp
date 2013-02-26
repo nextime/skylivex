@@ -33,6 +33,7 @@
  *
  */
 #include <QString>
+#include <QWebPage>
 #include <iostream>
 #include "ipcmsg.h"
 #include "jsbridge.h"
@@ -90,3 +91,12 @@ void JSBridge::change_telescope(QString tele)
    wwin->sendMessage(msg);
 
 }
+
+SkylivexWin* JSBridge::open_window(QString url, bool Modal)
+{
+   if(Modal)
+      return wwin->createSkyliveWindow(url, QWebPage::WebModalDialog);
+   else
+      return wwin->createSkyliveWindow(url, QWebPage::WebBrowserWindow);
+}
+

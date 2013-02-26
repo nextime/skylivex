@@ -38,6 +38,7 @@
 #include <QWebFrame>
 #include <QFile>
 #include <QUrl>
+#include <QList>
 #include <QDir>
 #include <QString>
 #include <QPalette>
@@ -68,12 +69,6 @@ WebWin::WebWin(QString &htmlfile)
    setHtmlFile(htmlfile);
    resize(250,200);
 
-   jsbridge = new JSBridge();
-   jsbridge->wwin = qobject_cast<WebWin *>(this);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
-
-
-   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
 
    msgsender = SENDER;
 
@@ -86,11 +81,6 @@ WebWin::WebWin()
    baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
    settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
    settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
-   jsbridge = new JSBridge();
-   jsbridge->wwin = qobject_cast<WebWin *>(this);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
-
-   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
    msgsender = SENDER;
 }
 
@@ -103,11 +93,6 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
 {
    WebWin *wv = new WebWin;
    QWebPage *newWeb = new QWebPage(wv);
-   wv->jsbridge = new JSBridge();
-   newWeb->mainFrame()->addToJavaScriptWindowObject("SkyliveX", wv->jsbridge);
-
-   connect(newWeb->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), wv, SLOT(refreshJsObject()));
-
    wv->setPage(newWeb);
    wv->setAttribute(Qt::WA_DeleteOnClose, true);
    if (type == QWebPage::WebModalDialog)
@@ -126,15 +111,6 @@ void WebWin::dragMoveEvent(QDragMoveEvent *ev)
 }
 */
 
-void WebWin::refreshJsObject()
-{
-   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-   jsbridge = new JSBridge();
-   jsbridge->wwin = qobject_cast<WebWin *>(this);
-   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
-
-}
-
 void WebWin::setHtmlFile(QString &fname)
 {
 
@@ -142,8 +118,6 @@ void WebWin::setHtmlFile(QString &fname)
    filename.open(QIODevice::ReadOnly);
    htmlFileCont = QString::fromUtf8(filename.readAll().constData());
    setHtml(htmlFileCont, baseUrl);
-   //page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", &jsbridge);
-   //jsbridge.mwin=qobject_cast<WebWin *>(this);
 }
 
 void WebWin::setHtmlFile(QString &fname, bool borders, bool transparentbg)
@@ -218,7 +192,6 @@ void WebWin::toggleTransparentBackground(bool transparentbg)
 
 void WebWin::sendMessage(SKMessage &msg)
 {
-   //msg.sender=SENDER;
    msg.sender = msgsender;
    emit putMessage(msg);
 }
@@ -227,5 +200,108 @@ void WebWin::registerHandler(QString type, SKHandlerFunction handler)
 {
   _handlers[type] = handler;
 
+}
+
+
+SkylivexWin::SkylivexWin(QString &htmlfile)
+      : WebWin(htmlfile)
+{
+
+   msgsender = "SkylivexWin";
+   
+   jsbridge = new JSBridge();
+   jsbridge->wwin = qobject_cast<SkylivexWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
+
+   registerHandler((QString)"alert", (SKHandlerFunction)&SkylivexWin::handle_alert);
+   registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
+   registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
+
+
+}
+
+SkylivexWin::SkylivexWin()
+      : WebWin()
+{
+   jsbridge = new JSBridge();
+   jsbridge->wwin = qobject_cast<SkylivexWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+   connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(refreshJsObject()));
+   msgsender = SENDER;
+
+   registerHandler((QString)"alert", (SKHandlerFunction)&SkylivexWin::handle_alert);
+   registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
+   registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
+
+
+}
+
+SkylivexWin* SkylivexWin::createSkyliveWindow(QString url, QWebPage::WebWindowType type)
+{
+   SkylivexWin *wv = new SkylivexWin;
+   QWebPage *newWeb = new QWebPage(wv);
+   wv->jsbridge = new JSBridge();
+   wv->jsbridge->wwin = qobject_cast<SkylivexWin *>(wv);
+   newWeb->mainFrame()->addToJavaScriptWindowObject("SkyliveX", wv->jsbridge);
+
+   connect(newWeb->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), wv, SLOT(refreshJsObject()));
+
+   wv->setPage(newWeb);
+   wv->setAttribute(Qt::WA_DeleteOnClose, true);
+   if (type == QWebPage::WebModalDialog)
+      wv->setWindowModality(Qt::ApplicationModal);
+   QList<QString> urilist = url.split("://");
+   if(urilist.size() <= 1)
+   {
+      QString uristring = baseUrl.toString().replace("dummy.html", "");
+      url.prepend(uristring);
+      std::cout << "transform uri in local file " << url.toStdString() << std::endl;
+   }
+   wv->setUrl(QUrl(url));
+   wv->show();
+   return wv;
+}
+
+
+
+
+SkylivexWin::~SkylivexWin()
+{
+
+}
+
+void SkylivexWin::refreshJsObject()
+{
+   jsbridge = new JSBridge();
+   jsbridge->wwin = qobject_cast<SkylivexWin *>(this);
+   page()->mainFrame()->addToJavaScriptWindowObject("SkyliveX", jsbridge);
+
+}
+
+
+void SkylivexWin::handle_alert(SKMessage &msg)
+{
+   if(msg.parameters.contains("msg"))
+      jsbridge->alertmsg(msg.parameters["msg"]);
+}
+
+void SkylivexWin::handle_notify(SKMessage &msg)
+{
+   if(msg.parameters.contains("msg"))
+      jsbridge->notify(msg.parameters["msg"]);
+}
+
+void SkylivexWin::handle_chatreceived(SKMessage &msg)
+{
+   if(msg.handle=="publicchatrcv")
+   {
+      if(msg.parameters.contains("msg") && msg.parameters.contains("username"))
+      {
+         jsbridge->public_received(msg.parameters["username"], msg.parameters["msg"]);
+      }
+   }
 }
 

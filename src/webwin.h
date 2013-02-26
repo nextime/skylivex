@@ -62,7 +62,6 @@ class WebWin : public QWebView
 
    Q_OBJECT
 
-   QUrl baseUrl;
    QString htmlfile;
    QString htmlFileCont;
 
@@ -81,11 +80,8 @@ class WebWin : public QWebView
       void toggleBorders(bool borders);
       void toggleTransparentBackground(bool transparentbg);
       QWebView* createWindow(QWebPage::WebWindowType type);
-      JSBridge* jsbridge;
       QString msgsender;
-
-   private slots:
-     void refreshJsObject();
+      QUrl baseUrl;
 
    public slots:
      void msgFromCore(SKMessage &msg);
@@ -96,6 +92,29 @@ class WebWin : public QWebView
    //  XXX Future usage
    //protected:
    //  void dragMoveEvent(QDragMoveEvent *ev);
+};
+
+
+class SkylivexWin : public WebWin
+{
+
+   Q_OBJECT
+
+   public:
+      SkylivexWin();
+      SkylivexWin(QString &htmlfile);
+      ~SkylivexWin();
+      SkylivexWin* createSkyliveWindow(QString url, QWebPage::WebWindowType type);
+      JSBridge* jsbridge;
+      QString msgsender;
+
+      void handle_alert(SKMessage &msg);
+      void handle_notify(SKMessage &msg);
+      void handle_chatreceived(SKMessage &msg);
+
+   private slots:
+      void refreshJsObject();
+
 };
 
 

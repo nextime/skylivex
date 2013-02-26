@@ -48,17 +48,14 @@
 #define SENDER "maingui"
 
 MainWin::MainWin(QString &htmlfile)
-      : WebWin(htmlfile)
+      : SkylivexWin(htmlfile)
 {
 
    registerHandler((QString)"coreStarted", (SKHandlerFunction)&MainWin::handle_corestarted);
    registerHandler((QString)"telescopeConnected", (SKHandlerFunction)&MainWin::handle_connected);
    registerHandler((QString)"asklogin", (SKHandlerFunction)&MainWin::handle_asklogin);
-   registerHandler((QString)"alert", (SKHandlerFunction)&MainWin::handle_alert);
-   registerHandler((QString)"notify", (SKHandlerFunction)&MainWin::handle_notify);
    registerHandler((QString)"loginok", (SKHandlerFunction)&MainWin::handle_loginres);
    registerHandler((QString)"loginfailed", (SKHandlerFunction)&MainWin::handle_loginres);
-   registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&MainWin::handle_chatreceived);
 
 
    msgsender = SENDER;
@@ -95,18 +92,6 @@ void MainWin::handle_asklogin(SKMessage &msg)
 }  
 
 
-void MainWin::handle_alert(SKMessage &msg)
-{
-   if(msg.parameters.contains("msg"))
-      jsbridge->alertmsg(msg.parameters["msg"]);
-}
-
-void MainWin::handle_notify(SKMessage &msg)
-{
-   if(msg.parameters.contains("msg"))
-      jsbridge->notify(msg.parameters["msg"]);
-}
-
 void MainWin::handle_loginres(SKMessage &msg)
 {
    if(msg.handle=="loginok") 
@@ -118,17 +103,6 @@ void MainWin::handle_loginres(SKMessage &msg)
    else 
    {
       std::cout << "LOGIN FAILED" << std::endl;
-   }
-}
-
-void MainWin::handle_chatreceived(SKMessage &msg)
-{
-   if(msg.handle=="publicchatrcv")
-   {
-      if(msg.parameters.contains("msg") && msg.parameters.contains("username"))
-      {
-         jsbridge->public_received(msg.parameters["username"], msg.parameters["msg"]);
-      }
    }
 }
 
