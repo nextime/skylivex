@@ -136,35 +136,34 @@
 
 
       </style>
-   </head>
-   	<body>
-		<img src="img/chat1.jpg" id="chat1"></img>
-		<img src="img/chat4.jpg" id="chat4"></img>
-		<img src="img/chat7.jpg" id="chat7"></img>
+    </head>
+    <body>
+        <img src="img/chat1.jpg" id="chat1"></img>
+        <img src="img/chat4.jpg" id="chat4"></img>
+        <img src="img/chat7.jpg" id="chat7"></img>
 
-		<img src="img/chat2.jpg" id="chat2"></img>
-		<img src="img/chat8.jpg" id="chat8"></img>
+        <img src="img/chat2.jpg" id="chat2"></img>
+        <img src="img/chat8.jpg" id="chat8"></img>
 
-		<img src="img/chat3.jpg" id="chat3"></img>
-		<img src="img/chat6.jpg" id="chat6"></img>
-		<img src="img/chat9.jpg" id="chat9"></img>
+        <img src="img/chat3.jpg" id="chat3"></img>
+        <img src="img/chat6.jpg" id="chat6"></img>
+        <img src="img/chat9.jpg" id="chat9"></img>
 
-		<img src="img/ulist_top.jpg" id="ulisttop"></img>
-		<img src="img/ulist_mid.jpg" id="ulistmiddle"></img>
-		<img src="img/ulist_bottom.jpg" id="ulistbottom"></img>
+        <img src="img/ulist_top.jpg" id="ulisttop"></img>
+        <img src="img/ulist_mid.jpg" id="ulistmiddle"></img>
+        <img src="img/ulist_bottom.jpg" id="ulistbottom"></img>
 
-                <div id="chatarea" class="csschat">
-                        <p>Welcome to Skylive Chat, you are connected as Administrator!</p>
-                </div>
+        <div id="chatarea" class="csschat">
+            <p>Welcome to Skylive Chat, you are connected as Administrator!</p>
+        </div>
 
-                <div id="userlist" class="cssuserlist">
-                        <p>ivan_staff</p>
-                        <p>nextime</p>
-		</div>
+        <div id="userlist" class="cssuserlist">
+            <p>ivan_staff</p>
+            <p>nextime</p>
+        </div>
 
-                <div chata id="chatinput" class="csschatinput" contenteditable >
-
-                </div>
+        <div chata id="chatinput" class="csschatinput" contenteditable >
+        </div>
    </body>
 </html>
 
