@@ -1,0 +1,102 @@
+<html debug="true">
+    <head>
+        <title>SkyliveX 0.1.0</title>
+        <script type="text/javascript" src="SkyliveX.js"></script>
+
+        <style>
+            body {
+                background-color: #FFFFFF;
+                background-image:url('img/mainbg.jpg');
+                background-repeat:no-repeat;
+                color: #000000;
+                margin: 0 auto;
+                overflow:hidden;
+            }
+
+            #datitele{
+                position: absolute;
+                top: 82px;
+                left: 438px;
+                height:100px;
+                width:50px;
+                color: #BBBBBB;
+                font-size:16px;
+                background-color: #000000;
+            }
+
+            #status {
+                height:35px;
+                width:350px;
+                color: #FFFF00;
+                text-align: left;
+                font-size:12px;
+                position: absolute;
+                top: 359px;
+                left: 38px;
+            }
+
+            #livearea {
+                height:240x;
+                width:320px;
+                top:73px;
+                left: 61px;
+                position: absolute;
+            }
+
+
+            #telescope {
+                position: absolute;
+                top: 23px;
+                left: 312px;
+                width: auto;
+                color: #CCCCCC;
+                font-size:18px;
+                background-color: #000000;
+            }
+
+            #numteleselect {
+                position: absolute;
+                top: 20px;
+                left: 407px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="status">
+            Telescopio chiuso per maltempo
+        </div>
+
+        <div id="datitele">
+            RA<br>
+            DEC<br>
+            CCD Temp.<br>
+            FWHM<br>
+        </div>
+
+        <div id="livearea">
+            <img src="http://live1.skylive.name/tele1/live640.jpg"></img>
+        </div>
+
+        <div id="telescope">
+            Telescope
+        </div>
+
+        <div id="numteleselect">
+            <select name="numtele" onChange="SkyliveX.change_telescope(this.options[this.selectedIndex].value);">
+                <option selected>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+     <script type="text/javascript" >
+        document.addEventListener('DOMContentLoaded',function(){
+           SkyliveX.open_window("chatgui.html", false);
+           setTimeout(function() { SkyliveX.resizeWin(636, 420); }, 500);
+        });
+    </script>
+    </body>
+</html>
+
