@@ -82,6 +82,8 @@ WebWin::WebWin()
    baseUrl = QUrl::fromLocalFile(QDir::current().absoluteFilePath("gui/dummy.html"));
    settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
    settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
+   settings()->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
+   settings()->setAttribute(QWebSettings::PluginsEnabled, true);
    msgsender = SENDER;
 }
 
