@@ -139,12 +139,13 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
           std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
          //if(msg.parameters.contains("width")
          //if(msg.parameters.contains("height);
-         WebWin *wv = new WebWin;
+         WebWin *wv = new WebWin();
          QWebPage *newWeb = new QWebPage(wv);
 
          wv->setPage(newWeb);
          wv->setAttribute(Qt::WA_DeleteOnClose, true);
-
+         wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+         wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
          wv->setUrl(QUrl(msg.parameters["url"]));
          wv->show();
 
