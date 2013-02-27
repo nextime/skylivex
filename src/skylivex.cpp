@@ -42,6 +42,7 @@
 #include "skylivex.h"
 #include "pluginsinterfaces.h"
 #include <iostream>
+#include "webwin.h"
 #include "ipcmsg.h"
 
 Q_DECLARE_METATYPE(SKMessage)
@@ -120,15 +121,20 @@ void SkyliveX::initializePlugin(QObject *plugin, QString filename)
 
 void SkyliveX::sendMessage(SKMessage &msg)
 {
-   //std::cout <<  "Send To MainWin: " << msg << std::endl;
-   emit msgForMainWin(msg);
+   emit msgForGui(msg);
    emit msgForPlugins(msg);
 }
 
 
-void SkyliveX::receiveFromMainWin(SKMessage &msg)
+void SkyliveX::receiveFromGui(SKMessage &msg)
 {
-    std::cout << "received from MainWin " << msg.handle.toStdString() << std::endl;
+    std::cout << "received from Gui " << msg.handle.toStdString() << std::endl;
+    if(msg.handle=="newwindow")
+    {
+       std::cout << "Connecting new window signals/slots" << std::endl;
+       connect(msg.webwin, SIGNAL(putMessage(SKMessage&)), this, SLOT(receiveFromGui(SKMessage&)));
+       connect(this, SIGNAL(msgForGui(SKMessage&)), msg.webwin, SLOT(msgFromCore(SKMessage&)));
+    } 
     emit msgForPlugins(msg);
 }
 

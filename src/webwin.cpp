@@ -97,6 +97,11 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
    wv->setAttribute(Qt::WA_DeleteOnClose, true);
    if (type == QWebPage::WebModalDialog)
       wv->setWindowModality(Qt::ApplicationModal);
+
+   SKMessage msg("newwindow", qobject_cast<SkylivexWin *>(wv));
+   sendMessage(msg);
+
+
    wv->show();
    return wv;
 }
@@ -261,7 +266,12 @@ SkylivexWin* SkylivexWin::createSkyliveWindow(QString url, QWebPage::WebWindowTy
       std::cout << "transform uri in local file " << url.toStdString() << std::endl;
    }
    wv->setUrl(QUrl(url));
+
+   SKMessage msg("newwindow", qobject_cast<SkylivexWin *>(wv));
+   sendMessage(msg);
+
    wv->show();
+   
    return wv;
 }
 

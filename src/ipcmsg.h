@@ -40,6 +40,10 @@
 #include <QHash>
 #include <QString>
 
+
+// Forward declarations
+class SkylivexWin;
+
 /*
  * SKMessage
  * An object representing an IPC message
@@ -56,12 +60,14 @@ class SKMessage
       QTime time;
       QString sender;
       QString handle;
+      SkylivexWin* webwin;
       QHash<QString, QString > parameters;
 
       SKMessage(QString s, QString h, QHash<QString, QString > p);
       SKMessage(QString h, QHash<QString, QString > p);
       SKMessage(QString s, QString h);
       SKMessage(QString h);
+      SKMessage(QString h, SkylivexWin* win);
 };
 
 

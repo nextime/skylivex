@@ -66,13 +66,13 @@ class SkyliveX : public QObject
 
    public slots:
      void initialize();
-     void receiveFromMainWin(SKMessage &msg);
+     void receiveFromGui(SKMessage &msg);
      void receiveFromPlugins(SKMessage msg);
 
    signals:
       void finished();
       void kickPlugins();
-      void msgForMainWin(SKMessage &msg);
+      void msgForGui(SKMessage &msg);
       void msgForPlugins(SKMessage msg);
 };
 

@@ -73,8 +73,8 @@ int main(int argc, char *argv[])
    QTimer::singleShot(0, skx, SLOT(initialize()));
 
    // connect core with the mainwin
-   QObject::connect(skx, SIGNAL(msgForMainWin(SKMessage&)), &mainw, SLOT(msgFromCore(SKMessage&)));
-   QObject::connect(&mainw, SIGNAL(putMessage(SKMessage&)), skx, SLOT(receiveFromMainWin(SKMessage&)));
+   QObject::connect(skx, SIGNAL(msgForGui(SKMessage&)), &mainw, SLOT(msgFromCore(SKMessage&)));
+   QObject::connect(&mainw, SIGNAL(putMessage(SKMessage&)), skx, SLOT(receiveFromGui(SKMessage&)));
 
    // and then.. go!
    return skylivexapp.exec();

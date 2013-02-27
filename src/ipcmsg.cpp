@@ -91,3 +91,12 @@ SKMessage::SKMessage(const SKMessage &other)
    time=other.time;
 }
 
+SKMessage::SKMessage(QString h, SkylivexWin* win)
+{
+   sender= QString("unknown");
+   handle = h;
+   webwin = win;
+   time = QTime::currentTime();
+}
+
+
