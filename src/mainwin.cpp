@@ -58,6 +58,7 @@ MainWin::MainWin(QString &htmlfile)
    registerHandler((QString)"loginfailed", (SKHandlerFunction)&MainWin::handle_loginres);
 
    registerHandler((QString)"openurl", (SKHandlerFunction)&MainWin::handle_openurl);
+   registerHandler((QString)"youtubevideo", (SKHandlerFunction)&MainWin::handle_youtubevideo);
 
    msgsender = SENDER;
 
@@ -128,3 +129,26 @@ void MainWin::handle_openurl(SKMessage &msg)
       }
    }
 }
+
+void MainWin::handle_youtubevideo(SKMessage &msg)
+{
+   if(msg.handle=="youtubevideo")
+   {
+      if(msg.parameters.contains("url"))
+      {
+          std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
+         //if(msg.parameters.contains("width")
+         //if(msg.parameters.contains("height);
+         WebWin *wv = new WebWin;
+         QWebPage *newWeb = new QWebPage(wv);
+
+         wv->setPage(newWeb);
+         wv->setAttribute(Qt::WA_DeleteOnClose, true);
+
+         wv->setUrl(QUrl(msg.parameters["url"]));
+         wv->show();
+
+      }
+   }
+}
+

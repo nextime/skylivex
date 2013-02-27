@@ -57,7 +57,8 @@ WebWin::WebWin(QString &htmlfile)
    
    settings()->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
    settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
-   //settings->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
+   settings()->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
+   settings()->setAttribute(QWebSettings::PluginsEnabled, true);
 
    QPalette pal = palette();
    pal.setBrush(QPalette::Base, Qt::transparent);

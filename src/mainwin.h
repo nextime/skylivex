@@ -63,6 +63,7 @@ class MainWin : public SkylivexWin
       void handle_asklogin(SKMessage &msg);
       void handle_loginres(SKMessage &msg);
       void handle_openurl(SKMessage &msg);
+      void handle_youtubevideo(SKMessage &msg);
 
 };
 
