@@ -206,6 +206,23 @@ void SkyliveProtocol::processPackets()
                }
             }
          }
+         else if(pkt.cmd=="OPENYOUTUBE")
+         {
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            if(paramlist.size()==3)
+            {
+               //SKMessage mmsg("youtubevideo");
+               //QString  yt("http://youtube.googleapis.com/v/");
+               SKMessage mmsg("openurl");
+               QString  yt("http://www.youtube.com/embed/");
+               yt.append(paramlist[0]);
+               yt.append("?html5=1&autoplay=1&start=");
+               yt.append(paramlist[1]);
+               mmsg.parameters.insert("url", yt);
+               //mmsg.parameters.insert("volume", paramlist[2]);
+               sendMessage(mmsg);
+            }
+         }
          else 
          {
             std::cout << "Unknown command from server" <<std::endl;
