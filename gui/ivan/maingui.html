@@ -1,7 +1,8 @@
-<html>
+<html debug="true">
     <head>
         <title>SkyliveX 0.1.0</title>
         <script type="text/javascript" src="SkyliveX.js"></script>
+
         <style>
             body {
                 background-color: #FFFFFF;
@@ -82,13 +83,20 @@
         </div>
 
         <div id="numteleselect">
-            <select name="numtele">
+            <select name="numtele" onChange="SkyliveX.change_telescope(this.options[this.selectedIndex].value);">
                 <option selected>1</option>
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
+                <option>5</option>
             </select>
         </div>
+     <script type="text/javascript" >
+        document.addEventListener('DOMContentLoaded',function(){
+           SkyliveX.open_window("chatgui.html", false);
+           setTimeout(function() { SkyliveX.resizeWin(636, 420); }, 500);
+        });
+    </script>
     </body>
 </html>
 

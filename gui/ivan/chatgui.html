@@ -2,6 +2,23 @@
     <head>
         <title>SkyliveX 0.1.0</title>
         <script type="text/javascript" src="SkyliveX.js"></script>
+        <script type="text/javascript">
+           function sendMsg()
+           {
+             SkyliveX.chat_message_send(document.forms.messagesend.msginput.value);
+             document.forms.messagesend.msginput.value="";
+           }
+
+           function  msgInputKey(event)
+           {
+             if(event.keyCode==13)
+             {
+               sendMsg();
+             }
+           }
+
+      </script>
+
         <style>
             body {
                 background-color: #333333;
@@ -38,7 +55,7 @@
                 overflow:auto;
             }
 
-            div.csschatinput {
+            textarea.csschatinput {
                 font: medium -moz-fixed;
                 font: -webkit-small-control;
                 padding: 2px;
@@ -161,10 +178,10 @@
                         <p>ivan_staff</p>
                         <p>nextime</p>
 		</div>
-
-                <div chata id="chatinput" class="csschatinput" contenteditable >
-
-                </div>
+             <form name="messagesend" onSubmit="return false;" >  
+                <textarea id="chatinput" class="csschatinput"  name="msginput" onKeyDown="msgInputKey(event);" >
+                </textarea>
+            </form>
    </body>
 </html>
 
