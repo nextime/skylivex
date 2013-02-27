@@ -55,6 +55,7 @@ void JSBridge::pushLogin(QString username, QString password)
 
 void JSBridge::resizeWin(int width, int height)
 {
+   std::cout << "resizeWin called from JS"  << std::endl;
    wwin->resize(width, height);
 }
 

@@ -25,7 +25,7 @@ skyliveClass.prototype.publicReceived = function(user, msg){
          var newel = document.createElement('p');
          newel.innerHTML="&lt;"+user+"&gt; "+msg;
          n.appendChild(newel);
-         n.scollTop = n.scrollHeight;
+         n.scrollTop = n.scrollHeight;
       }  
    }  
 }; 
