@@ -47,6 +47,27 @@
 
 #define SENDER "maingui"
 
+
+#if defined(Q_OS_MAC)
+/*
+ * For some reason youtube think that the default user agent 
+ * on OSX doesn't support HTML5 videos, 
+ * so, we change it faking the Linux one
+ */
+class QWebPageForMac : public QWebPage
+{
+   Q_OBJECT
+   public:
+     QString userAgentForUrl(const QUrl &url) const;
+};
+
+QString QWebPageForMac::userAgentForUrl(const QUrl &url) const
+{
+   return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) skylivex Safari/537.21";
+}
+
+#endif
+
 MainWin::MainWin(QString &htmlfile)
       : SkylivexWin(htmlfile)
 {
@@ -145,7 +166,11 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
          {
             yt = new WebWin();
             yt_is_open=true;
+            #if defined(Q_OS_MAC)
+            QWebPageForMac *newWeb = new QWebPageForMac(yt);
+            #else
             QWebPage *newWeb = new QWebPage(yt);
+            #endif
 
             yt->setPage(newWeb);
             yt->setAttribute(Qt::WA_DeleteOnClose, true);
