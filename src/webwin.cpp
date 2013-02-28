@@ -92,6 +92,11 @@ WebWin::~WebWin()
 
 }
 
+void WebWin::closeEvent(QCloseEvent *event)
+{
+   emit closingWindow();
+}
+
 QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
 {
    WebWin *wv = new WebWin;

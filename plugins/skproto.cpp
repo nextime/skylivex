@@ -213,23 +213,29 @@ void SkyliveProtocol::processPackets()
             {
 
                SKMessage mmsg("youtubevideo");
-               //#if defined(Q_OS_WIN)
+               #if defined(Q_OS_WIN)
                QString  yt("http://youtube.googleapis.com/v/");
                yt.append(paramlist[0]);
                yt.append("?autoplay=1&start=");
                yt.append(paramlist[1]);
-               //#else
+               #else
                //SKMessage mmsg("openurl");
-               /*
                QString  yt("http://www.youtube.com/embed/");
                yt.append(paramlist[0]);
                yt.append("?html5=1&autoplay=1&start=");
                yt.append(paramlist[1]);
-               #endif */
+               #endif 
                mmsg.parameters.insert("url", yt);
                mmsg.parameters.insert("volume", paramlist[2]);
                sendMessage(mmsg);
             }
+         }
+         else if(pkt.cmd=="CLOSEYOUTUBE")
+         {
+            SKMessage mmsg("closeyoutube");
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            mmsg.parameters.insert("when", paramlist[0]);
+            sendMessage(mmsg);
          }
          else 
          {

@@ -72,6 +72,7 @@ class WebWin : public QWebView
       WebWin();
       WebWin(QString &htmlfile);
       ~WebWin();
+      void closeEvent(QCloseEvent *event);
       void setHtmlFile(QString &fname);
       void setHtmlFile(QString &fname, bool borders, bool transparentbg);
       void setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transparentbg);
@@ -88,6 +89,7 @@ class WebWin : public QWebView
 
    signals:
      void putMessage(SKMessage &msg);
+     void closingWindow();
 
    //  XXX Future usage
    //protected:

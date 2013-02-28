@@ -58,12 +58,17 @@ class MainWin : public SkylivexWin
       MainWin(QString &htmlfile);
       ~MainWin();
       QString msgsender;
+      WebWin* yt;
+      bool yt_is_open;
       void handle_corestarted(SKMessage &msg);
       void handle_connected(SKMessage &msg);
       void handle_asklogin(SKMessage &msg);
       void handle_loginres(SKMessage &msg);
       void handle_openurl(SKMessage &msg);
       void handle_youtubevideo(SKMessage &msg);
+      void handle_closeyoutube(SKMessage &msg);
+   public slots:
+     void ytclosesignal();
 
 };
 

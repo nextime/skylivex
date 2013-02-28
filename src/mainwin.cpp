@@ -59,8 +59,10 @@ MainWin::MainWin(QString &htmlfile)
 
    registerHandler((QString)"openurl", (SKHandlerFunction)&MainWin::handle_openurl);
    registerHandler((QString)"youtubevideo", (SKHandlerFunction)&MainWin::handle_youtubevideo);
+   registerHandler((QString)"closeyoutube", (SKHandlerFunction)&MainWin::handle_closeyoutube);
 
    msgsender = SENDER;
+   yt_is_open=false;
 
 }
 
@@ -136,19 +138,49 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
    {
       if(msg.parameters.contains("url"))
       {
-          std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
+         std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
          //if(msg.parameters.contains("width")
          //if(msg.parameters.contains("height);
-         WebWin *wv = new WebWin();
-         QWebPage *newWeb = new QWebPage(wv);
+         if(!yt_is_open)
+         {
+            yt = new WebWin();
+            yt_is_open=true;
+            QWebPage *newWeb = new QWebPage(yt);
 
-         wv->setPage(newWeb);
-         wv->setAttribute(Qt::WA_DeleteOnClose, true);
-         wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
-         wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-         wv->setUrl(QUrl(msg.parameters["url"]));
-         wv->show();
+            yt->setPage(newWeb);
+            yt->setAttribute(Qt::WA_DeleteOnClose, true);
+            yt->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+            yt->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+            yt->setUrl(QUrl(msg.parameters["url"]));
+            connect(yt, SIGNAL(closingWindow()), this, SLOT(ytclosesignal()));
+            yt->show();
+         } 
+         else
+         {
+            yt->setUrl(QUrl(msg.parameters["url"]));
+         }
 
+      }
+   }
+}
+
+void MainWin::ytclosesignal()
+{
+   yt_is_open=false;
+}
+
+void MainWin::handle_closeyoutube(SKMessage &msg)
+{
+   if(msg.handle=="closeyoutube")
+   {
+      try
+      {
+         if(yt_is_open)
+            yt->close();
+      }
+      catch(int e)
+      {
+         std::cout << "ERROR Closing youtube window " << std::endl;
       }
    }
 }
