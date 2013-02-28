@@ -48,26 +48,6 @@
 #define SENDER "maingui"
 
 
-#if defined(Q_OS_MAC)
-#include <QWebPage>
-/*
- * For some reason youtube think that the default user agent 
- * on OSX doesn't support HTML5 videos, 
- * so, we change it faking the Linux one
- */
-
-QWebPageForMac::QWebPageForMac(WebWin* &win) : QWebPage(win)
-{
-
-}
-
-QString QWebPageForMac::userAgentForUrl(const QUrl &url) const
-{
-   return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) skylivex Safari/537.21";
-}
-
-#endif
-
 MainWin::MainWin(QString &htmlfile)
       : SkylivexWin(htmlfile)
 {
