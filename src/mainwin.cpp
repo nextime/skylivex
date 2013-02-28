@@ -146,11 +146,11 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
          {
             yt = new WebWin();
             yt_is_open=true;
-            #if defined(Q_OS_MAC)
-            QWebPageForMac *newWeb = new QWebPageForMac(yt);
-            #else
+            //#if defined(Q_OS_MAC)
+            //QWebPageForMac *newWeb = new QWebPageForMac(yt);
+            //#else
             QWebPage *newWeb = new QWebPage(yt);
-            #endif
+            //#endif
 
             yt->setPage(newWeb);
             yt->setAttribute(Qt::WA_DeleteOnClose, true);

@@ -50,23 +50,23 @@
 
 #define SENDER "webwin"
 
-#if defined(Q_OS_MAC)
+//#if defined(Q_OS_MAC)
 /*
  * For some reason youtube think that the default user agent 
  * on OSX doesn't support HTML5 videos, 
  * so, we change it faking the Linux one
  */
 
-QWebPageForMac::QWebPageForMac(WebWin* &win) : QWebPage(win)
-{
-}
-
-QString QWebPageForMac::userAgentForUrl(const QUrl &url) const
-{
-   return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) skylivex Safari/537.21";
-}
-
-#endif
+//QWebPageForMac::QWebPageForMac(WebWin* &win) : QWebPage(win)
+//{
+//}
+//
+//QString QWebPageForMac::userAgentForUrl(const QUrl &url) const
+//{
+//   return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.21 (KHTML, like Gecko) skylivex Safari/537.21";
+//}
+//
+//#endif
 
 
 
@@ -120,11 +120,11 @@ void WebWin::closeEvent(QCloseEvent *event)
 QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
 {
    WebWin *wv = new WebWin;
-   #if defined(Q_OS_MAC)
-   QWebPageForMac *newWeb = new QWebPageForMac(wv);
-   #else
+   //#if defined(Q_OS_MAC)
+   //QWebPageForMac *newWeb = new QWebPageForMac(wv);
+   //#else
    QWebPage *newWeb = new QWebPage(wv);
-   #endif
+   //#endif
 
    wv->setPage(newWeb);
    wv->setAttribute(Qt::WA_DeleteOnClose, true);

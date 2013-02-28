@@ -52,21 +52,21 @@ typedef void (WebWin::*SKHandlerFunction)(SKMessage&);
 //typedef int (WebWin::*SKHandlerFunction)(SKMessage&);
 
 
-#if defined(Q_OS_MAC)
+//#if defined(Q_OS_MAC)
 /*
  * For some reason youtube think that the default user agent 
  * on OSX doesn't support HTML5 videos, 
  * so, we change it faking the Linux one
  */
-class QWebPageForMac : public QWebPage
-{
-   Q_OBJECT
-   public:
-     QWebPageForMac(WebWin* &win);
-     QString userAgentForUrl(const QUrl &url) const;
-};
-
-#endif
+//class QWebPageForMac : public QWebPage
+//{
+//   Q_OBJECT
+//   public:
+//     QWebPageForMac(WebWin* &win);
+//     QString userAgentForUrl(const QUrl &url) const;
+//};
+//
+//#endif
 
 
 /*
