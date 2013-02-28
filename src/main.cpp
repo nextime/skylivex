@@ -29,9 +29,10 @@
  *
  * File: main.cpp
  * 
- * Purpose: Core file for the SkyliveX client. It provide core
- * functionality as the enter point of the client and
- * to load plugins and make them communicate.
+ * Purpose: Core file for the SkyliveX client.
+ * It launches the client and instantiate the main window,
+ * the SkyliveX object (IPC and Plugin loading), 
+ * and establish communication between those two
  *
  */
 #include <QApplication>

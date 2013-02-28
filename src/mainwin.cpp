@@ -27,9 +27,11 @@
  *
  ********************************************************************
  *
- * File: splashpage.cpp 
+ * File: mainwin.cpp 
  * 
  * Purpose:
+ * This define special methods for
+ * the mainwindow
  *
  */
 #include "mainwin.h"
@@ -45,28 +47,66 @@
 #include "ipcmsg.h"
 #include "jsbridge.h"
 
+/* Give a name for the IPC messages to this window */
 #define SENDER "maingui"
 
 
+/* 
+ * Method: MainWin
+ *
+ * Arguments:
+ *   - QString &htmlfile
+ *
+ * This method initialize the mainwindow object
+ * pointing it to a local html file, and register
+ * the handlers for the IPC messages that need to be
+ * handled from the main window.
+ *
+ * This class is derived from the SkylivexWin class,
+ * so, this window object will have a JSBridge
+ * and can communicate bidirectionally with the 
+ * HTML/javascript side
+ *
+ * This will be the primary GUI window, and it will also
+ * be the father of all others subwindow.
+ */
 MainWin::MainWin(QString &htmlfile)
       : SkylivexWin(htmlfile)
 {
 
+   // Handle the client initialization stage
    registerHandler((QString)"coreStarted", (SKHandlerFunction)&MainWin::handle_corestarted);
+
+   // Called when the skylive server is connected ( in TCP meaning of connected )
    registerHandler((QString)"telescopeConnected", (SKHandlerFunction)&MainWin::handle_connected);
+
+   // called when we have a login request from the server or from a plugin
    registerHandler((QString)"asklogin", (SKHandlerFunction)&MainWin::handle_asklogin);
+
+   // Called when a login succeed
    registerHandler((QString)"loginok", (SKHandlerFunction)&MainWin::handle_loginres);
+
+   // Called when a login fail
    registerHandler((QString)"loginfailed", (SKHandlerFunction)&MainWin::handle_loginres);
 
+   // Called when a plugin ask us to open an URL, for example for skylive Slides
    registerHandler((QString)"openurl", (SKHandlerFunction)&MainWin::handle_openurl);
+
+   // Called when a plugin ask us to open the special youtube page window
    registerHandler((QString)"youtubevideo", (SKHandlerFunction)&MainWin::handle_youtubevideo);
+
+   // Called when a plugin ask us to close the special youtube page window
    registerHandler((QString)"closeyoutube", (SKHandlerFunction)&MainWin::handle_closeyoutube);
 
+   // Set the IPC messages sender name
    msgsender = SENDER;
+
+   // At initialization, the special youtube page window is closed
    yt_is_open=false;
 
 }
 
+/* Destructor */
 MainWin::~MainWin()
 {
 

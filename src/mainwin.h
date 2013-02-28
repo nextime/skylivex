@@ -27,9 +27,11 @@
  *
  ********************************************************************
  *
- * File: skylivex.h
+ * File: mainwin.h
  * 
- * Purpose:
+ * Purpose: 
+ * This file define the special WebView derived object for
+ * the main window
  *
  */
 #ifndef MAINWIN_H
@@ -46,8 +48,10 @@
 
 /*
  * class MainWin
- * This is just a little webkit transparent window 
- * to show the splash screen
+ * This is needed cause the MainWindow is something
+ * different from the others, all the window
+ * with access to the c++ core will be subwindow of this one,
+ * but this will also serve the login window and the splashscreen
  */
 class MainWin : public SkylivexWin
 {
@@ -57,9 +61,9 @@ class MainWin : public SkylivexWin
    public:
       MainWin(QString &htmlfile);
       ~MainWin();
-      QString msgsender;
-      WebWin* yt;
-      bool yt_is_open;
+      QString msgsender;      // The name of the mainwindow for the IPC messages
+      WebWin* yt;             // a pointer to the special (singleton) Youtube window (if exists)
+      bool yt_is_open;        // a boolean to indicate if the Youtube window is open
       void handle_corestarted(SKMessage &msg);
       void handle_connected(SKMessage &msg);
       void handle_asklogin(SKMessage &msg);
@@ -68,7 +72,7 @@ class MainWin : public SkylivexWin
       void handle_youtubevideo(SKMessage &msg);
       void handle_closeyoutube(SKMessage &msg);
    public slots:
-     void ytclosesignal();
+     void ytclosesignal();   // This slot is needed to close the special youtube window
 
 };
 
