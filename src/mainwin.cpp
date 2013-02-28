@@ -55,13 +55,6 @@
  * on OSX doesn't support HTML5 videos, 
  * so, we change it faking the Linux one
  */
-class QWebPageForMac : public QWebPage
-{
-   Q_OBJECT
-   public:
-     QWebPageForMac(WebWin* &win);
-     QString userAgentForUrl(const QUrl &url) const;
-};
 
 QWebPageForMac::QWebPageForMac(WebWin* &win) : QWebPage(win)
 {

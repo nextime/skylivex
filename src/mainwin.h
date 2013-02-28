@@ -44,6 +44,25 @@
 #include "webwin.h"
 #include "jsbridge.h"
 
+
+#if defined(Q_OS_MAC)
+#include <QWebPage>
+/*
+ * For some reason youtube think that the default user agent 
+ * on OSX doesn't support HTML5 videos, 
+ * so, we change it faking the Linux one
+ */
+class QWebPageForMac : public QWebPage
+{
+   Q_OBJECT
+   public:
+     QWebPageForMac(WebWin* &win);
+     QString userAgentForUrl(const QUrl &url) const;
+};
+
+#endif
+
+
 /*
  * class MainWin
  * This is just a little webkit transparent window 
