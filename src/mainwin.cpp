@@ -59,16 +59,10 @@ class QWebPageForMac : public QWebPage
    Q_OBJECT
    public:
      QWebPageForMac(WebWin* &win);
-     ~QWebPageForMac();
      QString userAgentForUrl(const QUrl &url) const;
 };
 
 QWebPageForMac::QWebPageForMac(WebWin* &win) : QWebPage(win)
-{
-
-}
-
-QWebPageForMac::~QWebPageForMac() : ~QWebPage()
 {
 
 }
