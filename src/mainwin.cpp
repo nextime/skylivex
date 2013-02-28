@@ -49,6 +49,7 @@
 
 
 #if defined(Q_OS_MAC)
+#include <QWebPage>
 /*
  * For some reason youtube think that the default user agent 
  * on OSX doesn't support HTML5 videos, 
