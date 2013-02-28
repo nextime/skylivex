@@ -157,7 +157,7 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
          } 
          else
          {
-            yt->setUrl(QUrl(msg.parameters["url"]));
+            yt->load(QUrl(msg.parameters["url"]));
          }
 
       }
@@ -166,6 +166,7 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
 
 void MainWin::ytclosesignal()
 {
+   std::cout << "Youtube Window Closed " << std::endl; 
    yt_is_open=false;
 }
 
