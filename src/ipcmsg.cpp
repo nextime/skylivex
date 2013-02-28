@@ -27,9 +27,12 @@
  *
  ********************************************************************
  *
- * File: 
+ * File: ipcmsg.cpp
  * 
  * Purpose:
+ * Define the initialization methods for message istances.
+ * Those messages are used to make different plugins and core
+ * communicate using signals/slots QT method.
  *
  */
 
@@ -39,6 +42,7 @@
 #include <iostream>
 #include "ipcmsg.h"
 #include "pluginsinterfaces.h"
+
 
 SKMessage::SKMessage(QString s, QString h, QHash<QString, QString > p)
 {
@@ -91,6 +95,12 @@ SKMessage::SKMessage(const SKMessage &other)
    time=other.time;
 }
 
+/*
+ * This is a special case initialization where
+ * we have to pass a WebView derived object
+ * between a mainwindow and a subwindow
+ * using QT WebKit
+ */
 SKMessage::SKMessage(QString h, SkylivexWin* win)
 {
    sender= QString("unknown");

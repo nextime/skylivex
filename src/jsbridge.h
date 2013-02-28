@@ -27,9 +27,12 @@
  *
  ********************************************************************
  *
- * File: 
+ * File: jsbridge.h
  * 
  * Purpose:
+ * Define a QObject used to export to javascript
+ * some methods to make the webkit based GUI communicate
+ * with the core.
  *
  */
 #ifndef JSBRIDGE_H

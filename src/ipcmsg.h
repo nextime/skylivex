@@ -27,9 +27,14 @@
  *
  ********************************************************************
  *
- * File: 
+ * File: ipcmsg.h
  * 
- * Purpose:
+ * Purpose: 
+ * Define an object rapresenting a message
+ * that can be used to make plugins and core communicate
+ * even between different threads
+ *
+ * They will be passed using signal/slot mechanism in QT,
  *
  */
 
@@ -46,8 +51,9 @@ class SkylivexWin;
 
 /*
  * SKMessage
- * An object representing an IPC message
- * between threads
+ * An object representing an IPC message,
+ * both thread to thread (plugins) and between
+ * thread and core
  */
 class SKMessage
 {
@@ -57,11 +63,11 @@ class SKMessage
       SKMessage(const SKMessage &other);
       ~SKMessage();
 
-      QTime time;
-      QString sender;
-      QString handle;
-      SkylivexWin* webwin;
-      QHash<QString, QString > parameters;
+      QTime time;                    // A timestamp, just in case
+      QString sender;                // the name of the sender component
+      QString handle;                // the message type
+      SkylivexWin* webwin;           // sometime we need to transport a qobject representing a WebView
+      QHash<QString, QString > parameters; // mixed parameters in form of hash
 
       SKMessage(QString s, QString h, QHash<QString, QString > p);
       SKMessage(QString h, QHash<QString, QString > p);
