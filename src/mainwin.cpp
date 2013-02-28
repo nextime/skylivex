@@ -157,14 +157,18 @@ void MainWin::handle_openurl(SKMessage &msg)
    {
       if(msg.parameters.contains("url"))
       {
-          std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
-         //if(msg.parameters.contains("width")
-         //if(msg.parameters.contains("height);
+         std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
          WebWin *wv = new WebWin;
          QWebPage *newWeb = new QWebPage(wv);
 
          wv->setPage(newWeb);
          wv->setAttribute(Qt::WA_DeleteOnClose, true);
+         if(msg.parameters.contains("width") && msg.parameters.contains("height"))
+            wv->resize(msg.parameters["width"].toInt(), msg.parameters["height"].toInt());
+         else if(msg.parameters.contains("width"))
+            wv->resize(msg.parameters["width"].toInt(), wv->height());
+         else if(msg.parameters.contains("height"))
+            wv->resize(wv->width(), msg.parameters["height"].toInt());
 
          wv->setUrl(QUrl(msg.parameters["url"]));
          wv->show();

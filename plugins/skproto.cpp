@@ -237,6 +237,20 @@ void SkyliveProtocol::processPackets()
             mmsg.parameters.insert("when", paramlist[0]);
             sendMessage(mmsg);
          }
+         else if(pkt.cmd=="IMAGE")
+         {
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            if(paramlist.size()==3)
+            {
+               SKMessage mmsg("openurl");
+               mmsg.parameters.insert("url", QByteArray::fromPercentEncoding(paramlist[0].toLocal8Bit()));
+               mmsg.parameters.insert("width", paramlist[1]);
+               mmsg.parameters.insert("height", paramlist[2]);
+               sendMessage(mmsg);
+            }
+
+
+         }
          else 
          {
             std::cout << "Unknown command from server" <<std::endl;
