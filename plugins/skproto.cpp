@@ -266,8 +266,12 @@ void SkyliveProtocol::readFromNetwork()
    while(tcpSocket->bytesAvailable())
    {
       if(readidx > MAX_PACKETREAD)
+      {
+         std::cout << "MAX_PACKETREAD REACHED" << std::endl;
          return;
+      }
       tcpSocket->read(&c, 1);
+      //std::cout << "Read Byte: " << c <<  std::endl;
       switch(SM_TCPCLIENT)
       {
          case HOME:
@@ -306,6 +310,19 @@ void SkyliveProtocol::readFromNetwork()
             switch(c)
             {
                case PARAM_END:
+                  /*
+                   * Bad. Bad. BAD! there is a fucking one message,
+                   * the "IMAGE" one, that isn't standard and 
+                   * doesn't uriencode the URL of the image.
+                   * So, we need to manage this special case.
+                   */
+                  if(protoMsg.params=="http" && protoMsg.cmd=="IMAGE")
+                  {
+                     protoMsg.params.append(c);
+                     break;
+                  }
+
+                  // Ok it isn't the "fucking special case"
                   SM_TCPCLIENT=CRC;
                   protoMsg.computed_crc-=static_cast<int>(c);
                   break;
