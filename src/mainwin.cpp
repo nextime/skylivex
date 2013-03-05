@@ -127,7 +127,8 @@ void MainWin::httpResponseFinished(QNetworkReply * reply)
  //           connect(nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
 
 
-       disconnect(yt->page()->networkAccessManager(), &ReferredNetworkAccessManager::finished, this, &MainWin::httpResponseFinished);
+       //disconnect(yt->page()->networkAccessManager(), &ReferredNetworkAccessManager::finished, this, &MainWin::httpResponseFinished);
+       disconnect(yt->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
        yt->load(QUrl(urlstr.remove("html5=1&")));
     }
 }
