@@ -42,6 +42,9 @@
 #include <QHash>
 #include <QString>
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QIODevice>
 #include <ipcmsg.h>
 #include "webwin.h"
 #include "jsbridge.h"
@@ -74,6 +77,22 @@ class MainWin : public SkylivexWin
    public slots:
      void ytclosesignal();   // This slot is needed to close the special youtube window
 
+};
+
+
+class ReferredNetworkAccessManager : public QNetworkAccessManager {
+
+    Q_OBJECT
+
+    protected:
+      virtual QNetworkReply * createRequest(Operation op,
+                                            const QNetworkRequest & req,
+                                            QIODevice * outgoingData = 0)
+      {
+         QNetworkRequest newReq(req);
+         newReq.setRawHeader("Referer", "http://www.skylive.it");
+         return QNetworkAccessManager::createRequest(op, newReq, outgoingData);
+      }
 };
 
 

@@ -52,7 +52,6 @@ typedef void (WebWin::*SKHandlerFunction)(SKMessage&);
 //typedef int (WebWin::*SKHandlerFunction)(SKMessage&);
 
 
-//#if defined(Q_OS_MAC)
 /*
  * For some reason youtube think that the default user agent 
  * on OSX doesn't support HTML5 videos, 

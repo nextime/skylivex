@@ -131,6 +131,10 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
    if (type == QWebPage::WebModalDialog)
       wv->setWindowModality(Qt::ApplicationModal);
 
+   // Assure plugin and js support also for this window.
+   wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+   wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+
    SKMessage msg("newwindow", qobject_cast<SkylivexWin *>(wv));
    sendMessage(msg);
 
@@ -289,6 +293,11 @@ SkylivexWin* SkylivexWin::createSkyliveWindow(QString url, QWebPage::WebWindowTy
    newWeb->mainFrame()->addToJavaScriptWindowObject("SkyliveX", wv->jsbridge);
 
    connect(newWeb->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), wv, SLOT(refreshJsObject()));
+
+   // Assure plugin and js support also for this window.
+   wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+   wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+   
 
    wv->setPage(newWeb);
    wv->setAttribute(Qt::WA_DeleteOnClose, true);

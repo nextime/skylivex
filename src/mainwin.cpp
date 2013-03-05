@@ -184,8 +184,6 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
       if(msg.parameters.contains("url"))
       {
          std::cout << "OPEN URL " << msg.parameters["url"].toStdString() << std::endl;
-         //if(msg.parameters.contains("width")
-         //if(msg.parameters.contains("height);
          if(!yt_is_open)
          {
             yt = new WebWin();
@@ -194,12 +192,22 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
             //QWebPageForMac *newWeb = new QWebPageForMac(yt);
             //#else
             QWebPage *newWeb = new QWebPage(yt);
+            //ReferredNetworkAccessManager nam;
+            ReferredNetworkAccessManager *nam = new ReferredNetworkAccessManager();              
+            newWeb->setNetworkAccessManager(nam);
             //#endif
 
             yt->setPage(newWeb);
             yt->setAttribute(Qt::WA_DeleteOnClose, true);
             yt->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
             yt->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+            if(msg.parameters.contains("width") && msg.parameters.contains("height"))
+               yt->resize(msg.parameters["width"].toInt(), msg.parameters["height"].toInt());
+            else if(msg.parameters.contains("width"))
+               yt->resize(msg.parameters["width"].toInt(), yt->height());
+            else if(msg.parameters.contains("height"))
+               yt->resize(yt->width(), msg.parameters["height"].toInt());
+
             yt->setUrl(QUrl(msg.parameters["url"]));
             connect(yt, SIGNAL(closingWindow()), this, SLOT(ytclosesignal()));
             yt->show();
