@@ -214,7 +214,7 @@ void SkyliveProtocol::processPackets()
 
                SKMessage mmsg("youtubevideo");
                #if defined(Q_OS_WIN)
-               QString  yt("http://youtube.googleapis.com/v/");
+               QString  yt("http://www.youtube.com/embed/");
                yt.append(paramlist[0]);
                yt.append("?autoplay=1&start=");
                yt.append(paramlist[1]);
