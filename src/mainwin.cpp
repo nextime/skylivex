@@ -123,6 +123,11 @@ void MainWin::httpResponseFinished(QNetworkReply * reply)
        QString urlstr = yt->url().toString();
        std::cout << "NO HTML5 FOR THIS YOUTUBE VIDEO " << urlstr.toStdString() << std::endl;
        std::cout << "Reopen with " << urlstr.remove("html5=1&").toStdString() << std::endl;
+       yt->stop();
+ //           connect(nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
+
+
+       disconnect(yt->page()->networkAccessManager(), &ReferredNetworkAccessManager::finished, this, &MainWin::httpResponseFinished);
        yt->load(QUrl(urlstr.remove("html5=1&")));
     }
 }
