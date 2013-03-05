@@ -43,6 +43,7 @@
 #include <QString>
 #include <QPalette>
 #include <QDragMoveEvent>
+#include <QNetworkReply>
 #include <iostream>
 #include "ipcmsg.h"
 #include "jsbridge.h"
@@ -110,6 +111,20 @@ MainWin::MainWin(QString &htmlfile)
 MainWin::~MainWin()
 {
 
+}
+
+
+void MainWin::httpResponseFinished(QNetworkReply * reply)
+{
+    QString urls = reply->url().toString();
+    //std::cout << "AAAA " << reply->error() << " URI " << urls.toStdString() <<  std::endl;;
+    if(yt_is_open && urls.contains("stream_204") && urls.contains("youtube") && urls.contains("html5=1"))
+    {
+       QString urlstr = yt->url().toString();
+       std::cout << "NO HTML5 FOR THIS YOUTUBE VIDEO " << urlstr.toStdString() << std::endl;
+       std::cout << "Reopen with " << urlstr.remove("html5=1&").toStdString() << std::endl;
+       yt->load(QUrl(urlstr.remove("html5=1&")));
+    }
 }
 
 
@@ -194,6 +209,9 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
             QWebPage *newWeb = new QWebPage(yt);
             //ReferredNetworkAccessManager nam;
             ReferredNetworkAccessManager *nam = new ReferredNetworkAccessManager();              
+
+            connect(nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
+
             newWeb->setNetworkAccessManager(nam);
             //#endif
 

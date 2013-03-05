@@ -45,6 +45,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QIODevice>
+#include <QNetworkReply>
 #include <ipcmsg.h>
 #include "webwin.h"
 #include "jsbridge.h"
@@ -76,6 +77,7 @@ class MainWin : public SkylivexWin
       void handle_closeyoutube(SKMessage &msg);
    public slots:
      void ytclosesignal();   // This slot is needed to close the special youtube window
+     void httpResponseFinished(QNetworkReply * reply);
 
 };
 

@@ -43,6 +43,7 @@
 #include <QString>
 #include <QPalette>
 #include <QDragMoveEvent>
+//#include <QNetworkReply>
 #include <iostream>
 #include "ipcmsg.h"
 #include "jsbridge.h"
@@ -67,6 +68,8 @@
 //}
 //
 //#endif
+
+
 
 
 
@@ -112,6 +115,15 @@ WebWin::~WebWin()
 
 }
 
+/*
+void WebWin::httpResponseFinished(QNetworkReply * reply)
+{
+   if(reply->error()==204)
+      std::cout << "NO FLASH!" << std::endl;
+   }
+}
+*/
+
 void WebWin::closeEvent(QCloseEvent *event)
 {
    emit closingWindow();
@@ -126,6 +138,7 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
    QWebPage *newWeb = new QWebPage(wv);
    //#endif
 
+   //connect(newWeb->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
    wv->setPage(newWeb);
    wv->setAttribute(Qt::WA_DeleteOnClose, true);
    if (type == QWebPage::WebModalDialog)
@@ -137,7 +150,6 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
 
    SKMessage msg("newwindow", qobject_cast<SkylivexWin *>(wv));
    sendMessage(msg);
-
 
    wv->show();
    return wv;

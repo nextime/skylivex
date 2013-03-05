@@ -42,6 +42,7 @@
 #include <QHash>
 #include <QString>
 #include <QObject>
+//#include <QNetworkReply>
 #include <ipcmsg.h>
 #include "jsbridge.h"
 
@@ -102,6 +103,7 @@ class WebWin : public QWebView
 
    public slots:
      void msgFromCore(SKMessage &msg);
+     //void httpResponseFinished(QNetworkReply * reply);
 
    signals:
      void putMessage(SKMessage &msg);
