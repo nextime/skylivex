@@ -68,6 +68,9 @@ class MainWin : public SkylivexWin
       QString msgsender;      // The name of the mainwindow for the IPC messages
       WebWin* yt;             // a pointer to the special (singleton) Youtube window (if exists)
       bool yt_is_open;        // a boolean to indicate if the Youtube window is open
+#if defined(Q_OS_MAC)
+      bool yt_if_fallback;
+#endif
       void handle_corestarted(SKMessage &msg);
       void handle_connected(SKMessage &msg);
       void handle_asklogin(SKMessage &msg);

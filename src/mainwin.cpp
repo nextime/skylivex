@@ -118,17 +118,20 @@ void MainWin::httpResponseFinished(QNetworkReply * reply)
 {
     QString urls = reply->url().toString();
     //std::cout << "AAAA " << reply->error() << " URI " << urls.toStdString() <<  std::endl;;
+#if defined(Q_OS_MAC)
+    if(yt_is_open && urls.contains("stream_204") && urls.contains("youtube") && urls.contains("html5=1") && yt_is_fallback==false)
+#else
     if(yt_is_open && urls.contains("stream_204") && urls.contains("youtube") && urls.contains("html5=1"))
+#endif
     {
        QString urlstr = yt->url().toString();
        std::cout << "NO HTML5 FOR THIS YOUTUBE VIDEO " << urlstr.toStdString() << std::endl;
        std::cout << "Reopen with " << urlstr.remove("html5=1&").toStdString() << std::endl;
        yt->stop();
- //           connect(nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
-
-
-       //disconnect(yt->page()->networkAccessManager(), &ReferredNetworkAccessManager::finished, this, &MainWin::httpResponseFinished);
        disconnect(yt->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply *)), this, SLOT(httpResponseFinished(QNetworkReply *)));
+#if defined(Q_OS_MAC)
+       yt_is_fallback=true;
+#endif
        yt->load(QUrl(urlstr.remove("html5=1&")));
     }
 }
@@ -220,6 +223,10 @@ void MainWin::handle_youtubevideo(SKMessage &msg)
 
             newWeb->setNetworkAccessManager(nam);
             //#endif
+
+#if defined(Q_OS_MAC)
+            yt_is_fallback = false;
+#endif
 
             yt->setPage(newWeb);
             yt->setAttribute(Qt::WA_DeleteOnClose, true);
