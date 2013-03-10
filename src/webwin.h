@@ -43,7 +43,7 @@
 #include <QString>
 #include <QObject>
 //#include <QNetworkReply>
-#include <ipcmsg.h>
+#include "ipcmsg.h"
 #include "jsbridge.h"
 
 class WebWin; // forward declaration for typedef

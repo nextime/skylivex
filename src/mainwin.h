@@ -46,7 +46,7 @@
 #include <QNetworkRequest>
 #include <QIODevice>
 #include <QNetworkReply>
-#include <ipcmsg.h>
+#include "ipcmsg.h"
 #include "webwin.h"
 #include "jsbridge.h"
 
