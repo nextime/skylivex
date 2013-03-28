@@ -273,7 +273,6 @@ SkylivexWin::SkylivexWin(QString &htmlfile)
    registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
 
-
 }
 
 SkylivexWin::SkylivexWin()

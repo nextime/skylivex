@@ -44,7 +44,7 @@
 #include <QTime>
 #include <QHash>
 #include <QString>
-
+#include <QList>
 
 // Forward declarations
 class SkylivexWin;
@@ -68,6 +68,7 @@ class SKMessage
       QString handle;                // the message type
       SkylivexWin* webwin;           // sometime we need to transport a qobject representing a WebView
       QHash<QString, QString > parameters; // mixed parameters in form of hash
+      QHash<QString, QList<QString> > listparams; // mixed parameters lists, when needed
 
       SKMessage(QString s, QString h, QHash<QString, QString > p);
       SKMessage(QString h, QHash<QString, QString > p);

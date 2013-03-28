@@ -39,7 +39,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QtNetwork>
-
+#include <QChar>
 
 void SkyliveProtocol::startPlugin()
 {
@@ -159,8 +159,54 @@ void SkyliveProtocol::processPackets()
          {
                
          }
+         else if(pkt.cmd=="CLIST")
+         {
+            SKMessage pmsg("userlist");
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            QList<QString> admins;
+            QList<QString> enableds;
+            QList<QString> users;
+            for(int i=0;i<paramlist.size();i++)
+            {
+               if(paramlist[i].length() > 2)
+               {
+                  if(paramlist[i].startsWith("!"))
+                     admins.append(paramlist[i].remove(0, 1));
+                  else if(paramlist[i].startsWith("@"))
+                     enableds.append(paramlist[i].remove(0, 1));
+                  else
+                     users.append(paramlist[i].remove(0, 1));
+               }
+            }
+            pmsg.listparams.insert("admins", admins);
+            pmsg.listparams.insert("enableds", enableds);
+            pmsg.listparams.insert("users", users);
+            pmsg.parameters.insert("type", "all");
+            sendMessage(pmsg);
+
+         }
          else if(pkt.cmd=="ULIST")
          {
+            SKMessage pmsg("userlist");
+            QList<QString> paramlist = pkt.params.split(PARAM_SEPARATOR);
+            if(paramlist[0].length() > 2)
+            {
+               if(paramlist[1]=="IN")
+                  pmsg.parameters.insert("type", "in");
+               else
+                  pmsg.parameters.insert("type", "out");
+
+               if(paramlist[0].startsWith("!"))
+                  pmsg.parameters.insert("usertype", "admin");
+               else if(paramlist[0].startsWith("@"))
+                  pmsg.parameters.insert("usertype", "enabled");
+               else
+                  pmsg.parameters.insert("usertype", "user");
+               pmsg.parameters.insert("user", paramlist[0].remove(0, 1));
+               sendMessage(pmsg);
+
+            }
+
 
          }
          else if(pkt.cmd=="ENABLE")

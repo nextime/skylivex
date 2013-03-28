@@ -75,7 +75,7 @@
         </div>
 
         <div id="livearea">
-            <img src="http://live1.skylive.name/tele1/live640.jpg"></img>
+            <img id="liveimg" src="http://live1.skylive.name/tele1/live640.jpg"></img>
         </div>
 
         <div id="telescope">
@@ -83,7 +83,7 @@
         </div>
 
         <div id="numteleselect">
-            <select name="numtele" onChange="SkyliveX.change_telescope(this.options[this.selectedIndex].value);">
+            <select id="telsel" name="numtele" onChange="SkyliveX.change_telescope(this.options[this.selectedIndex].value); updateLiveImage();">
                 <option selected>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -92,9 +92,28 @@
             </select>
         </div>
      <script type="text/javascript" >
+
+        function showLiveImage(img)
+        {
+           if(img.complete)
+           {
+               document.getElementById("liveimg").src=img.src;
+           } else {
+               setTimeout(function(){showLiveImage(img);}, 250);
+           }
+        }
+
+        function updateLiveImage()
+        {
+            
+         var tele=document.getElementById("numtele").options[document.getElementById("numtele").selectedIndex].value;
+         var newImage = new Image();
+         newImage.src="http://live1.skylive.name/tele"+tele+"live640.jpg?"+new Date().getTime();
+        }
         document.addEventListener('DOMContentLoaded',function(){
            SkyliveX.open_window("chatgui.html", false);
            setTimeout(function() { SkyliveX.resizeWin(636, 420); }, 500);
+           setInterval(updateLiveImage, 5000);
         });
     </script>
     </body>

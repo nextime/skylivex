@@ -29,9 +29,26 @@ skyliveClass.prototype.publicReceived = function(user, msg){
       }  
    }  
 }; 
+skyliveClass.prototype.userlistChange = function(action, u){
+   if(typeof(userlist_change)=="function")
+   {
+      userlist_change(action, u);
+   } else {
+      switch(action)
+      {
+         case "new":
+            break;
+         case "add":
+            break;
+         case "del":
+            break;
+      }
+   }
+};
 
 SkyliveXPage = new skyliveClass();
 SkyliveX.changeContent.connect(SkyliveXPage.changeContent);
 SkyliveX.notify.connect(SkyliveXPage.notify);
 SkyliveX.alertmsg.connect(SkyliveXPage.msgalert);
 SkyliveX.public_received.connect(SkyliveXPage.publicReceived);
+SkyliveX.userlist_change.connect(SkyliveXPage.userlistChange);
