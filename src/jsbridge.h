@@ -62,6 +62,8 @@ class JSBridge : public QObject
       void notify(QString content);
       void alertmsg(QString content);
       void public_received(QString user, QString content);
+      void updateUserList(QString user, QString utype, QString direction);
+      void deleteUserList();
 
    public slots:
       void pushLogin(QString username, QString password);

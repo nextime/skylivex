@@ -272,6 +272,7 @@ SkylivexWin::SkylivexWin(QString &htmlfile)
    registerHandler((QString)"alert", (SKHandlerFunction)&SkylivexWin::handle_alert);
    registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
+   registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
 
 }
 
@@ -288,6 +289,7 @@ SkylivexWin::SkylivexWin()
    registerHandler((QString)"alert", (SKHandlerFunction)&SkylivexWin::handle_alert);
    registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
+   registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
 
 }
 
@@ -371,3 +373,33 @@ void SkylivexWin::handle_chatreceived(SKMessage &msg)
    }
 }
 
+void SkylivexWin::handle_userlist(SKMessage &msg)
+{
+   if(msg.handle=="userlist")
+   {
+      if(msg.parameters.contains("type"))
+      {
+         if(msg.parameters["type"]=="all")
+         {
+            jsbridge->deleteUserList();
+            for(int i=0;i<msg.listparams["admins"].size();i++)
+            {
+               jsbridge->updateUserList(msg.listparams["admins"][i], "admin", "in");
+            }
+            for(int i=0;i<msg.listparams["enableds"].size();i++)
+            {
+               jsbridge->updateUserList(msg.listparams["enableds"][i], "enabled", "in");
+            }
+            for(int i=0;i<msg.listparams["users"].size();i++)
+            {
+               jsbridge->updateUserList(msg.listparams["users"][i], "user", "in");
+            }
+
+         }
+         else if(msg.parameters["type"]=="in" || msg.parameters["type"]=="out")
+         {
+            jsbridge->updateUserList(msg.parameters["user"], msg.parameters["usertype"], msg.parameters["type"]);
+         }
+      }
+   }
+}
