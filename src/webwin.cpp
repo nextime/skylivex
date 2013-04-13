@@ -82,6 +82,8 @@ WebWin::WebWin(QString &htmlfile)
    settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
    settings()->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
    settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+   settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+   settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
 
    QPalette pal = palette();
    pal.setBrush(QPalette::Base, Qt::transparent);
@@ -107,6 +109,8 @@ WebWin::WebWin()
    settings()->setAttribute(QWebSettings::JavascriptCanCloseWindows, true);
    settings()->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
    settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+   settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+   settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
    msgsender = SENDER;
 }
 
@@ -147,6 +151,8 @@ QWebView* WebWin::createWindow(QWebPage::WebWindowType type)
    // Assure plugin and js support also for this window.
    wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
    wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+   wv->settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+   wv->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
    SKMessage msg("newwindow", qobject_cast<SkylivexWin *>(wv));
    sendMessage(msg);
@@ -310,10 +316,12 @@ SkylivexWin* SkylivexWin::createSkyliveWindow(QString url, QWebPage::WebWindowTy
    // Assure plugin and js support also for this window.
    wv->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
    wv->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-   
+
 
    wv->setPage(newWeb);
    wv->setAttribute(Qt::WA_DeleteOnClose, true);
+   wv->settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+   wv->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
    if (type == QWebPage::WebModalDialog)
       wv->setWindowModality(Qt::ApplicationModal);
    QList<QString> urilist = url.split("://");

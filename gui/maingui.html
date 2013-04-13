@@ -1,6 +1,7 @@
 <html debug="true">
     <head>
         <title>SkyliveX 0.1.0</title>
+        <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="SkyliveX.js"></script>
 
         <style>
@@ -93,22 +94,11 @@
         </div>
      <script type="text/javascript" >
 
-        function showLiveImage(img)
-        {
-           if(img.complete)
-           {
-               document.getElementById("liveimg").src=img.src;
-           } else {
-               setTimeout(function(){showLiveImage(img);}, 250);
-           }
-        }
-
         function updateLiveImage()
         {
-            
-         var tele=document.getElementById("numtele").options[document.getElementById("numtele").selectedIndex].value;
-         var newImage = new Image();
-         newImage.src="http://live1.skylive.name/tele"+tele+"live640.jpg?"+new Date().getTime();
+            var d = new Date();
+            var tele=document.getElementById("telsel").options[document.getElementById("telsel").selectedIndex].value;
+            $("#liveimg").attr("src", "http://live1.skylive.name/tele"+tele+"/live640.jpg?"+d.getTime());
         }
         document.addEventListener('DOMContentLoaded',function(){
            SkyliveX.open_window("chatgui.html", false);
