@@ -45,10 +45,15 @@ skyliveClass.prototype.userlistChange = function(action, u){
       }
    }
 };
+skyliveClass.prototype.changeTelescope = function(tele){
+   if(typeof(telescopeChanged)=="function")
+      telescopeChanged(tele);
+};
 
 SkyliveXPage = new skyliveClass();
 SkyliveX.changeContent.connect(SkyliveXPage.changeContent);
 SkyliveX.notify.connect(SkyliveXPage.notify);
 SkyliveX.alertmsg.connect(SkyliveXPage.msgalert);
 SkyliveX.public_received.connect(SkyliveXPage.publicReceived);
-SkyliveX.userlist_change.connect(SkyliveXPage.userlistChange);
+//SkyliveX.userlist_change.connect(SkyliveXPage.userlistChange);
+SkyliveX.changeTelescope.connect(SkyliveXPage.changeTelescope);

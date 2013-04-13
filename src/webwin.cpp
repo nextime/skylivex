@@ -198,8 +198,8 @@ void WebWin::setHtmlCont(QString cont, QUrl baseUrl, bool borders, bool transpar
 
 void WebWin::msgFromCore(SKMessage &msg)
 {
-   std::cout << "WebWindow msg reveived: " << msg.handle.toStdString() << std::endl;
-   if(_handlers.contains(msg.handle) && msg.sender != msgsender)
+   std::cout << "WebWindow msg received: " << msg.handle.toStdString() << std::endl;
+   if(_handlers.contains(msg.handle) && (msg.handle=="changeTelescope" || msg.sender != msgsender))
    {
       SKHandlerFunction mf =_handlers[msg.handle];
       (this->*mf)(msg);
@@ -279,6 +279,8 @@ SkylivexWin::SkylivexWin(QString &htmlfile)
    registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
    registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
+   registerHandler((QString)"changeTelescope", (SKHandlerFunction)&SkylivexWin::handle_changetelescope);
+
 
 }
 
@@ -296,6 +298,7 @@ SkylivexWin::SkylivexWin()
    registerHandler((QString)"notify", (SKHandlerFunction)&SkylivexWin::handle_notify);
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
    registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
+   registerHandler((QString)"changeTelescope", (SKHandlerFunction)&SkylivexWin::handle_changetelescope);
 
 }
 
@@ -409,5 +412,13 @@ void SkylivexWin::handle_userlist(SKMessage &msg)
             jsbridge->updateUserList(msg.parameters["user"], msg.parameters["usertype"], msg.parameters["type"]);
          }
       }
+   }
+}
+
+void SkylivexWin::handle_changetelescope(SKMessage &msg)
+{
+   if(msg.parameters.size() > 0)
+   {
+      jsbridge->changeTelescope(msg.parameters["telescope"]);
    }
 }

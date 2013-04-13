@@ -135,6 +135,10 @@ void SkyliveX::receiveFromGui(SKMessage &msg)
        connect(msg.webwin, SIGNAL(putMessage(SKMessage&)), this, SLOT(receiveFromGui(SKMessage&)));
        connect(this, SIGNAL(msgForGui(SKMessage&)), msg.webwin, SLOT(msgFromCore(SKMessage&)));
     } 
+    if(msg.handle=="changeTelescope")
+    {
+      emit msgForGui(msg);
+    }
     emit msgForPlugins(msg);
 }
 

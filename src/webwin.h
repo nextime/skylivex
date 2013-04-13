@@ -132,6 +132,7 @@ class SkylivexWin : public WebWin
       void handle_notify(SKMessage &msg);
       void handle_chatreceived(SKMessage &msg);
       void handle_userlist(SKMessage &msg);
+      void handle_changetelescope(SKMessage &msg);
 
    private slots:
       void refreshJsObject();
