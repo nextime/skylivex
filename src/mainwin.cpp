@@ -42,6 +42,7 @@
 #include <QDir>
 #include <QString>
 #include <QPalette>
+#include <QIcon>
 #include <QDragMoveEvent>
 #include <QNetworkReply>
 #include <iostream>
@@ -104,6 +105,8 @@ MainWin::MainWin(QString &htmlfile)
 
    // At initialization, the special youtube page window is closed
    yt_is_open=false;
+
+   setWindowIcon(QIcon("skylivex.ico"));
 
 }
 

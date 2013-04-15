@@ -37,6 +37,7 @@
 #include <QWebPage>
 #include <QWebFrame>
 #include <QFile>
+#include <QIcon>
 #include <QUrl>
 #include <QList>
 #include <QDir>
@@ -95,6 +96,8 @@ WebWin::WebWin(QString &htmlfile)
    setHtmlFile(htmlfile);
    resize(250,200);
 
+   setWindowIcon(QIcon("skylivex.ico"));
+
 
    msgsender = SENDER;
 
@@ -112,6 +115,8 @@ WebWin::WebWin()
    settings()->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
    settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
    msgsender = SENDER;
+   setWindowIcon(QIcon("skylivex.ico"));
+
 }
 
 WebWin::~WebWin()
@@ -280,6 +285,8 @@ SkylivexWin::SkylivexWin(QString &htmlfile)
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
    registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
    registerHandler((QString)"changeTelescope", (SKHandlerFunction)&SkylivexWin::handle_changetelescope);
+   
+   setWindowIcon(QIcon("skylivex.ico"));
 
 
 }
@@ -299,6 +306,8 @@ SkylivexWin::SkylivexWin()
    registerHandler((QString)"publicchatrcv", (SKHandlerFunction)&SkylivexWin::handle_chatreceived);
    registerHandler((QString)"userlist", (SKHandlerFunction)&SkylivexWin::handle_userlist);
    registerHandler((QString)"changeTelescope", (SKHandlerFunction)&SkylivexWin::handle_changetelescope);
+
+   setWindowIcon(QIcon("skylivex.ico"));
 
 }
 
